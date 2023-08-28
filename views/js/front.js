@@ -17,7 +17,7 @@ function ajaxCheckBooking() {
     .then((res) => {
       console.log(res);
       if (res.bookings.length) {
-        showBooking();
+        showBooking(res.bookings[0].date_add);
       } else {
         hideBooking();
       }
@@ -27,41 +27,44 @@ function ajaxCheckBooking() {
 
 ajaxCheckBooking();
 
-let timerSpan = document.createElement("span");
+let timerSpan = document.querySelector(".bookingTimeContainer .bookingTime");
+if (!timerSpan) {
+  timerSpan = document.createElement("span");
+}
 const cartBlock = document.querySelector(".blockcart.cart-preview");
 
-function showBooking() {
-  /* const menuBlock = document.querySelector(
-    ".ets_mm_megamenu_content .ets_mm_megamenu_content_content"
-  );
+function showBooking(date) {
+  if (timerSpan.className === "") {
+    const menuBlock = document.querySelector(
+      ".ets_mm_megamenu_content .ets_mm_megamenu_content_content"
+    );
+
+    let icon2 = document.createElement("i");
+    icon2.className = "material-icons";
+    icon2.innerText = "timer";
+
+    timerSpan.className = "bookingTime";
+    let div = document.createElement("div");
+    div.className = "bookingTimeContainer";
+    div.append(icon2);
+    div.append(timerSpan);
+    menuBlock.append(div);
+  } else {
+    date = document.querySelector(".bookingTimeContainer [data-date]")?.dataset
+      ?.date;
+  }
 
   cartBlock.classList.add("booked");
-
   let icon = document.createElement("i");
   icon.className = "material-icons";
   icon.innerText = "timer";
   cartBlock.append(icon);
 
-  let icon2 = document.createElement("i");
-  icon2.className = "material-icons";
-  icon2.innerText = "timer";
-
-  timerSpan.className = "bookingTime";
-  let div = document.createElement("div");
-  div.className = "bookingTimeContainer";
-  div.append(icon2);
-  div.append(timerSpan);
-  menuBlock.append(div);*/
-
-  const date = document
-    .querySelector(".bookingTimeContainer [data-date]")
-    .dataset("date");
-
   countdown(date);
 }
 
 function hideBooking() {
-  timerSpan.parentNode.remove();
+  timerSpan?.parentNode?.remove();
   cartBlock.classList.remove("booked");
 }
 

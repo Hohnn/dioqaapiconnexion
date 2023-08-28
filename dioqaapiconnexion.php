@@ -323,11 +323,12 @@ class Dioqaapiconnexion extends Module implements WidgetInterface
             $this->setLogTest(
                 'hookActionValidateOrder : ' . $th->__toString(),
                 null,
-                __DIR__ . '/logs_error/log_' . date('y-m-d-H') . 'h.log'
+                __DIR__ . '/logs_test/log_' . date('y-m-d-H') . 'h.log'
             );
         }
     }
 
+    /* Mise a jour du produit depuis le BO */
     public function hookActionProductUpdate($params)
     {
         try {
@@ -388,14 +389,20 @@ class Dioqaapiconnexion extends Module implements WidgetInterface
 
                 $date = $olderBook['date_add'];
 
+                $countDown = Booking::timeDifferenceToNowFormatted($date);
+
                 $this->smarty->assign([
-                    'date' => $date
+                    'date' => $date,
+                    'time' => $countDown
                 ]);
 
                 return $this->display(__FILE__, 'views/templates/widget/timer.tpl');
             }
         }
     }
+
+
+
 
     /**
      * Récupération des variables du widget
@@ -759,9 +766,6 @@ class Dioqaapiconnexion extends Module implements WidgetInterface
 
     private function deleteBooking($id_product, $id_cart)
     {
-        $productCrd = new ProductCrd($id_product);
-        $productCrd->setNoPublished();
-
         return $this->updateBooking($id_product, $id_cart, 0);
     }
 

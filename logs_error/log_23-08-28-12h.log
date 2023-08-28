@@ -1,0 +1,32 @@
+==================================2023-08-28 12:50:53==================================
+ => hookActionCartUpdateQuantityAfter : ErrorException: {"stack":["error: la valeur d'une clé dupliquée rompt la contrainte unique « booking_un »"],"message":"la valeur d'une clé dupliquée rompt la contrainte unique « booking_un »","length":191,"name":"error","severity":"ERREUR","code":"23505","detail":"La clé « (stock_id, cart_id)=(22, 9) » existe déjà.","file":"nbtinsert.c","line":"408","routine":"_bt_check_unique"} in /home/www/client/www/CPT013/bee/modules/dioqaapiconnexion/src/Controller/ApiController.php:118
+Stack trace:
+#0 /home/www/client/www/CPT013/bee/modules/dioqaapiconnexion/dioqaapiconnexion.php(804): Dioqaapiconnexion\Controller\ApiController->post('/api/crd/stock/...', Object(stdClass))
+#1 /home/www/client/www/CPT013/bee/modules/dioqaapiconnexion/dioqaapiconnexion.php(758): Dioqaapiconnexion->handleBooking(Object(Dioqaapiconnexion\Entity\Booking))
+#2 /home/www/client/www/CPT013/bee/modules/dioqaapiconnexion/dioqaapiconnexion.php(294): Dioqaapiconnexion->addBooking(26, 9, '3')
+#3 /home/www/client/www/CPT013/bee/classes/Hook.php(1007): Dioqaapiconnexion->hookActionCartUpdateQuantityAfter(Array)
+#4 /home/www/client/www/CPT013/bee/classes/Hook.php(431): HookCore::coreCallHook(Object(Dioqaapiconnexion), 'hookActionCartU...', Array)
+#5 /home/www/client/www/CPT013/bee/classes/Hook.php(944): HookCore::callHookOn(Object(Dioqaapiconnexion), 'actionCartUpdat...', Array)
+#6 /home/www/client/www/CPT013/bee/classes/Cart.php(1690): HookCore::exec('actionCartUpdat...', Array)
+#7 /home/www/client/www/CPT013/bee/controllers/front/CartController.php(502): CartCore->updateQty(1, 26, 0, 0, 'up', 0, Object(Shop), true, true)
+#8 /home/www/client/www/CPT013/bee/controllers/front/CartController.php(246): CartControllerCore->processChangeProductInCart()
+#9 /home/www/client/www/CPT013/bee/controllers/front/CartController.php(235): CartControllerCore->updateCart()
+#10 /home/www/client/www/CPT013/bee/classes/controller/Controller.php(295): CartControllerCore->postProcess()
+#11 /home/www/client/www/CPT013/bee/classes/Dispatcher.php(525): ControllerCore->run()
+#12 /home/www/client/www/CPT013/bee/index.php(28): DispatcherCore->dispatch()
+#13 {main} 
+==================================2023-08-28 12:55:53==================================
+ => hookActionObjectProductInCartDeleteAfter : PrestaShopException: Booking for product id : 26 and cart id 9 does not exist in /home/www/client/www/CPT013/bee/modules/dioqaapiconnexion/dioqaapiconnexion.php:778
+Stack trace:
+#0 /home/www/client/www/CPT013/bee/modules/dioqaapiconnexion/dioqaapiconnexion.php(763): Dioqaapiconnexion->updateBooking(26, 9, 0)
+#1 /home/www/client/www/CPT013/bee/modules/dioqaapiconnexion/dioqaapiconnexion.php(308): Dioqaapiconnexion->deleteBooking(26, 9, '3')
+#2 /home/www/client/www/CPT013/bee/classes/Hook.php(1007): Dioqaapiconnexion->hookActionObjectProductInCartDeleteAfter(Array)
+#3 /home/www/client/www/CPT013/bee/classes/Hook.php(431): HookCore::coreCallHook(Object(Dioqaapiconnexion), 'hookActionObjec...', Array)
+#4 /home/www/client/www/CPT013/bee/classes/Hook.php(944): HookCore::callHookOn(Object(Dioqaapiconnexion), 'actionObjectPro...', Array)
+#5 /home/www/client/www/CPT013/bee/controllers/front/CartController.php(346): HookCore::exec('actionObjectPro...', Array)
+#6 /home/www/client/www/CPT013/bee/controllers/front/CartController.php(248): CartControllerCore->processDeleteProductInCart()
+#7 /home/www/client/www/CPT013/bee/controllers/front/CartController.php(235): CartControllerCore->updateCart()
+#8 /home/www/client/www/CPT013/bee/classes/controller/Controller.php(295): CartControllerCore->postProcess()
+#9 /home/www/client/www/CPT013/bee/classes/Dispatcher.php(525): ControllerCore->run()
+#10 /home/www/client/www/CPT013/bee/index.php(28): DispatcherCore->dispatch()
+#11 {main} 

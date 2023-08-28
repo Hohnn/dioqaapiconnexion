@@ -18,6 +18,7 @@ use Context;
 use PrestaShopException;
 use FeatureValue;
 use Category;
+use DateTime;
 
 use Dioqaapiconnexion\Entity\ImageCrd;
 use Dioqaapiconnexion\Controller\SwitchAction;
@@ -164,5 +165,21 @@ class Booking
         $query->where("id_cart = " . $id_cart);
 
         return Db::getInstance()->executeS($query);
+    }
+
+    public static function timeDifferenceToNowFormatted($date)
+    {
+        $dateTime = new DateTime($date);
+        $dateTime->modify('+15 hours');
+        $now = new DateTime();
+
+        if ($dateTime < $now) {
+            return false;
+        }
+
+        $interval = $now->diff($dateTime);
+
+        $formattedTime = sprintf('%02d:%02d:%02d', $interval->h, $interval->i, $interval->s);
+        return $formattedTime;
     }
 }

@@ -332,11 +332,6 @@ class ProductCrd
         return Db::getInstance()->update('dioqaapiconnexion_product', ['publish' => true], "id_product = " . (int) $this->id);
     }
 
-    public function setNoPublished()
-    {
-        return Db::getInstance()->update('dioqaapiconnexion_product', ['publish' => false], "id_product = " . (int) $this->id);
-    }
-
     public function getCRDProductId()
     {
         $query = new DbQuery();
