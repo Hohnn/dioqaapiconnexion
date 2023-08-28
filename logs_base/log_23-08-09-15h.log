@@ -1,0 +1,10 @@
+==================================2023-08-09 15:23:51==================================
+ => FAIL model 2 : Symfony\Component\Debug\Exception\ContextErrorException: Notice: Trying to get property 'modelId' of non-object in /home/www/client/www/CPT013/cr-digital/modules/dioqaapiconnexion/dioqaapiconnexion.php:484
+Stack trace:
+#0 /home/www/client/www/CPT013/cr-digital/modules/dioqaapiconnexion/dioqaapiconnexion.php(378): Dioqaapiconnexion->setCategory('{"modelId":"122...')
+#1 /home/www/client/www/CPT013/cr-digital/modules/dioqaapiconnexion/dioqaapiconnexion.php(332): Dioqaapiconnexion->executeTasks('{"modelId":"122...')
+#2 /home/www/client/www/CPT013/cr-digital/modules/dioqaapiconnexion/dioqaapiconnexion.php(306): Dioqaapiconnexion->executeTasksFromBDD()
+#3 /home/www/client/www/CPT013/cr-digital/modules/dioqaapiconnexion/cron.php(22): Dioqaapiconnexion->dev()
+#4 {main} : "{\"modelId\":\"1229\",\"name\":\"2DS\",\"manufacturerRef\":null,\"releaseDate\":null,\"comment\":null,\"status\":true,\"brandId\":\"19\",\"brandName\":\"NINTENDO\",\"productTypeId\":\"7\",\"productTypeName\":\"Console\",\"createdDate\":\"2022-06-30T14:47:43.000Z\",\"updatedDate\":\"2023-03-23T16:02:47.000Z\",\"processor\":null,\"screenSize\":null,\"screenResolution\":null,\"cameraFront\":null,\"cameraBack\":null,\"nfc\":null,\"jack\":null,\"battery\":null,\"das\":null,\"network\":null}" 
+==================================2023-08-09 15:26:29==================================
+ => SUCCESS model 2 : {"modelId":"1229","name":"2DS","manufacturerRef":null,"releaseDate":null,"comment":null,"status":true,"brandId":"19","brandName":"NINTENDO","productTypeId":"7","productTypeName":"Console","createdDate":"2022-06-30T14:47:43.000Z","updatedDate":"2023-03-23T16:02:47.000Z","processor":null,"screenSize":null,"screenResolution":null,"cameraFront":null,"cameraBack":null,"nfc":null,"jack":null,"battery":null,"das":null,"network":null} 

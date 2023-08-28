@@ -1,0 +1,90 @@
+==================================2023-08-24 14:40:06==================================
+ => hookActionCartUpdateQuantityAfter : Error: Call to a member function Insert_ID() on bool in /home/www/client/www/CPT013/bee/modules/dioqaapiconnexion/src/Entity/Booking.php:54
+Stack trace:
+#0 /home/www/client/www/CPT013/bee/modules/dioqaapiconnexion/src/Entity/Booking.php(131): Dioqaapiconnexion\Entity\Booking->add()
+#1 /home/www/client/www/CPT013/bee/modules/dioqaapiconnexion/dioqaapiconnexion.php(758): Dioqaapiconnexion\Entity\Booking->handleBookingInBDD()
+#2 /home/www/client/www/CPT013/bee/modules/dioqaapiconnexion/dioqaapiconnexion.php(712): Dioqaapiconnexion->handleBooking(Object(Dioqaapiconnexion\Entity\Booking))
+#3 /home/www/client/www/CPT013/bee/modules/dioqaapiconnexion/dioqaapiconnexion.php(293): Dioqaapiconnexion->addBooking(26, 9, '3')
+#4 /home/www/client/www/CPT013/bee/classes/Hook.php(1007): Dioqaapiconnexion->hookActionCartUpdateQuantityAfter(Array)
+#5 /home/www/client/www/CPT013/bee/classes/Hook.php(431): HookCore::coreCallHook(Object(Dioqaapiconnexion), 'hookActionCartU...', Array)
+#6 /home/www/client/www/CPT013/bee/classes/Hook.php(944): HookCore::callHookOn(Object(Dioqaapiconnexion), 'actionCartUpdat...', Array)
+#7 /home/www/client/www/CPT013/bee/classes/Cart.php(1690): HookCore::exec('actionCartUpdat...', Array)
+#8 /home/www/client/www/CPT013/bee/controllers/front/CartController.php(502): CartCore->updateQty(1, 26, 0, 0, 'up', 0, Object(Shop), true, true)
+#9 /home/www/client/www/CPT013/bee/controllers/front/CartController.php(246): CartControllerCore->processChangeProductInCart()
+#10 /home/www/client/www/CPT013/bee/controllers/front/CartController.php(235): CartControllerCore->updateCart()
+#11 /home/www/client/www/CPT013/bee/classes/controller/Controller.php(295): CartControllerCore->postProcess()
+#12 /home/www/client/www/CPT013/bee/classes/Dispatcher.php(525): ControllerCore->run()
+#13 /home/www/client/www/CPT013/bee/index.php(28): DispatcherCore->dispatch()
+#14 {main} 
+==================================2023-08-24 14:47:44==================================
+ => hookActionCartUpdateQuantityAfter : Error: Call to a member function Insert_ID() on bool in /home/www/client/www/CPT013/bee/modules/dioqaapiconnexion/src/Entity/Booking.php:54
+Stack trace:
+#0 /home/www/client/www/CPT013/bee/modules/dioqaapiconnexion/src/Entity/Booking.php(131): Dioqaapiconnexion\Entity\Booking->add()
+#1 /home/www/client/www/CPT013/bee/modules/dioqaapiconnexion/dioqaapiconnexion.php(758): Dioqaapiconnexion\Entity\Booking->handleBookingInBDD()
+#2 /home/www/client/www/CPT013/bee/modules/dioqaapiconnexion/dioqaapiconnexion.php(712): Dioqaapiconnexion->handleBooking(Object(Dioqaapiconnexion\Entity\Booking))
+#3 /home/www/client/www/CPT013/bee/modules/dioqaapiconnexion/dioqaapiconnexion.php(293): Dioqaapiconnexion->addBooking(26, 9, '3')
+#4 /home/www/client/www/CPT013/bee/classes/Hook.php(1007): Dioqaapiconnexion->hookActionCartUpdateQuantityAfter(Array)
+#5 /home/www/client/www/CPT013/bee/classes/Hook.php(431): HookCore::coreCallHook(Object(Dioqaapiconnexion), 'hookActionCartU...', Array)
+#6 /home/www/client/www/CPT013/bee/classes/Hook.php(944): HookCore::callHookOn(Object(Dioqaapiconnexion), 'actionCartUpdat...', Array)
+#7 /home/www/client/www/CPT013/bee/classes/Cart.php(1690): HookCore::exec('actionCartUpdat...', Array)
+#8 /home/www/client/www/CPT013/bee/controllers/front/CartController.php(502): CartCore->updateQty(1, 26, 0, 0, 'up', 0, Object(Shop), true, true)
+#9 /home/www/client/www/CPT013/bee/controllers/front/CartController.php(246): CartControllerCore->processChangeProductInCart()
+#10 /home/www/client/www/CPT013/bee/controllers/front/CartController.php(235): CartControllerCore->updateCart()
+#11 /home/www/client/www/CPT013/bee/classes/controller/Controller.php(295): CartControllerCore->postProcess()
+#12 /home/www/client/www/CPT013/bee/classes/Dispatcher.php(525): ControllerCore->run()
+#13 /home/www/client/www/CPT013/bee/index.php(28): DispatcherCore->dispatch()
+#14 {main} 
+==================================2023-08-24 14:50:21==================================
+ => hookActionCartUpdateQuantityAfter : Error: Call to a member function Insert_ID() on bool in /home/www/client/www/CPT013/bee/modules/dioqaapiconnexion/src/Entity/Booking.php:54
+Stack trace:
+#0 /home/www/client/www/CPT013/bee/modules/dioqaapiconnexion/src/Entity/Booking.php(131): Dioqaapiconnexion\Entity\Booking->add()
+#1 /home/www/client/www/CPT013/bee/modules/dioqaapiconnexion/dioqaapiconnexion.php(758): Dioqaapiconnexion\Entity\Booking->handleBookingInBDD()
+#2 /home/www/client/www/CPT013/bee/modules/dioqaapiconnexion/dioqaapiconnexion.php(712): Dioqaapiconnexion->handleBooking(Object(Dioqaapiconnexion\Entity\Booking))
+#3 /home/www/client/www/CPT013/bee/modules/dioqaapiconnexion/dioqaapiconnexion.php(293): Dioqaapiconnexion->addBooking(26, 9, '3')
+#4 /home/www/client/www/CPT013/bee/classes/Hook.php(1007): Dioqaapiconnexion->hookActionCartUpdateQuantityAfter(Array)
+#5 /home/www/client/www/CPT013/bee/classes/Hook.php(431): HookCore::coreCallHook(Object(Dioqaapiconnexion), 'hookActionCartU...', Array)
+#6 /home/www/client/www/CPT013/bee/classes/Hook.php(944): HookCore::callHookOn(Object(Dioqaapiconnexion), 'actionCartUpdat...', Array)
+#7 /home/www/client/www/CPT013/bee/classes/Cart.php(1690): HookCore::exec('actionCartUpdat...', Array)
+#8 /home/www/client/www/CPT013/bee/controllers/front/CartController.php(502): CartCore->updateQty(1, 26, 0, 0, 'up', 0, Object(Shop), true, true)
+#9 /home/www/client/www/CPT013/bee/controllers/front/CartController.php(246): CartControllerCore->processChangeProductInCart()
+#10 /home/www/client/www/CPT013/bee/controllers/front/CartController.php(235): CartControllerCore->updateCart()
+#11 /home/www/client/www/CPT013/bee/classes/controller/Controller.php(295): CartControllerCore->postProcess()
+#12 /home/www/client/www/CPT013/bee/classes/Dispatcher.php(525): ControllerCore->run()
+#13 /home/www/client/www/CPT013/bee/index.php(28): DispatcherCore->dispatch()
+#14 {main} 
+==================================2023-08-24 14:55:28==================================
+ => hookActionCartUpdateQuantityAfter : Error: Call to a member function Insert_ID() on bool in /home/www/client/www/CPT013/bee/modules/dioqaapiconnexion/src/Entity/Booking.php:54
+Stack trace:
+#0 /home/www/client/www/CPT013/bee/modules/dioqaapiconnexion/src/Entity/Booking.php(131): Dioqaapiconnexion\Entity\Booking->add()
+#1 /home/www/client/www/CPT013/bee/modules/dioqaapiconnexion/dioqaapiconnexion.php(758): Dioqaapiconnexion\Entity\Booking->handleBookingInBDD()
+#2 /home/www/client/www/CPT013/bee/modules/dioqaapiconnexion/dioqaapiconnexion.php(712): Dioqaapiconnexion->handleBooking(Object(Dioqaapiconnexion\Entity\Booking))
+#3 /home/www/client/www/CPT013/bee/modules/dioqaapiconnexion/dioqaapiconnexion.php(293): Dioqaapiconnexion->addBooking(26, 9, '3')
+#4 /home/www/client/www/CPT013/bee/classes/Hook.php(1007): Dioqaapiconnexion->hookActionCartUpdateQuantityAfter(Array)
+#5 /home/www/client/www/CPT013/bee/classes/Hook.php(431): HookCore::coreCallHook(Object(Dioqaapiconnexion), 'hookActionCartU...', Array)
+#6 /home/www/client/www/CPT013/bee/classes/Hook.php(944): HookCore::callHookOn(Object(Dioqaapiconnexion), 'actionCartUpdat...', Array)
+#7 /home/www/client/www/CPT013/bee/classes/Cart.php(1690): HookCore::exec('actionCartUpdat...', Array)
+#8 /home/www/client/www/CPT013/bee/controllers/front/CartController.php(502): CartCore->updateQty(1, 26, 0, 0, 'up', 0, Object(Shop), true, true)
+#9 /home/www/client/www/CPT013/bee/controllers/front/CartController.php(246): CartControllerCore->processChangeProductInCart()
+#10 /home/www/client/www/CPT013/bee/controllers/front/CartController.php(235): CartControllerCore->updateCart()
+#11 /home/www/client/www/CPT013/bee/classes/controller/Controller.php(295): CartControllerCore->postProcess()
+#12 /home/www/client/www/CPT013/bee/classes/Dispatcher.php(525): ControllerCore->run()
+#13 /home/www/client/www/CPT013/bee/index.php(28): DispatcherCore->dispatch()
+#14 {main} 
+==================================2023-08-24 14:59:43==================================
+ => hookActionCartUpdateQuantityAfter : Error: Call to a member function Insert_ID() on bool in /home/www/client/www/CPT013/bee/modules/dioqaapiconnexion/src/Entity/Booking.php:54
+Stack trace:
+#0 /home/www/client/www/CPT013/bee/modules/dioqaapiconnexion/src/Entity/Booking.php(131): Dioqaapiconnexion\Entity\Booking->add()
+#1 /home/www/client/www/CPT013/bee/modules/dioqaapiconnexion/dioqaapiconnexion.php(758): Dioqaapiconnexion\Entity\Booking->handleBookingInBDD()
+#2 /home/www/client/www/CPT013/bee/modules/dioqaapiconnexion/dioqaapiconnexion.php(712): Dioqaapiconnexion->handleBooking(Object(Dioqaapiconnexion\Entity\Booking))
+#3 /home/www/client/www/CPT013/bee/modules/dioqaapiconnexion/dioqaapiconnexion.php(293): Dioqaapiconnexion->addBooking(26, 9, '3')
+#4 /home/www/client/www/CPT013/bee/classes/Hook.php(1007): Dioqaapiconnexion->hookActionCartUpdateQuantityAfter(Array)
+#5 /home/www/client/www/CPT013/bee/classes/Hook.php(431): HookCore::coreCallHook(Object(Dioqaapiconnexion), 'hookActionCartU...', Array)
+#6 /home/www/client/www/CPT013/bee/classes/Hook.php(944): HookCore::callHookOn(Object(Dioqaapiconnexion), 'actionCartUpdat...', Array)
+#7 /home/www/client/www/CPT013/bee/classes/Cart.php(1690): HookCore::exec('actionCartUpdat...', Array)
+#8 /home/www/client/www/CPT013/bee/controllers/front/CartController.php(502): CartCore->updateQty(1, 26, 0, 0, 'up', 0, Object(Shop), true, true)
+#9 /home/www/client/www/CPT013/bee/controllers/front/CartController.php(246): CartControllerCore->processChangeProductInCart()
+#10 /home/www/client/www/CPT013/bee/controllers/front/CartController.php(235): CartControllerCore->updateCart()
+#11 /home/www/client/www/CPT013/bee/classes/controller/Controller.php(295): CartControllerCore->postProcess()
+#12 /home/www/client/www/CPT013/bee/classes/Dispatcher.php(525): ControllerCore->run()
+#13 /home/www/client/www/CPT013/bee/index.php(28): DispatcherCore->dispatch()
+#14 {main} 

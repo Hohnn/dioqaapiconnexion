@@ -1,0 +1,79 @@
+==================================2023-08-08 15:26:34==================================
+ => hookActionCartUpdateQuantityBefore : PrestaShopException: Quantity in cart for product id : 1790 and cart id : 35 does not exist in /home/www/client/www/CPT013/cr-digital/modules/dioqaapiconnexion/dioqaapiconnexion.php:608
+Stack trace:
+#0 /home/www/client/www/CPT013/cr-digital/modules/dioqaapiconnexion/dioqaapiconnexion.php(255): Dioqaapiconnexion->addBooking(Array)
+#1 /home/www/client/www/CPT013/cr-digital/classes/Hook.php(1007): Dioqaapiconnexion->hookActionCartUpdateQuantityBefore(Array)
+#2 /home/www/client/www/CPT013/cr-digital/classes/Hook.php(431): HookCore::coreCallHook(Object(Dioqaapiconnexion), 'hookActionCartU...', Array)
+#3 /home/www/client/www/CPT013/cr-digital/classes/Hook.php(944): HookCore::callHookOn(Object(Dioqaapiconnexion), 'actionCartUpdat...', Array)
+#4 /home/www/client/www/CPT013/cr-digital/classes/Cart.php(1565): HookCore::exec('actionCartUpdat...', Array)
+#5 /home/www/client/www/CPT013/cr-digital/controllers/front/CartController.php(502): CartCore->updateQty(1, 1790, 0, 0, 'up', 8, Object(Shop), true, true)
+#6 /home/www/client/www/CPT013/cr-digital/controllers/front/CartController.php(246): CartControllerCore->processChangeProductInCart()
+#7 /home/www/client/www/CPT013/cr-digital/controllers/front/CartController.php(235): CartControllerCore->updateCart()
+#8 /home/www/client/www/CPT013/cr-digital/classes/controller/Controller.php(295): CartControllerCore->postProcess()
+#9 /home/www/client/www/CPT013/cr-digital/classes/Dispatcher.php(525): ControllerCore->run()
+#10 /home/www/client/www/CPT013/cr-digital/index.php(28): DispatcherCore->dispatch()
+#11 {main} 
+==================================2023-08-08 15:28:27==================================
+ => hookActionCartUpdateQuantityBefore : PrestaShopException: Quantity in cart for product id : 1790 and cart id : 36 does not exist in /home/www/client/www/CPT013/cr-digital/modules/dioqaapiconnexion/dioqaapiconnexion.php:608
+Stack trace:
+#0 /home/www/client/www/CPT013/cr-digital/modules/dioqaapiconnexion/dioqaapiconnexion.php(255): Dioqaapiconnexion->addBooking(Array)
+#1 /home/www/client/www/CPT013/cr-digital/classes/Hook.php(1007): Dioqaapiconnexion->hookActionCartUpdateQuantityBefore(Array)
+#2 /home/www/client/www/CPT013/cr-digital/classes/Hook.php(431): HookCore::coreCallHook(Object(Dioqaapiconnexion), 'hookActionCartU...', Array)
+#3 /home/www/client/www/CPT013/cr-digital/classes/Hook.php(944): HookCore::callHookOn(Object(Dioqaapiconnexion), 'actionCartUpdat...', Array)
+#4 /home/www/client/www/CPT013/cr-digital/classes/Cart.php(1565): HookCore::exec('actionCartUpdat...', Array)
+#5 /home/www/client/www/CPT013/cr-digital/controllers/front/CartController.php(502): CartCore->updateQty(1, 1790, 0, 0, 'up', 8, Object(Shop), true, true)
+#6 /home/www/client/www/CPT013/cr-digital/controllers/front/CartController.php(246): CartControllerCore->processChangeProductInCart()
+#7 /home/www/client/www/CPT013/cr-digital/controllers/front/CartController.php(235): CartControllerCore->updateCart()
+#8 /home/www/client/www/CPT013/cr-digital/classes/controller/Controller.php(295): CartControllerCore->postProcess()
+#9 /home/www/client/www/CPT013/cr-digital/classes/Dispatcher.php(525): ControllerCore->run()
+#10 /home/www/client/www/CPT013/cr-digital/index.php(28): DispatcherCore->dispatch()
+#11 {main} 
+==================================2023-08-08 15:47:13==================================
+ => hookActionCartUpdateQuantityBefore : PrestaShopException: Quantity in cart for product id : 1790 and cart id : 36 does not exist in /home/www/client/www/CPT013/cr-digital/modules/dioqaapiconnexion/dioqaapiconnexion.php:635
+Stack trace:
+#0 /home/www/client/www/CPT013/cr-digital/modules/dioqaapiconnexion/dioqaapiconnexion.php(256): Dioqaapiconnexion->addBooking(Array)
+#1 /home/www/client/www/CPT013/cr-digital/classes/Hook.php(1007): Dioqaapiconnexion->hookActionCartUpdateQuantityBefore(Array)
+#2 /home/www/client/www/CPT013/cr-digital/classes/Hook.php(431): HookCore::coreCallHook(Object(Dioqaapiconnexion), 'hookActionCartU...', Array)
+#3 /home/www/client/www/CPT013/cr-digital/classes/Hook.php(944): HookCore::callHookOn(Object(Dioqaapiconnexion), 'actionCartUpdat...', Array)
+#4 /home/www/client/www/CPT013/cr-digital/classes/Cart.php(1565): HookCore::exec('actionCartUpdat...', Array)
+#5 /home/www/client/www/CPT013/cr-digital/controllers/front/CartController.php(502): CartCore->updateQty(1, 1790, 0, 0, 'up', '8', Object(Shop), true, true)
+#6 /home/www/client/www/CPT013/cr-digital/controllers/front/CartController.php(246): CartControllerCore->processChangeProductInCart()
+#7 /home/www/client/www/CPT013/cr-digital/controllers/front/CartController.php(235): CartControllerCore->updateCart()
+#8 /home/www/client/www/CPT013/cr-digital/classes/controller/Controller.php(295): CartControllerCore->postProcess()
+#9 /home/www/client/www/CPT013/cr-digital/classes/Dispatcher.php(525): ControllerCore->run()
+#10 /home/www/client/www/CPT013/cr-digital/index.php(28): DispatcherCore->dispatch()
+#11 {main} 
+==================================2023-08-08 15:49:28==================================
+ => hookActionCartUpdateQuantityBefore : Symfony\Component\Debug\Exception\ContextErrorException: Notice: Undefined offset: 0 in /home/www/client/www/CPT013/cr-digital/modules/dioqaapiconnexion/dioqaapiconnexion.php:707
+Stack trace:
+#0 /home/www/client/www/CPT013/cr-digital/modules/dioqaapiconnexion/dioqaapiconnexion.php(670): Dioqaapiconnexion->getCRDStockByProductId('53')
+#1 /home/www/client/www/CPT013/cr-digital/modules/dioqaapiconnexion/dioqaapiconnexion.php(645): Dioqaapiconnexion->updateBooking(1790, 36, '6', '5')
+#2 /home/www/client/www/CPT013/cr-digital/modules/dioqaapiconnexion/dioqaapiconnexion.php(282): Dioqaapiconnexion->addBooking(Array)
+#3 /home/www/client/www/CPT013/cr-digital/classes/Hook.php(1007): Dioqaapiconnexion->hookActionCartUpdateQuantityAfter(Array)
+#4 /home/www/client/www/CPT013/cr-digital/classes/Hook.php(431): HookCore::coreCallHook(Object(Dioqaapiconnexion), 'hookActionCartU...', Array)
+#5 /home/www/client/www/CPT013/cr-digital/classes/Hook.php(944): HookCore::callHookOn(Object(Dioqaapiconnexion), 'actionCartUpdat...', Array)
+#6 /home/www/client/www/CPT013/cr-digital/classes/Cart.php(1690): HookCore::exec('actionCartUpdat...', Array)
+#7 /home/www/client/www/CPT013/cr-digital/controllers/front/CartController.php(502): CartCore->updateQty(1, 1790, 0, 0, 'up', '8', Object(Shop), true, true)
+#8 /home/www/client/www/CPT013/cr-digital/controllers/front/CartController.php(246): CartControllerCore->processChangeProductInCart()
+#9 /home/www/client/www/CPT013/cr-digital/controllers/front/CartController.php(235): CartControllerCore->updateCart()
+#10 /home/www/client/www/CPT013/cr-digital/classes/controller/Controller.php(295): CartControllerCore->postProcess()
+#11 /home/www/client/www/CPT013/cr-digital/classes/Dispatcher.php(525): ControllerCore->run()
+#12 /home/www/client/www/CPT013/cr-digital/index.php(28): DispatcherCore->dispatch()
+#13 {main} 
+==================================2023-08-08 15:49:38==================================
+ => hookActionCartUpdateQuantityBefore : Symfony\Component\Debug\Exception\ContextErrorException: Notice: Undefined offset: 0 in /home/www/client/www/CPT013/cr-digital/modules/dioqaapiconnexion/dioqaapiconnexion.php:707
+Stack trace:
+#0 /home/www/client/www/CPT013/cr-digital/modules/dioqaapiconnexion/dioqaapiconnexion.php(670): Dioqaapiconnexion->getCRDStockByProductId('53')
+#1 /home/www/client/www/CPT013/cr-digital/modules/dioqaapiconnexion/dioqaapiconnexion.php(645): Dioqaapiconnexion->updateBooking(1790, 36, '6', '6')
+#2 /home/www/client/www/CPT013/cr-digital/modules/dioqaapiconnexion/dioqaapiconnexion.php(282): Dioqaapiconnexion->addBooking(Array)
+#3 /home/www/client/www/CPT013/cr-digital/classes/Hook.php(1007): Dioqaapiconnexion->hookActionCartUpdateQuantityAfter(Array)
+#4 /home/www/client/www/CPT013/cr-digital/classes/Hook.php(431): HookCore::coreCallHook(Object(Dioqaapiconnexion), 'hookActionCartU...', Array)
+#5 /home/www/client/www/CPT013/cr-digital/classes/Hook.php(944): HookCore::callHookOn(Object(Dioqaapiconnexion), 'actionCartUpdat...', Array)
+#6 /home/www/client/www/CPT013/cr-digital/classes/Cart.php(1690): HookCore::exec('actionCartUpdat...', Array)
+#7 /home/www/client/www/CPT013/cr-digital/controllers/front/CartController.php(502): CartCore->updateQty(1, 1790, 0, 0, 'up', '8', Object(Shop), true, true)
+#8 /home/www/client/www/CPT013/cr-digital/controllers/front/CartController.php(246): CartControllerCore->processChangeProductInCart()
+#9 /home/www/client/www/CPT013/cr-digital/controllers/front/CartController.php(235): CartControllerCore->updateCart()
+#10 /home/www/client/www/CPT013/cr-digital/classes/controller/Controller.php(295): CartControllerCore->postProcess()
+#11 /home/www/client/www/CPT013/cr-digital/classes/Dispatcher.php(525): ControllerCore->run()
+#12 /home/www/client/www/CPT013/cr-digital/index.php(28): DispatcherCore->dispatch()
+#13 {main} 

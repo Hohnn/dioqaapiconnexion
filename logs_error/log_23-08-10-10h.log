@@ -1,0 +1,12 @@
+==================================2023-08-10 10:50:41==================================
+ => hookActionCartUpdateQuantityBefore : Unknown column 'data' in 'field list'<br /><br /><pre>INSERT INTO `ps_dioqaapiconnexion_booking` (`id_product`, `id_crd`, `id_customer`, `id_cart`, `quantity`, `data`) VALUES ('1790', '53', '6', '37', '1', '2023-08-10T10:50:41')</pre> 
+==================================2023-08-10 10:51:28==================================
+ => hookActionCartUpdateQuantityBefore : Unknown column 'data' in 'field list'<br /><br /><pre>INSERT INTO `ps_dioqaapiconnexion_booking` (`id_product`, `id_crd`, `id_customer`, `id_cart`, `quantity`, `data`) VALUES ('1790', '53', '6', '37', '2', '2023-08-10T10:51:28')</pre> 
+==================================2023-08-10 10:51:57==================================
+ => hookActionCartUpdateQuantityBefore : Unknown column 'data' in 'field list'<br /><br /><pre>INSERT INTO `ps_dioqaapiconnexion_booking` (`id_product`, `id_crd`, `id_customer`, `id_cart`, `quantity`, `data`) VALUES ('1790', '53', '6', '37', '3', '2023-08-10T10:51:57')</pre> 
+==================================2023-08-10 10:51:58==================================
+ => hookActionCartUpdateQuantityBefore : Unknown column 'data' in 'field list'<br /><br /><pre>INSERT INTO `ps_dioqaapiconnexion_booking` (`id_product`, `id_crd`, `id_customer`, `id_cart`, `quantity`, `data`) VALUES ('1790', '53', '6', '37', '4', '2023-08-10T10:51:58')</pre> 
+==================================2023-08-10 10:51:58==================================
+ => hookActionCartUpdateQuantityBefore : Unknown column 'data' in 'field list'<br /><br /><pre>INSERT INTO `ps_dioqaapiconnexion_booking` (`id_product`, `id_crd`, `id_customer`, `id_cart`, `quantity`, `data`) VALUES ('1790', '53', '6', '37', '5', '2023-08-10T10:51:58')</pre> 
+==================================2023-08-10 10:53:34==================================
+ => hookActionCartUpdateQuantityBefore : Unknown column 'data' in 'field list'<br /><br /><pre>INSERT INTO `ps_dioqaapiconnexion_booking` (`id_product`, `id_crd`, `id_customer`, `id_cart`, `quantity`, `data`) VALUES ('1790', '53', '6', '37', '6', '2023-08-10T10:53:34')</pre> 

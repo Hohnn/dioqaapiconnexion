@@ -1,0 +1,33 @@
+.bookingTimeContainer {
+    display: flex;
+    align-items: center;
+    gap: 0.2rem;
+}
+
+.bookingTimeContainer i {
+    color: white;
+    font-size: 1.3rem;
+}
+
+.bookingTime {
+    background-color: white;
+    padding: 0.2rem 0.5rem;
+    border-radius: 2rem;
+    line-height: 1;
+}
+
+.blockcart.cart-preview i {
+    display: none;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    transition: auto;
+    transform: translate(50%, 50%);
+    color: white;
+    font-size: 1.2rem;
+}
+
+.blockcart.cart-preview.booked i {
+    display: block;
+    
+}

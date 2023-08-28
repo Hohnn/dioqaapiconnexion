@@ -1,0 +1,13 @@
+{
+  "name": "dioqa/apiconnexion",
+  "description": "Dioqa module for api connexion",
+  "autoload": {
+    "psr-4": {
+      "Dioqaapiconnexion\\": "src/"
+    }
+  },
+  "config": {
+    "prepend-autoloader": false
+  },
+  "type": "prestashop-module"
+}

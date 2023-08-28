@@ -1,0 +1,151 @@
+==================================2023-08-24 11:05:44==================================
+ => hookActionObjectProductInCartDeleteAfter : PrestaShopException: Booking for product id : 26 and cart id 9 does not exist in /home/www/client/www/CPT013/bee/modules/dioqaapiconnexion/dioqaapiconnexion.php:717
+Stack trace:
+#0 /home/www/client/www/CPT013/bee/modules/dioqaapiconnexion/dioqaapiconnexion.php(702): Dioqaapiconnexion->updateBooking(26, 9, 0)
+#1 /home/www/client/www/CPT013/bee/modules/dioqaapiconnexion/dioqaapiconnexion.php(311): Dioqaapiconnexion->deleteBooking(26, 9, '3')
+#2 /home/www/client/www/CPT013/bee/classes/Hook.php(1007): Dioqaapiconnexion->hookActionObjectProductInCartDeleteAfter(Array)
+#3 /home/www/client/www/CPT013/bee/classes/Hook.php(431): HookCore::coreCallHook(Object(Dioqaapiconnexion), 'hookActionObjec...', Array)
+#4 /home/www/client/www/CPT013/bee/classes/Hook.php(944): HookCore::callHookOn(Object(Dioqaapiconnexion), 'actionObjectPro...', Array)
+#5 /home/www/client/www/CPT013/bee/controllers/front/CartController.php(346): HookCore::exec('actionObjectPro...', Array)
+#6 /home/www/client/www/CPT013/bee/controllers/front/CartController.php(248): CartControllerCore->processDeleteProductInCart()
+#7 /home/www/client/www/CPT013/bee/controllers/front/CartController.php(235): CartControllerCore->updateCart()
+#8 /home/www/client/www/CPT013/bee/classes/controller/Controller.php(295): CartControllerCore->postProcess()
+#9 /home/www/client/www/CPT013/bee/classes/Dispatcher.php(525): ControllerCore->run()
+#10 /home/www/client/www/CPT013/bee/index.php(28): DispatcherCore->dispatch()
+#11 {main} 
+==================================2023-08-24 11:06:47==================================
+ => hookActionObjectProductInCartDeleteAfter : PrestaShopException: Booking for product id : 26 and cart id 9 does not exist in /home/www/client/www/CPT013/bee/modules/dioqaapiconnexion/dioqaapiconnexion.php:717
+Stack trace:
+#0 /home/www/client/www/CPT013/bee/modules/dioqaapiconnexion/dioqaapiconnexion.php(702): Dioqaapiconnexion->updateBooking(26, 9, 0)
+#1 /home/www/client/www/CPT013/bee/modules/dioqaapiconnexion/dioqaapiconnexion.php(311): Dioqaapiconnexion->deleteBooking(26, 9, '3')
+#2 /home/www/client/www/CPT013/bee/classes/Hook.php(1007): Dioqaapiconnexion->hookActionObjectProductInCartDeleteAfter(Array)
+#3 /home/www/client/www/CPT013/bee/classes/Hook.php(431): HookCore::coreCallHook(Object(Dioqaapiconnexion), 'hookActionObjec...', Array)
+#4 /home/www/client/www/CPT013/bee/classes/Hook.php(944): HookCore::callHookOn(Object(Dioqaapiconnexion), 'actionObjectPro...', Array)
+#5 /home/www/client/www/CPT013/bee/controllers/front/CartController.php(346): HookCore::exec('actionObjectPro...', Array)
+#6 /home/www/client/www/CPT013/bee/controllers/front/CartController.php(248): CartControllerCore->processDeleteProductInCart()
+#7 /home/www/client/www/CPT013/bee/controllers/front/CartController.php(235): CartControllerCore->updateCart()
+#8 /home/www/client/www/CPT013/bee/classes/controller/Controller.php(295): CartControllerCore->postProcess()
+#9 /home/www/client/www/CPT013/bee/classes/Dispatcher.php(525): ControllerCore->run()
+#10 /home/www/client/www/CPT013/bee/index.php(28): DispatcherCore->dispatch()
+#11 {main} 
+==================================2023-08-24 11:10:41==================================
+ => hookActionCartUpdateQuantityAfter : PrestaShopException: Stock for product id : 26 does not exist in /home/www/client/www/CPT013/bee/modules/dioqaapiconnexion/dioqaapiconnexion.php:726
+Stack trace:
+#0 /home/www/client/www/CPT013/bee/modules/dioqaapiconnexion/dioqaapiconnexion.php(691): Dioqaapiconnexion->handleBooking(Object(Dioqaapiconnexion\Entity\Booking))
+#1 /home/www/client/www/CPT013/bee/modules/dioqaapiconnexion/dioqaapiconnexion.php(291): Dioqaapiconnexion->addBooking(26, 9, '3')
+#2 /home/www/client/www/CPT013/bee/classes/Hook.php(1007): Dioqaapiconnexion->hookActionCartUpdateQuantityAfter(Array)
+#3 /home/www/client/www/CPT013/bee/classes/Hook.php(431): HookCore::coreCallHook(Object(Dioqaapiconnexion), 'hookActionCartU...', Array)
+#4 /home/www/client/www/CPT013/bee/classes/Hook.php(944): HookCore::callHookOn(Object(Dioqaapiconnexion), 'actionCartUpdat...', Array)
+#5 /home/www/client/www/CPT013/bee/classes/Cart.php(1690): HookCore::exec('actionCartUpdat...', Array)
+#6 /home/www/client/www/CPT013/bee/controllers/front/CartController.php(502): CartCore->updateQty(1, 26, 0, 0, 'up', 0, Object(Shop), true, true)
+#7 /home/www/client/www/CPT013/bee/controllers/front/CartController.php(246): CartControllerCore->processChangeProductInCart()
+#8 /home/www/client/www/CPT013/bee/controllers/front/CartController.php(235): CartControllerCore->updateCart()
+#9 /home/www/client/www/CPT013/bee/classes/controller/Controller.php(295): CartControllerCore->postProcess()
+#10 /home/www/client/www/CPT013/bee/classes/Dispatcher.php(525): ControllerCore->run()
+#11 /home/www/client/www/CPT013/bee/index.php(28): DispatcherCore->dispatch()
+#12 {main} 
+==================================2023-08-24 11:13:37==================================
+ => hookActionObjectProductInCartDeleteAfter : PrestaShopException: Booking for product id : 26 and cart id 9 does not exist in /home/www/client/www/CPT013/bee/modules/dioqaapiconnexion/dioqaapiconnexion.php:711
+Stack trace:
+#0 /home/www/client/www/CPT013/bee/modules/dioqaapiconnexion/dioqaapiconnexion.php(696): Dioqaapiconnexion->updateBooking(26, 9, 0)
+#1 /home/www/client/www/CPT013/bee/modules/dioqaapiconnexion/dioqaapiconnexion.php(305): Dioqaapiconnexion->deleteBooking(26, 9, '3')
+#2 /home/www/client/www/CPT013/bee/classes/Hook.php(1007): Dioqaapiconnexion->hookActionObjectProductInCartDeleteAfter(Array)
+#3 /home/www/client/www/CPT013/bee/classes/Hook.php(431): HookCore::coreCallHook(Object(Dioqaapiconnexion), 'hookActionObjec...', Array)
+#4 /home/www/client/www/CPT013/bee/classes/Hook.php(944): HookCore::callHookOn(Object(Dioqaapiconnexion), 'actionObjectPro...', Array)
+#5 /home/www/client/www/CPT013/bee/controllers/front/CartController.php(346): HookCore::exec('actionObjectPro...', Array)
+#6 /home/www/client/www/CPT013/bee/controllers/front/CartController.php(248): CartControllerCore->processDeleteProductInCart()
+#7 /home/www/client/www/CPT013/bee/controllers/front/CartController.php(235): CartControllerCore->updateCart()
+#8 /home/www/client/www/CPT013/bee/classes/controller/Controller.php(295): CartControllerCore->postProcess()
+#9 /home/www/client/www/CPT013/bee/classes/Dispatcher.php(525): ControllerCore->run()
+#10 /home/www/client/www/CPT013/bee/index.php(28): DispatcherCore->dispatch()
+#11 {main} 
+==================================2023-08-24 11:13:46==================================
+ => hookActionCartUpdateQuantityAfter : Error: Call to a member function Insert_ID() on bool in /home/www/client/www/CPT013/bee/modules/dioqaapiconnexion/src/Entity/Booking.php:54
+Stack trace:
+#0 /home/www/client/www/CPT013/bee/modules/dioqaapiconnexion/src/Entity/Booking.php(131): Dioqaapiconnexion\Entity\Booking->add()
+#1 /home/www/client/www/CPT013/bee/modules/dioqaapiconnexion/dioqaapiconnexion.php(737): Dioqaapiconnexion\Entity\Booking->handleBookingInBDD()
+#2 /home/www/client/www/CPT013/bee/modules/dioqaapiconnexion/dioqaapiconnexion.php(691): Dioqaapiconnexion->handleBooking(Object(Dioqaapiconnexion\Entity\Booking))
+#3 /home/www/client/www/CPT013/bee/modules/dioqaapiconnexion/dioqaapiconnexion.php(291): Dioqaapiconnexion->addBooking(26, 9, '3')
+#4 /home/www/client/www/CPT013/bee/classes/Hook.php(1007): Dioqaapiconnexion->hookActionCartUpdateQuantityAfter(Array)
+#5 /home/www/client/www/CPT013/bee/classes/Hook.php(431): HookCore::coreCallHook(Object(Dioqaapiconnexion), 'hookActionCartU...', Array)
+#6 /home/www/client/www/CPT013/bee/classes/Hook.php(944): HookCore::callHookOn(Object(Dioqaapiconnexion), 'actionCartUpdat...', Array)
+#7 /home/www/client/www/CPT013/bee/classes/Cart.php(1690): HookCore::exec('actionCartUpdat...', Array)
+#8 /home/www/client/www/CPT013/bee/controllers/front/CartController.php(502): CartCore->updateQty(1, 26, 0, 0, 'up', 0, Object(Shop), true, true)
+#9 /home/www/client/www/CPT013/bee/controllers/front/CartController.php(246): CartControllerCore->processChangeProductInCart()
+#10 /home/www/client/www/CPT013/bee/controllers/front/CartController.php(235): CartControllerCore->updateCart()
+#11 /home/www/client/www/CPT013/bee/classes/controller/Controller.php(295): CartControllerCore->postProcess()
+#12 /home/www/client/www/CPT013/bee/classes/Dispatcher.php(525): ControllerCore->run()
+#13 /home/www/client/www/CPT013/bee/index.php(28): DispatcherCore->dispatch()
+#14 {main} 
+==================================2023-08-24 11:20:21==================================
+ => hookActionCartUpdateQuantityAfter : Error: Call to a member function Insert_ID() on bool in /home/www/client/www/CPT013/bee/modules/dioqaapiconnexion/src/Entity/Booking.php:54
+Stack trace:
+#0 /home/www/client/www/CPT013/bee/modules/dioqaapiconnexion/src/Entity/Booking.php(131): Dioqaapiconnexion\Entity\Booking->add()
+#1 /home/www/client/www/CPT013/bee/modules/dioqaapiconnexion/dioqaapiconnexion.php(737): Dioqaapiconnexion\Entity\Booking->handleBookingInBDD()
+#2 /home/www/client/www/CPT013/bee/modules/dioqaapiconnexion/dioqaapiconnexion.php(691): Dioqaapiconnexion->handleBooking(Object(Dioqaapiconnexion\Entity\Booking))
+#3 /home/www/client/www/CPT013/bee/modules/dioqaapiconnexion/dioqaapiconnexion.php(291): Dioqaapiconnexion->addBooking(26, 9, '3')
+#4 /home/www/client/www/CPT013/bee/classes/Hook.php(1007): Dioqaapiconnexion->hookActionCartUpdateQuantityAfter(Array)
+#5 /home/www/client/www/CPT013/bee/classes/Hook.php(431): HookCore::coreCallHook(Object(Dioqaapiconnexion), 'hookActionCartU...', Array)
+#6 /home/www/client/www/CPT013/bee/classes/Hook.php(944): HookCore::callHookOn(Object(Dioqaapiconnexion), 'actionCartUpdat...', Array)
+#7 /home/www/client/www/CPT013/bee/classes/Cart.php(1690): HookCore::exec('actionCartUpdat...', Array)
+#8 /home/www/client/www/CPT013/bee/controllers/front/CartController.php(502): CartCore->updateQty(1, 26, 0, 0, 'up', 0, Object(Shop), true, true)
+#9 /home/www/client/www/CPT013/bee/controllers/front/CartController.php(246): CartControllerCore->processChangeProductInCart()
+#10 /home/www/client/www/CPT013/bee/controllers/front/CartController.php(235): CartControllerCore->updateCart()
+#11 /home/www/client/www/CPT013/bee/classes/controller/Controller.php(295): CartControllerCore->postProcess()
+#12 /home/www/client/www/CPT013/bee/classes/Dispatcher.php(525): ControllerCore->run()
+#13 /home/www/client/www/CPT013/bee/index.php(28): DispatcherCore->dispatch()
+#14 {main} 
+==================================2023-08-24 11:23:19==================================
+ => hookActionCartUpdateQuantityAfter : Error: Call to a member function Insert_ID() on bool in /home/www/client/www/CPT013/bee/modules/dioqaapiconnexion/src/Entity/Booking.php:54
+Stack trace:
+#0 /home/www/client/www/CPT013/bee/modules/dioqaapiconnexion/src/Entity/Booking.php(131): Dioqaapiconnexion\Entity\Booking->add()
+#1 /home/www/client/www/CPT013/bee/modules/dioqaapiconnexion/dioqaapiconnexion.php(738): Dioqaapiconnexion\Entity\Booking->handleBookingInBDD()
+#2 /home/www/client/www/CPT013/bee/modules/dioqaapiconnexion/dioqaapiconnexion.php(692): Dioqaapiconnexion->handleBooking(Object(Dioqaapiconnexion\Entity\Booking))
+#3 /home/www/client/www/CPT013/bee/modules/dioqaapiconnexion/dioqaapiconnexion.php(292): Dioqaapiconnexion->addBooking(26, 9, '3')
+#4 /home/www/client/www/CPT013/bee/classes/Hook.php(1007): Dioqaapiconnexion->hookActionCartUpdateQuantityAfter(Array)
+#5 /home/www/client/www/CPT013/bee/classes/Hook.php(431): HookCore::coreCallHook(Object(Dioqaapiconnexion), 'hookActionCartU...', Array)
+#6 /home/www/client/www/CPT013/bee/classes/Hook.php(944): HookCore::callHookOn(Object(Dioqaapiconnexion), 'actionCartUpdat...', Array)
+#7 /home/www/client/www/CPT013/bee/classes/Cart.php(1690): HookCore::exec('actionCartUpdat...', Array)
+#8 /home/www/client/www/CPT013/bee/controllers/front/CartController.php(502): CartCore->updateQty(1, 26, 0, 0, 'up', 0, Object(Shop), true, true)
+#9 /home/www/client/www/CPT013/bee/controllers/front/CartController.php(246): CartControllerCore->processChangeProductInCart()
+#10 /home/www/client/www/CPT013/bee/controllers/front/CartController.php(235): CartControllerCore->updateCart()
+#11 /home/www/client/www/CPT013/bee/classes/controller/Controller.php(295): CartControllerCore->postProcess()
+#12 /home/www/client/www/CPT013/bee/classes/Dispatcher.php(525): ControllerCore->run()
+#13 /home/www/client/www/CPT013/bee/index.php(28): DispatcherCore->dispatch()
+#14 {main} 
+==================================2023-08-24 11:41:11==================================
+ => hookActionCartUpdateQuantityAfter : Error: Call to a member function Insert_ID() on bool in /home/www/client/www/CPT013/bee/modules/dioqaapiconnexion/src/Entity/Booking.php:54
+Stack trace:
+#0 /home/www/client/www/CPT013/bee/modules/dioqaapiconnexion/src/Entity/Booking.php(131): Dioqaapiconnexion\Entity\Booking->add()
+#1 /home/www/client/www/CPT013/bee/modules/dioqaapiconnexion/dioqaapiconnexion.php(737): Dioqaapiconnexion\Entity\Booking->handleBookingInBDD()
+#2 /home/www/client/www/CPT013/bee/modules/dioqaapiconnexion/dioqaapiconnexion.php(691): Dioqaapiconnexion->handleBooking(Object(Dioqaapiconnexion\Entity\Booking))
+#3 /home/www/client/www/CPT013/bee/modules/dioqaapiconnexion/dioqaapiconnexion.php(291): Dioqaapiconnexion->addBooking(26, 9, '3')
+#4 /home/www/client/www/CPT013/bee/classes/Hook.php(1007): Dioqaapiconnexion->hookActionCartUpdateQuantityAfter(Array)
+#5 /home/www/client/www/CPT013/bee/classes/Hook.php(431): HookCore::coreCallHook(Object(Dioqaapiconnexion), 'hookActionCartU...', Array)
+#6 /home/www/client/www/CPT013/bee/classes/Hook.php(944): HookCore::callHookOn(Object(Dioqaapiconnexion), 'actionCartUpdat...', Array)
+#7 /home/www/client/www/CPT013/bee/classes/Cart.php(1690): HookCore::exec('actionCartUpdat...', Array)
+#8 /home/www/client/www/CPT013/bee/controllers/front/CartController.php(502): CartCore->updateQty(1, 26, 0, 0, 'up', 0, Object(Shop), true, true)
+#9 /home/www/client/www/CPT013/bee/controllers/front/CartController.php(246): CartControllerCore->processChangeProductInCart()
+#10 /home/www/client/www/CPT013/bee/controllers/front/CartController.php(235): CartControllerCore->updateCart()
+#11 /home/www/client/www/CPT013/bee/classes/controller/Controller.php(295): CartControllerCore->postProcess()
+#12 /home/www/client/www/CPT013/bee/classes/Dispatcher.php(525): ControllerCore->run()
+#13 /home/www/client/www/CPT013/bee/index.php(28): DispatcherCore->dispatch()
+#14 {main} 
+==================================2023-08-24 11:48:24==================================
+ => hookActionCartUpdateQuantityAfter : Error: Call to a member function Insert_ID() on bool in /home/www/client/www/CPT013/bee/modules/dioqaapiconnexion/src/Entity/Booking.php:54
+Stack trace:
+#0 /home/www/client/www/CPT013/bee/modules/dioqaapiconnexion/src/Entity/Booking.php(131): Dioqaapiconnexion\Entity\Booking->add()
+#1 /home/www/client/www/CPT013/bee/modules/dioqaapiconnexion/dioqaapiconnexion.php(748): Dioqaapiconnexion\Entity\Booking->handleBookingInBDD()
+#2 /home/www/client/www/CPT013/bee/modules/dioqaapiconnexion/dioqaapiconnexion.php(702): Dioqaapiconnexion->handleBooking(Object(Dioqaapiconnexion\Entity\Booking))
+#3 /home/www/client/www/CPT013/bee/modules/dioqaapiconnexion/dioqaapiconnexion.php(302): Dioqaapiconnexion->addBooking(26, 9, '3')
+#4 /home/www/client/www/CPT013/bee/classes/Hook.php(1007): Dioqaapiconnexion->hookActionCartUpdateQuantityAfter(Array)
+#5 /home/www/client/www/CPT013/bee/classes/Hook.php(431): HookCore::coreCallHook(Object(Dioqaapiconnexion), 'hookActionCartU...', Array)
+#6 /home/www/client/www/CPT013/bee/classes/Hook.php(944): HookCore::callHookOn(Object(Dioqaapiconnexion), 'actionCartUpdat...', Array)
+#7 /home/www/client/www/CPT013/bee/classes/Cart.php(1690): HookCore::exec('actionCartUpdat...', Array)
+#8 /home/www/client/www/CPT013/bee/controllers/front/CartController.php(502): CartCore->updateQty(1, 26, 0, 0, 'up', 0, Object(Shop), true, true)
+#9 /home/www/client/www/CPT013/bee/controllers/front/CartController.php(246): CartControllerCore->processChangeProductInCart()
+#10 /home/www/client/www/CPT013/bee/controllers/front/CartController.php(235): CartControllerCore->updateCart()
+#11 /home/www/client/www/CPT013/bee/classes/controller/Controller.php(295): CartControllerCore->postProcess()
+#12 /home/www/client/www/CPT013/bee/classes/Dispatcher.php(525): ControllerCore->run()
+#13 /home/www/client/www/CPT013/bee/index.php(28): DispatcherCore->dispatch()
+#14 {main} 

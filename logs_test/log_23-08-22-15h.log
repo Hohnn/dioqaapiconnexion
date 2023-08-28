@@ -1,0 +1,338 @@
+==================================2023-08-22 15:53:17==================================
+ => hookActionObjectProductUpdateAfter : {
+    "object": {
+        "tax_name": null,
+        "tax_rate": null,
+        "id_manufacturer": "9",
+        "id_supplier": "0",
+        "id_category_default": "770",
+        "id_shop_default": "1",
+        "manufacturer_name": null,
+        "supplier_name": null,
+        "name": {
+            "1": "APPLE IPHONE 11 128GO BLANC"
+        },
+        "description": {
+            "1": "<p>Testdsqdqdsqdazdadgggggggggggvvv<\/p>"
+        },
+        "description_short": {
+            "1": ""
+        },
+        "quantity": "0",
+        "minimal_quantity": 1,
+        "low_stock_threshold": null,
+        "low_stock_alert": false,
+        "available_now": {
+            "1": ""
+        },
+        "available_later": {
+            "1": ""
+        },
+        "price": 379,
+        "specificPrice": 0,
+        "additional_shipping_cost": 0,
+        "wholesale_price": 0,
+        "on_sale": false,
+        "online_only": false,
+        "unity": null,
+        "unit_price": "0",
+        "unit_price_ratio": "0.000000",
+        "ecotax": "0",
+        "reference": "3546797846556",
+        "supplier_reference": "",
+        "location": null,
+        "width": 0,
+        "height": 0,
+        "depth": 0,
+        "weight": 0,
+        "ean13": "",
+        "isbn": "",
+        "upc": "",
+        "mpn": "",
+        "link_rewrite": {
+            "1": "apple-iphone-11-128go-blanc"
+        },
+        "meta_description": {
+            "1": ""
+        },
+        "meta_keywords": {
+            "1": ""
+        },
+        "meta_title": {
+            "1": ""
+        },
+        "quantity_discount": "0",
+        "customizable": "0",
+        "new": null,
+        "uploadable_files": 0,
+        "text_fields": 0,
+        "active": true,
+        "redirect_type": "301-category",
+        "id_type_redirected": 0,
+        "available_for_order": true,
+        "available_date": null,
+        "show_condition": false,
+        "condition": "new",
+        "show_price": true,
+        "indexed": 0,
+        "visibility": "both",
+        "date_add": "2023-08-22 11:55:43",
+        "date_upd": "2023-08-22 15:53:17",
+        "tags": null,
+        "state": 1,
+        "base_price": null,
+        "id_tax_rules_group": 0,
+        "id_color_default": 0,
+        "advanced_stock_management": false,
+        "out_of_stock": "2",
+        "depends_on_stock": null,
+        "isFullyLoaded": false,
+        "cache_is_pack": "0",
+        "cache_has_attachments": "0",
+        "is_virtual": 0,
+        "id_pack_product_attribute": null,
+        "cache_default_attribute": "0",
+        "category": false,
+        "pack_stock_type": 3,
+        "additional_delivery_times": 1,
+        "delivery_in_stock": {
+            "1": ""
+        },
+        "delivery_out_stock": {
+            "1": ""
+        },
+        "product_type": "",
+        "id": 26,
+        "id_shop_list": [],
+        "force_id": false
+    },
+    "cookie": {},
+    "cart": null,
+    "altern": 1
+} 
+==================================2023-08-22 15:53:57==================================
+ => hookActionProductUpdate : {
+    "id_product": 26,
+    "product": {
+        "tax_name": null,
+        "tax_rate": null,
+        "id_manufacturer": "9",
+        "id_supplier": "0",
+        "id_category_default": "770",
+        "id_shop_default": "1",
+        "manufacturer_name": null,
+        "supplier_name": null,
+        "name": {
+            "1": "APPLE IPHONE 11 128GO BLANC"
+        },
+        "description": {
+            "1": "<p>Testdsqdqdsqdazdadgggggggggggvvvcc<\/p>"
+        },
+        "description_short": {
+            "1": ""
+        },
+        "quantity": "0",
+        "minimal_quantity": 1,
+        "low_stock_threshold": null,
+        "low_stock_alert": false,
+        "available_now": {
+            "1": ""
+        },
+        "available_later": {
+            "1": ""
+        },
+        "price": 379,
+        "specificPrice": 0,
+        "additional_shipping_cost": 0,
+        "wholesale_price": 0,
+        "on_sale": false,
+        "online_only": false,
+        "unity": null,
+        "unit_price": "0",
+        "unit_price_ratio": "0.000000",
+        "ecotax": "0",
+        "reference": "3546797846556",
+        "supplier_reference": "",
+        "location": null,
+        "width": 0,
+        "height": 0,
+        "depth": 0,
+        "weight": 0,
+        "ean13": "",
+        "isbn": "",
+        "upc": "",
+        "mpn": "",
+        "link_rewrite": {
+            "1": "apple-iphone-11-128go-blanc"
+        },
+        "meta_description": {
+            "1": ""
+        },
+        "meta_keywords": {
+            "1": ""
+        },
+        "meta_title": {
+            "1": ""
+        },
+        "quantity_discount": "0",
+        "customizable": "0",
+        "new": null,
+        "uploadable_files": 0,
+        "text_fields": 0,
+        "active": true,
+        "redirect_type": "301-category",
+        "id_type_redirected": 0,
+        "available_for_order": true,
+        "available_date": null,
+        "show_condition": false,
+        "condition": "new",
+        "show_price": true,
+        "indexed": 0,
+        "visibility": "both",
+        "date_add": "2023-08-22 11:55:43",
+        "date_upd": "2023-08-22 15:53:56",
+        "tags": null,
+        "state": 1,
+        "base_price": null,
+        "id_tax_rules_group": 0,
+        "id_color_default": 0,
+        "advanced_stock_management": false,
+        "out_of_stock": "2",
+        "depends_on_stock": null,
+        "isFullyLoaded": false,
+        "cache_is_pack": "0",
+        "cache_has_attachments": "0",
+        "is_virtual": 0,
+        "id_pack_product_attribute": null,
+        "cache_default_attribute": "0",
+        "category": false,
+        "pack_stock_type": 3,
+        "additional_delivery_times": 1,
+        "delivery_in_stock": {
+            "1": ""
+        },
+        "delivery_out_stock": {
+            "1": ""
+        },
+        "product_type": "",
+        "id": 26,
+        "id_shop_list": [],
+        "force_id": false
+    },
+    "cookie": {},
+    "cart": null,
+    "altern": 2
+} 
+==================================2023-08-22 15:53:57==================================
+ => hookActionProductUpdate : {
+    "id_product": 26,
+    "product": {
+        "tax_name": null,
+        "tax_rate": null,
+        "id_manufacturer": "9",
+        "id_supplier": "0",
+        "id_category_default": "770",
+        "id_shop_default": "1",
+        "manufacturer_name": null,
+        "supplier_name": null,
+        "name": {
+            "1": "APPLE IPHONE 11 128GO BLANC"
+        },
+        "description": {
+            "1": "<p>Testdsqdqdsqdazdadgggggggggggvvvcc<\/p>"
+        },
+        "description_short": {
+            "1": ""
+        },
+        "quantity": 1,
+        "minimal_quantity": 1,
+        "low_stock_threshold": null,
+        "low_stock_alert": false,
+        "available_now": {
+            "1": ""
+        },
+        "available_later": {
+            "1": ""
+        },
+        "price": 379,
+        "specificPrice": 0,
+        "additional_shipping_cost": 0,
+        "wholesale_price": 0,
+        "on_sale": false,
+        "online_only": false,
+        "unity": null,
+        "unit_price": "0",
+        "unit_price_ratio": "0.000000",
+        "ecotax": "0",
+        "reference": "3546797846556",
+        "supplier_reference": "",
+        "location": "",
+        "width": 0,
+        "height": 0,
+        "depth": 0,
+        "weight": 0,
+        "ean13": "",
+        "isbn": "",
+        "upc": "",
+        "mpn": "",
+        "link_rewrite": {
+            "1": "apple-iphone-11-128go-blanc"
+        },
+        "meta_description": {
+            "1": ""
+        },
+        "meta_keywords": {
+            "1": ""
+        },
+        "meta_title": {
+            "1": ""
+        },
+        "quantity_discount": "0",
+        "customizable": "0",
+        "new": null,
+        "uploadable_files": 0,
+        "text_fields": 0,
+        "active": true,
+        "redirect_type": "301-category",
+        "id_type_redirected": 0,
+        "available_for_order": true,
+        "available_date": null,
+        "show_condition": false,
+        "condition": "new",
+        "show_price": true,
+        "indexed": 0,
+        "visibility": "both",
+        "date_add": "2023-08-22 11:55:43",
+        "date_upd": "2023-08-22 15:53:56",
+        "tags": null,
+        "state": 1,
+        "base_price": null,
+        "id_tax_rules_group": 0,
+        "id_color_default": 0,
+        "advanced_stock_management": false,
+        "out_of_stock": 2,
+        "depends_on_stock": false,
+        "isFullyLoaded": false,
+        "cache_is_pack": "0",
+        "cache_has_attachments": "0",
+        "is_virtual": 0,
+        "id_pack_product_attribute": null,
+        "cache_default_attribute": "0",
+        "category": false,
+        "pack_stock_type": 3,
+        "additional_delivery_times": 1,
+        "delivery_in_stock": {
+            "1": ""
+        },
+        "delivery_out_stock": {
+            "1": ""
+        },
+        "product_type": "",
+        "id": 26,
+        "id_shop_list": [],
+        "force_id": false
+    },
+    "cookie": {},
+    "cart": null,
+    "altern": 2
+} 
