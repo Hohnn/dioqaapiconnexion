@@ -379,29 +379,36 @@ class Dioqaapiconnexion extends Module implements WidgetInterface
     public function renderWidget($hookName = null, array $configuration = [])
     {
         if (isset($configuration['action']) && $configuration['action'] == "displayBookingTimer") {
+            return $this->renderTimer();
+        }
 
-            if ($this->context->cart->id) {
-                $bookings = Booking::getBookingsByCartId($this->context->cart->id);
-                if (empty($bookings)) {
-                    return;
-                }
-                $olderBook = $bookings[0];
-
-                $date = $olderBook['date_add'];
-
-                $countDown = Booking::timeDifferenceToNowFormatted($date);
-
-                $this->smarty->assign([
-                    'date' => $date,
-                    'time' => $countDown
-                ]);
-
-                return $this->display(__FILE__, 'views/templates/widget/timer.tpl');
-            }
+        if (isset($configuration['action']) && $configuration['action'] == "displayAddCharger") {
+            $this->smarty->assign($configuration);
+            return $this->display(__FILE__, 'views/templates/widget/addCharger.tpl');
         }
     }
 
+    private function renderTimer()
+    {
+        if ($this->context->cart->id) {
+            $bookings = Booking::getBookingsByCartId($this->context->cart->id);
+            if (empty($bookings)) {
+                return;
+            }
+            $olderBook = $bookings[0];
 
+            $date = $olderBook['date_add'];
+
+            $countDown = Booking::timeDifferenceToNowFormatted($date);
+
+            $this->smarty->assign([
+                'date' => $date,
+                'time' => $countDown
+            ]);
+
+            return $this->display(__FILE__, 'views/templates/widget/timer.tpl');
+        }
+    }
 
 
     /**
