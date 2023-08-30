@@ -52,7 +52,8 @@ class Booking
             'quantity' => 1,
         ];
 
-        $this->id = Db::getInstance()->insert('dioqaapiconnexion_booking', $data)->Insert_ID();
+        Db::getInstance()->insert('dioqaapiconnexion_booking', $data);
+        $this->id = Db::getInstance()->Insert_ID();
 
         return $this->id;
     }
@@ -170,7 +171,7 @@ class Booking
     public static function timeDifferenceToNowFormatted($date)
     {
         $dateTime = new DateTime($date);
-        $dateTime->modify('+15 hours');
+        $dateTime->modify('+15 minutes');
         $now = new DateTime();
 
         if ($dateTime < $now) {

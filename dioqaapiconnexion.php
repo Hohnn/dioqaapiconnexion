@@ -96,6 +96,7 @@ class Dioqaapiconnexion extends Module implements WidgetInterface
             $this->registerHook('actionCartUpdateQuantityAfter') &&
             $this->registerHook('actionObjectProductInCartDeleteAfter') &&
             $this->registerHook('displayBackOfficeHeader') &&
+            $this->registerHook('displayBeforeBodyClosingTag') &&
             $this->registerHook('actionValidateOrder') &&
             $this->registerHook('actionPresentProduct') &&
             $this->registerHook('actionProductUpdate');
@@ -266,10 +267,18 @@ class Dioqaapiconnexion extends Module implements WidgetInterface
      */
     public function hookHeader()
     {
-        /* $this->context->controller->addJS($this->_path . '/views/js/front.js'); */
         $this->context->controller->registerJavascript(
             $this->name . '_js',
             'modules/' . $this->name . '/views/js/front.js',
+            [
+                'attributes' => 'defer',
+                'priority' => 1000,
+                'position' => 'bottom'
+            ]
+        );
+        $this->context->controller->registerJavascript(
+            $this->name . '_modal_js',
+            'modules/' . $this->name . '/views/js/modal.js',
             [
                 'attributes' => 'defer',
                 'priority' => 1000,
@@ -367,6 +376,50 @@ class Dioqaapiconnexion extends Module implements WidgetInterface
                     'position' => 'bottom'
                 ]
             );
+        }
+    }
+
+    public function hookDisplayBeforeBodyClosingTag(array &$params)
+    {
+        if ($this->context->cart->id) {
+            $bookings = Booking::getBookingsByCartId($this->context->cart->id);
+            if (empty($bookings)) {
+                return;
+            }
+            $olderBook = $bookings[0];
+            $date = $olderBook['date_add'];
+            $countDown = Booking::timeDifferenceToNowFormatted($date);
+
+            if ($countDown) {
+                return;
+            }
+
+            $cart = new Cart($this->context->cart->id);
+            $productsInCart = $cart->getProducts(false, false, null, false);
+
+            foreach ($productsInCart as $key => $product) {
+                $productCrd = new ProductCrd($product['id_product']);
+                $id_crd = $productCrd->getCRDProductId();
+                $stock = $this->getCRDStockByProductId($id_crd);
+
+                if ($stock->bookingQuantity < $stock->quantity) {
+                    continue;
+                }
+
+                if (count($stock->bookings) && $stock->bookings[0]->cartId == $this->context->cart->id) {
+                    continue;
+                }
+
+                $cart->deleteProduct($product['id_product'], $product['id_product_attribute'], $product['id_customization']);
+            }
+
+            $productsInCartAfter = $cart->getProducts(true, false, null, false);
+
+            $this->smarty->assign([
+                'products' => $productsInCartAfter,
+            ]);
+
+            return $this->display(__FILE__, 'views/templates/hook/modal.tpl');
         }
     }
 
@@ -747,7 +800,7 @@ class Dioqaapiconnexion extends Module implements WidgetInterface
         return (bool) file_put_contents($filePath, $newJsonString);
     }
 
-    private function addBooking($id_product, $id_cart, $id_customer)
+    public function addBooking($id_product, $id_cart, $id_customer)
     {
         $query = new DbQuery();
         $query->select('quantity');
@@ -771,7 +824,7 @@ class Dioqaapiconnexion extends Module implements WidgetInterface
         return $this->handleBooking($book);
     }
 
-    private function deleteBooking($id_product, $id_cart)
+    public function deleteBooking($id_product, $id_cart)
     {
         return $this->updateBooking($id_product, $id_cart, 0);
     }

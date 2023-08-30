@@ -29,5 +29,45 @@
 
 .blockcart.cart-preview.booked i {
     display: block;
-    
+}
+
+#bookingModal .modal-body ul li {
+    display: flex;
+    align-items: center;
+    margin: 0.5rem 0;
+    justify-content: space-between;
+    background-color: #f1f1f1;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+#bookingModal .modal-body ul li label {
+    padding: 5px 10px;
+    font-size: 1rem;
+    margin: 0 0.5rem;
+    background: transparent;
+    border: 1px solid #FAB511;
+    cursor: pointer;
+}
+#bookingModal .modal-body ul li .close-label {
+    display: inline-block;
+    background: white;
+    border: 1px solid #000;
+    border-radius: 5px;
+    padding: 0;
+}
+#bookingModal .modal-header {
+    background-color: black;
+    color: white;
+}
+
+#bookingModal input[type="radio"] {
+    opacity: 0;
+    position: fixed;
+    width: 0;
+}
+
+#bookingModal input[type="radio"]:checked + label {
+    background: #FAB511;
+    border: 1px solid #FAB511;
 }

@@ -70,7 +70,7 @@ function hideBooking() {
 
 function countdown(date) {
   const currentDate = new Date(date);
-  currentDate.setHours(currentDate.getHours() + 15);
+  currentDate.setMinutes(currentDate.getMinutes() + 15);
 
   const expiredDate = currentDate.getTime();
   let timeRemaining = expiredDate - new Date().getTime();
