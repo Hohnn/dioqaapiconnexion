@@ -17,6 +17,12 @@ async function handleAddToCart() {
   let IsBookingPossible = await ajaxIsBookingPossible();
   if (IsBookingPossible) {
     reelAddToCartBtn.click();
+  } else {
+    addToCartBtn.classList.remove("is--loading");
+    let error = document.createElement("span");
+    error.className = "text-danger";
+    error.innerText = "Produit déjà réservé";
+    addToCartBtn.parentNode.append(error);
   }
 }
 

@@ -71,3 +71,25 @@
     background: #FAB511;
     border: 1px solid #FAB511;
 }
+
+.isBooked {
+    border: 1px solid red;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 5px 10px;
+    text-transform: uppercase;
+    color: red;
+    
+}
+
+.productTimer {
+    background-color: black;
+    padding: 5px;
+    border-radius: 1rem;
+}
+
+.productBooking {
+    align-self: flex-start;
+    margin-top: 9px;
+}

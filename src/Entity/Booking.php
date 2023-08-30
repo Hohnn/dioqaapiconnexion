@@ -32,6 +32,8 @@ class Booking
     public $quantity;
     public $id;
     public $date_add;
+    public $date_expire;
+    public $add_time;
 
     public const ROUTE_UPDATE = "/api/crd/stock/:id/booking";
 
@@ -47,9 +49,9 @@ class Booking
         $data = [
             'id_product' => $this->id_product,
             'id_crd' => $this->id_crd,
-            'id_customer' => $this->id_customer,
             'id_cart' => $this->id_cart,
             'quantity' => 1,
+            'date_expire' => $this->date_expire,
         ];
 
         Db::getInstance()->insert('dioqaapiconnexion_booking', $data);
@@ -61,7 +63,6 @@ class Booking
     public function delete()
     {
         $where = "id_product = " . $this->id_product
-            . " AND id_customer = " . $this->id_customer
             . " AND id_cart = " . $this->id_cart
             . " AND id_crd = " . $this->id_crd
             . " AND id_booking = " . $this->id;
@@ -74,10 +75,11 @@ class Booking
         $data = [
             'id_product' => $this->id_product,
             'id_crd' => $this->id_crd,
-            'id_customer' => $this->id_customer,
             'id_cart' => $this->id_cart,
             'quantity' => $this->quantity,
-            'date_upd' => time()
+            'date_upd' => time(),
+            'date_expire' => $this->date_expire,
+            'add_time' => $this->add_time,
         ];
 
         $where = "id_booking = " . $this->id;
@@ -98,7 +100,8 @@ class Booking
             $this->id_cart = $result['id_cart'];
             $this->quantity = $result['quantity'];
             $this->id_crd = $result['id_crd'];
-            $this->id_customer = $result['id_customer'];
+            $this->date_expire = $result['date_expire'];
+            $this->add_time = $result['add_time'];
         }
     }
 
@@ -109,7 +112,6 @@ class Booking
         $query->from('dioqaapiconnexion_booking');
         $query->where("id_product = " . $this->id_product);
         $query->where("id_crd = " . $this->id_crd);
-        $query->where("id_customer = " . $this->id_customer);
         $query->where("id_cart = " . $this->id_cart);
 
         if ($result = Db::getInstance()->getRow($query)) {
@@ -148,16 +150,6 @@ class Booking
         return false;
     }
 
-    public static function getBookingsByCustomerId($id_customer)
-    {
-        $query = new DbQuery();
-        $query->select('*');
-        $query->from('dioqaapiconnexion_booking');
-        $query->where("id_customer = " . $id_customer);
-
-        return Db::getInstance()->executeS($query);
-    }
-
     public static function getBookingsByCartId($id_cart)
     {
         $query = new DbQuery();
@@ -171,7 +163,7 @@ class Booking
     public static function timeDifferenceToNowFormatted($date)
     {
         $dateTime = new DateTime($date);
-        $dateTime->modify('+15 minutes');
+        $dateTime->modify('-1 minutes');
         $now = new DateTime();
 
         if ($dateTime < $now) {

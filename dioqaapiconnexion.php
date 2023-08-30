@@ -286,6 +286,10 @@ class Dioqaapiconnexion extends Module implements WidgetInterface
             ]
         );
         $this->context->controller->addCSS($this->_path . '/views/css/front.css');
+
+        if (isset($this->context->controller->php_self)  && $this->context->controller->php_self == 'order') {
+            $this->addBookingMoreTime();
+        }
     }
 
     public function hookActionCartUpdateQuantityBefore($params)
@@ -300,7 +304,6 @@ class Dioqaapiconnexion extends Module implements WidgetInterface
             $this->addBooking(
                 $params['product']->id,
                 $params['cart']->id,
-                $params['cart']->id_customer,
             );
         } catch (Throwable $th) {
             $this->setLogTest(
@@ -314,7 +317,7 @@ class Dioqaapiconnexion extends Module implements WidgetInterface
     public function hookActionObjectProductInCartDeleteAfter($params)
     {
         try {
-            $this->deleteBooking($params['id_product'], $params['id_cart'], $params['cart']->id_customer);
+            $this->deleteBooking($params['id_product'], $params['id_cart']);
         } catch (\Exception $th) {
             $this->setLogTest(
                 'hookActionObjectProductInCartDeleteAfter : ' . $th->__toString(),
@@ -376,6 +379,12 @@ class Dioqaapiconnexion extends Module implements WidgetInterface
                     'position' => 'bottom'
                 ]
             );
+
+            $id_product = $params['presentedProduct']->getId();
+
+            $this->context->smarty->assign([
+                'isBookingPossible' => $this->isBookingPossible($id_product)
+            ]);
         }
     }
 
@@ -383,43 +392,45 @@ class Dioqaapiconnexion extends Module implements WidgetInterface
     {
         if ($this->context->cart->id) {
             $bookings = Booking::getBookingsByCartId($this->context->cart->id);
-            if (empty($bookings)) {
-                return;
-            }
-            $olderBook = $bookings[0];
-            $date = $olderBook['date_add'];
-            $countDown = Booking::timeDifferenceToNowFormatted($date);
+            if ($bookings) {
+                $olderBook = $bookings[0];
+                $date = $olderBook['date_expire'];
+                $countDown = Booking::timeDifferenceToNowFormatted($date);
 
-            if ($countDown) {
-                return;
+                if (!$countDown) {
+                    $this->deleteProductNotAvailable();
+                }
             }
 
             $cart = new Cart($this->context->cart->id);
-            $productsInCart = $cart->getProducts(false, false, null, false);
-
-            foreach ($productsInCart as $key => $product) {
-                $productCrd = new ProductCrd($product['id_product']);
-                $id_crd = $productCrd->getCRDProductId();
-                $stock = $this->getCRDStockByProductId($id_crd);
-
-                if ($stock->bookingQuantity < $stock->quantity) {
-                    continue;
-                }
-
-                if (count($stock->bookings) && $stock->bookings[0]->cartId == $this->context->cart->id) {
-                    continue;
-                }
-
-                $cart->deleteProduct($product['id_product'], $product['id_product_attribute'], $product['id_customization']);
-            }
-
-            $productsInCartAfter = $cart->getProducts(true, false, null, false);
 
             $this->smarty->assign([
-                'products' => $productsInCartAfter,
+                'products' => $cart->getProducts(true, false, null, false)
             ]);
 
-            return $this->display(__FILE__, 'views/templates/hook/modal.tpl');
+            return $this->display(__FILE__, 'views/templates/hook/modals.tpl');
+        }
+    }
+
+    private function deleteProductNotAvailable()
+    {
+        $cart = new Cart($this->context->cart->id);
+        $productsInCart = $cart->getProducts(false, false, null, false);
+
+        foreach ($productsInCart as $key => $product) {
+            $productCrd = new ProductCrd($product['id_product']);
+            $id_crd = $productCrd->getCRDProductId();
+            $stock = $this->getCRDStockByProductId($id_crd);
+
+            if ($stock->bookingQuantity < $stock->quantity) {
+                continue;
+            }
+
+            if (count($stock->bookings) && $stock->bookings[0]->cartId == $this->context->cart->id) {
+                continue;
+            }
+
+            $cart->deleteProduct($product['id_product'], $product['id_product_attribute'], $product['id_customization']);
         }
     }
 
@@ -439,6 +450,11 @@ class Dioqaapiconnexion extends Module implements WidgetInterface
             $this->smarty->assign($configuration);
             return $this->display(__FILE__, 'views/templates/widget/addCharger.tpl');
         }
+
+        if (isset($configuration['action']) && $configuration['action'] == "displayBooked") {
+            $this->smarty->assign($configuration);
+            return $this->display(__FILE__, 'views/templates/widget/isBooked.tpl');
+        }
     }
 
     private function renderTimer()
@@ -450,7 +466,7 @@ class Dioqaapiconnexion extends Module implements WidgetInterface
             }
             $olderBook = $bookings[0];
 
-            $date = $olderBook['date_add'];
+            $date = $olderBook['date_expire'];
 
             $countDown = Booking::timeDifferenceToNowFormatted($date);
 
@@ -800,7 +816,7 @@ class Dioqaapiconnexion extends Module implements WidgetInterface
         return (bool) file_put_contents($filePath, $newJsonString);
     }
 
-    public function addBooking($id_product, $id_cart, $id_customer)
+    public function addBooking($id_product, $id_cart)
     {
         $query = new DbQuery();
         $query->select('quantity');
@@ -817,7 +833,6 @@ class Dioqaapiconnexion extends Module implements WidgetInterface
         $book = new Booking();
         $book->quantity = $reelQuantity;
         $book->id_product = $id_product;
-        $book->id_customer = $id_customer;
         $book->id_cart = $id_cart;
         $book->id_crd = (new ProductCrd($id_product))->getCRDProductId();
 
@@ -836,7 +851,7 @@ class Dioqaapiconnexion extends Module implements WidgetInterface
         }
     }
 
-    private function updateBooking($id_product, $id_cart, $quantity)
+    private function updateBooking($id_product, $id_cart, $quantity, $addTime = false)
     {
         $id_booking = Booking::getBookingIdByDatas($id_product, $id_cart);
 
@@ -848,10 +863,10 @@ class Dioqaapiconnexion extends Module implements WidgetInterface
         $book = new Booking($id_booking);
         $book->quantity = $quantity;
 
-        $this->handleBooking($book);
+        $this->handleBooking($book, $addTime);
     }
 
-    private function handleBooking(Booking $book)
+    private function handleBooking(Booking $book, $addTime = false)
     {
         $stock = $this->getCRDStockByProductId($book->id_crd);
 
@@ -865,9 +880,15 @@ class Dioqaapiconnexion extends Module implements WidgetInterface
         $data = (object)[
             "cartId" => $book->id_cart,
             "quantity" => $book->quantity,
+            "time" => $addTime
         ];
 
-        return ApiController::getInstance()->post($route, $data) && $book->handleBookingInBDD();
+        $bookingCrd = ApiController::getInstance()->post($route, $data);
+
+        $book->date_expire = $bookingCrd->dateValidity;
+        $book->add_time = $addTime;
+
+        return $book->handleBookingInBDD();
     }
 
 
@@ -890,5 +911,49 @@ class Dioqaapiconnexion extends Module implements WidgetInterface
         }
 
         return array_shift($stock);
+    }
+
+    public function isBookingPossible($id_product)
+    {
+        $product = new ProductCrd($id_product);
+        $id_crd = $product->getCRDProductId();
+        $stocks = ApiController::getInstance()->get("/api/crd/stocks/device/$id_crd");
+
+        if (!empty($stocks)) {
+            $stock = array_shift($stocks);
+
+            $booking = $stock->bookings;
+
+            $myBooking = array_filter($booking, fn ($v) => $v->cartId == $this->context->cart->id);
+
+            $isBooked = $stock->quantity == $stock->bookingQuantity;
+
+            return [
+                "myBooking" => (bool) !empty($myBooking),
+                "isBooked" => (bool) $isBooked
+            ];
+        }
+
+        return false;
+    }
+
+    private function addBookingMoreTime()
+    {
+        $id_cart = $this->context->cart->id;
+
+        $cart = new Cart($id_cart);
+
+        $products = $cart->getProducts(false, false, null, false);
+
+        foreach ($products as $key => $product) {
+            $id_booking = Booking::getBookingIdByDatas($product['id_product'], $id_cart);
+
+            $book = new Booking($id_booking);
+
+            if ($book->add_time == 1) {
+                continue;
+            }
+            $this->updateBooking($product['id_product'], $id_cart, 1, true);
+        }
     }
 }

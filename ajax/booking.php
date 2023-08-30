@@ -13,13 +13,13 @@ if (isset($_POST['action']) && $_POST['action'] == 'checkBooking') {
     $book = [];
     $context = Context::getContext();
 
-    if (!$context->customer->id) {
-        returnDatas($data);
+    if (!$context->cart->id) {
+        returnDatas(false);
     }
 
-    $id_customer = $context->customer->id;
+    $id_cart = $context->cart->id;
 
-    $book = Booking::getBookingsByCustomerId($id_customer);
+    $book = Booking::getBookingsByCartId($id_cart);
     $data['bookings'] = $book;
     /* $data['customer'] = $context->customer; */
     /* $data['cart'] = $context->cart; */
