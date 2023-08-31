@@ -431,6 +431,7 @@ class Dioqaapiconnexion extends Module implements WidgetInterface
             }
 
             $cart->deleteProduct($product['id_product'], $product['id_product_attribute'], $product['id_customization']);
+            $this->deleteBooking($product['id_product'], $this->context->cart->id);
         }
     }
 
@@ -924,7 +925,9 @@ class Dioqaapiconnexion extends Module implements WidgetInterface
 
             $booking = $stock->bookings;
 
-            $myBooking = array_filter($booking, fn ($v) => $v->cartId == $this->context->cart->id);
+            $myBooking = array_filter($booking, function ($v) {
+                return $v->cartId == $this->context->cart->id && $v->quantity > 0;
+            });
 
             $isBooked = $stock->quantity == $stock->bookingQuantity;
 
@@ -940,16 +943,12 @@ class Dioqaapiconnexion extends Module implements WidgetInterface
     private function addBookingMoreTime()
     {
         $id_cart = $this->context->cart->id;
-
         $cart = new Cart($id_cart);
-
         $products = $cart->getProducts(false, false, null, false);
 
-        foreach ($products as $key => $product) {
+        foreach ($products as $product) {
             $id_booking = Booking::getBookingIdByDatas($product['id_product'], $id_cart);
-
             $book = new Booking($id_booking);
-
             if ($book->add_time == 1) {
                 continue;
             }

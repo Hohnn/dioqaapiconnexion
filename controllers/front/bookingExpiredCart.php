@@ -32,9 +32,15 @@ class DioqaapiconnexionBookingExpiredCartModuleFrontController extends ModuleFro
         foreach ($products as $key => $data) {
             $id_product = $data['id_product'];
             $id_customization = $data['id_customization'];
-            if ($data['booking']) {
+            if ($data['addBooking']) {
                 $this->module->deleteBooking($id_product, $id_cart);
-                $this->module->addBooking($id_product, $id_cart, $id_customer);
+
+                $isPossible = $this->module->isBookingPossible($id_product);
+                if ($isPossible && !$isPossible['isBooked']) {
+                    $this->module->addBooking($id_product, $id_cart, $id_customer);
+                } else {
+                    $this->context->cart->deleteProduct($id_product, 0, $id_customization);
+                }
             } else {
                 $this->context->cart->deleteProduct($id_product, 0, $id_customization);
                 $this->module->deleteBooking($id_product, $id_cart);
@@ -57,7 +63,7 @@ class DioqaapiconnexionBookingExpiredCartModuleFrontController extends ModuleFro
             $data = [
                 "id_product" => (int) $ids[0],
                 "id_customization" => (int) isset($ids[1]) ? $ids[1] : 0,
-                "booking" => $bool === "true" ? true : false
+                "addBooking" => $bool === "true" ? true : false
             ];
             $array[] = $data;
         }

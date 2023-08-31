@@ -17,7 +17,7 @@ function ajaxCheckBooking() {
     .then((res) => {
       console.log(res);
       if (res && res.bookings.length) {
-        showBooking(res.bookings[0].date_add);
+        showBooking(res.bookings[0].date_expire);
       } else {
         hideBooking();
       }
@@ -68,14 +68,14 @@ function hideBooking() {
   cartBlock.classList.remove("booked");
 }
 
+let count = 0;
+
 function countdown(date) {
   const currentDate = new Date(date);
   currentDate.setMinutes(currentDate.getMinutes() - 1);
 
   const expiredDate = currentDate.getTime();
   let timeRemaining = expiredDate - new Date().getTime();
-
-  let count = 0;
 
   const interval = 1000;
   // Mettre à jour le compte à rebours immédiatement
@@ -85,7 +85,7 @@ function countdown(date) {
       console.log("Compte à rebours terminé !");
       showModalBookingExpire();
     } else {
-      if (timeRemaining <= 1000) {
+      if (timeRemaining <= 2000) {
         console.log("bientot fini");
         showModalBookingOrderNow();
       }
