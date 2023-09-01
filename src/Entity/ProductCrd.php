@@ -15,6 +15,7 @@ use Shop;
 use ImageManager;
 use ImageType;
 use Context;
+use CustomerCrd;
 use Dioqaapiconnexion\Controller\ApiController;
 use PrestaShopException;
 use Exception;
@@ -346,5 +347,45 @@ class ProductCrd
         }
 
         return $id_crd;
+    }
+
+    private function handleClientAssociation($id_crd)
+    {
+        $places = ApiController::getInstance()->get("/api/crd/essentials/place");
+        $clientApi = array_filter($places, fn ($place) => $place->id == $id_crd);
+
+        if (empty($clientApi)) {
+            return;
+        }
+
+        $clientPresta = Customer::getCustomersByEmail($clientApi->mail);
+
+        if (isset($clientPresta[0])) {
+            $id_customer = $clientPresta[0]['id_customer'];
+        } else {
+            $customer = new Customer();
+            $customer->firstname = "Agence";
+            $customer->lastname = $clientApi->name;
+            $customer->email = $clientApi->mail;
+            $customer->passwd = Tools::passwdGen();
+            $customer->active = 1;
+            $customer->add();
+
+            $address = new Address();
+            $address->id_customer = $customer->id;
+            $address->alias = "Agence";
+            $address->firstname = "Agence";
+            $address->lastname = $clientApi->name;
+            $address->address1 = $clientApi->address;
+            $address->postcode = $clientApi->zipCode;
+            $address->city = $clientApi->name;
+            $address->phone = $clientApi->phone;
+            $address->add();
+        }
+
+        $clientApi = array_shift($clientApi);
+
+        $client = new CustomerCrd();
+        $client->add($clientApi);
     }
 }

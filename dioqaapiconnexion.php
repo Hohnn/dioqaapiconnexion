@@ -42,8 +42,11 @@ use Dioqaapiconnexion\Entity\FeatureCrd;
 use Dioqaapiconnexion\Entity\FeatureValueCrd;
 use Dioqaapiconnexion\Entity\ProductCrd;
 use Dioqaapiconnexion\Entity\Booking;
+use Dioqaapiconnexion\Entity\CustomerCrd;
 
 use PrestaShop\PrestaShop\Core\Module\WidgetInterface;
+use PrestaShopBundle\Form\Admin\Type\TranslateType;
+use \Symfony\Component\Form\Extension\Core\Type\TextType;
 
 class Dioqaapiconnexion extends Module implements WidgetInterface
 {
@@ -95,6 +98,8 @@ class Dioqaapiconnexion extends Module implements WidgetInterface
             $this->registerHook('actionCartUpdateQuantityBefore') &&
             $this->registerHook('actionCartUpdateQuantityAfter') &&
             $this->registerHook('actionObjectProductInCartDeleteAfter') &&
+            $this->registerHook('actionCustomerFormBuilderModifier') &&
+            $this->registerHook('actionAfterUpdateCustomerFormHandler') &&
             $this->registerHook('displayBackOfficeHeader') &&
             $this->registerHook('displayBeforeBodyClosingTag') &&
             $this->registerHook('actionValidateOrder') &&
@@ -297,6 +302,58 @@ class Dioqaapiconnexion extends Module implements WidgetInterface
         /* add booking qty check */
     }
 
+    public function hookActionAfterUpdateCustomerFormHandler(array $params)
+    {
+        $customerId = $params['id'];
+        $companyId = $params['form_data']['id_place'][1];
+        $this->storeDescription($customerId, $companyId);
+    }
+
+    protected function storeDescription($customerId, $data)
+    {
+        Db::getInstance()->insert(
+            'dioqaapiconnexion_customer',
+            ['id_crd' => (int) $data, 'id_customer' => (int) $customerId],
+            false,
+            true,
+            Db::ON_DUPLICATE_KEY
+        );
+    }
+
+    public function hookActionCustomerFormBuilderModifier(array $params)
+    {
+        $customerId = $params['id'];
+        $formBuilder = $params['form_builder'];
+        $locales = $this->get('prestashop.adapter.legacy.context')->getLanguages();
+
+        $formBuilder->add(
+            'id_place',
+            TranslateType::class,
+            [
+                'type' => TextType::class,
+                'label' => "Société ID",
+                'locales' => $locales,
+                'hideTabs' => false,
+                'required' => false
+            ]
+        );
+
+        foreach ($locales as $locale) {
+            $langId = $locale['id_lang'];
+            $params['data']['id_place'][$langId] = $this->getDescription($customerId);
+        }
+        $formBuilder->setData($params['data']);
+    }
+
+    protected function getDescription($customerId)
+    {
+        if ((int) $customerId) {
+            $result = Db::getInstance()->getValue('SELECT `id_crd` FROM `' . _DB_PREFIX_ . 'dioqaapiconnexion_customer` WHERE `id_customer` = ' . $customerId);
+            return $result;
+        }
+        return false;
+    }
+
 
     public function hookActionCartUpdateQuantityAfter($params)
     {
@@ -331,6 +388,7 @@ class Dioqaapiconnexion extends Module implements WidgetInterface
     {
         try {
             $this->deleteBookingAfterOrder($params);
+            $this->sendOrder($params);
         } catch (\Exception $th) {
             $this->setLogTest(
                 'hookActionValidateOrder : ' . $th->__toString(),
@@ -411,6 +469,7 @@ class Dioqaapiconnexion extends Module implements WidgetInterface
             return $this->display(__FILE__, 'views/templates/hook/modals.tpl');
         }
     }
+
 
     private function deleteProductNotAvailable()
     {
@@ -508,8 +567,9 @@ class Dioqaapiconnexion extends Module implements WidgetInterface
         echo 'DEV';
         echo '<pre>';
         try {
-            $this->setTasksFromAPI();
-            $this->executeTasksFromBDD();
+            /* $this->setTasksFromAPI();
+            $this->executeTasksFromBDD(); */
+            (new CustomerCrd)->setProductToCustomer(18, 24);
         } catch (\Throwable $e) {
             var_dump($e);
         }
@@ -850,6 +910,37 @@ class Dioqaapiconnexion extends Module implements WidgetInterface
         foreach ($params['order']->product_list as $key => $product) {
             $this->deleteBooking($product['id_product'], $params['cart']->id);
         }
+    }
+
+    private function sendOrder($params)
+    {
+        $order = $params['order'];
+        $cart = $params['cart'];
+
+        $products = $order->product_list;
+
+        $productDatas = [];
+
+        foreach ($products as $product) {
+            $data = [
+                "deviceId" => (int) $product['id_product'],
+                "quantity" => (int) $product['quantity'],
+                "unitPrice" => (float) $product['price_wt'],
+            ];
+
+            array_push($productDatas, $data);
+        }
+
+        $data = [
+            "orderId" => (int) $order->id,
+            "placeId" => (int) 999,
+            "orderDate" => $order->date_add,
+            "content" => $productDatas
+        ];
+
+        throw new PrestaShopException(json_encode($data));
+
+        return ApiController::getInstance()->post("/api/crd/order", $data);
     }
 
     private function updateBooking($id_product, $id_cart, $quantity, $addTime = false)
