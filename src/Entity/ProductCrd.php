@@ -15,7 +15,6 @@ use Shop;
 use ImageManager;
 use ImageType;
 use Context;
-use CustomerCrd;
 use Dioqaapiconnexion\Controller\ApiController;
 use PrestaShopException;
 use Exception;
@@ -26,6 +25,7 @@ use Dioqaapiconnexion\Controller\SwitchAction;
 use Dioqaapiconnexion\Entity\ManufacturerCrd;
 use Dioqaapiconnexion\Entity\FeatureValueCrd;
 use Dioqaapiconnexion\Entity\FeatureCrd;
+use Dioqaapiconnexion\Entity\CustomerCrd;
 use Throwable;
 
 class ProductCrd
@@ -112,6 +112,10 @@ class ProductCrd
 
         StockAvailable::setQuantity($pr->id, null, 1);
 
+        $this->handleCustomerCrd($object->placeId);
+        $client = new CustomerCrd();
+        $client->setProductToCustomer($object->placeId, $pr->id);
+
         /* ajout à l'index de recherche */
         Search::indexation(false, $object->deviceId);
         Module::processDeferedFuncCall();
@@ -166,7 +170,10 @@ class ProductCrd
 
     public function createProductName($object)
     {
-        return $object->name;
+        $brandName = $object->brandName;
+        $productName = str_replace($brandName, '', $object->name);
+        $productName = trim($productName);
+        return $productName;
     }
 
     private function getCatList($object)
@@ -349,43 +356,34 @@ class ProductCrd
         return $id_crd;
     }
 
-    private function handleClientAssociation($id_crd)
+    private function handleCustomerCrd($id_crd)
     {
         $places = ApiController::getInstance()->get("/api/crd/essentials/place");
-        $clientApi = array_filter($places, fn ($place) => $place->id == $id_crd);
+        $clientApi = array_filter($places, fn ($place) => $place->placeId == $id_crd);
 
         if (empty($clientApi)) {
             return;
         }
 
-        $clientPresta = Customer::getCustomersByEmail($clientApi->mail);
+        $clientApi = array_shift($clientApi);
+
+        $clientPresta = \Customer::getCustomersByEmail($clientApi->mail);
 
         if (isset($clientPresta[0])) {
             $id_customer = $clientPresta[0]['id_customer'];
+            if (!CustomerCrd::getTableLinkStatic($id_crd)) {
+                CustomerCrd::setTableLinkStatic($id_customer, $id_crd);
+            }
         } else {
-            $customer = new Customer();
-            $customer->firstname = "Agence";
-            $customer->lastname = $clientApi->name;
-            $customer->email = $clientApi->mail;
-            $customer->passwd = Tools::passwdGen();
-            $customer->active = 1;
-            $customer->add();
-
-            $address = new Address();
-            $address->id_customer = $customer->id;
-            $address->alias = "Agence";
-            $address->firstname = "Agence";
-            $address->lastname = $clientApi->name;
-            $address->address1 = $clientApi->address;
-            $address->postcode = $clientApi->zipCode;
-            $address->city = $clientApi->name;
-            $address->phone = $clientApi->phone;
-            $address->add();
+            $client = new CustomerCrd();
+            $client->add($clientApi);
         }
+    }
 
-        $clientApi = array_shift($clientApi);
-
-        $client = new CustomerCrd();
-        $client->add($clientApi);
+    public function disableProduct()
+    {
+        $pr = new \Product($this->id);
+        $pr->active = false;
+        $pr->update();
     }
 }

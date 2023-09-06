@@ -29,37 +29,47 @@ class CustomerCrd
     {
         $id_customer = $this->parseCustomer($object, "create");
 
-        $this->setTableLink($id_customer, $object->id);
+        $this->setTableLink($id_customer, $object->placeId);
     }
 
     public function update($object)
     {
-        $id_customer = $this->getTableLink($object->id);
+        $id_customer = $this->getTableLink($object->placeId);
 
         $this->parseCustomer($object, "update", $id_customer);
     }
 
     private function parseCustomer($object, $action, $id_customer = null)
     {
-        $customer = new Customer($id_customer, Configuration::get('PS_LANG_DEFAULT'));
-        $customer->firstname = $object->firstname;
-        $customer->lastname = $object->lastname;
-        $customer->email = $object->email;
-        $customer->passwd = $object->passwd;
-        $customer->active = $object->status;
+        $customer = new \Customer($id_customer, Configuration::get('PS_LANG_DEFAULT'));
+        $customer->firstname = "Agence";
+        $customer->lastname = $object->name;
+        $customer->email = $object->mail;
+        $customer->passwd = Tools::passwdGen();
+        $customer->active = 1;
 
         SwitchAction::handleCrud($customer, $action);
 
         return $customer->id;
     }
 
-    private function setTableLink($id_customer, $id_crd)
+    public function setTableLink($id_customer, $id_crd)
+    {
+        return self::setTableLinkStatic($id_customer, $id_crd);
+    }
+
+    public static function setTableLinkStatic($id_customer, $id_crd)
     {
         $datas = ["id_customer" => $id_customer, "id_crd" => $id_crd];
         return Db::getInstance()->insert('dioqaapiconnexion_customer', $datas);
     }
 
     public function getTableLink($id_crd)
+    {
+        return self::getTableLinkStatic($id_crd);
+    }
+
+    public static function getTableLinkStatic($id_crd)
     {
         $sql = new DbQuery();
         $sql->select('id_customer');
@@ -69,9 +79,16 @@ class CustomerCrd
         return Db::getInstance()->getValue($sql);
     }
 
-    public function setProductToCustomer($id_place, $id_product)
+
+    /**
+     * Ajoute les produits à un client pour le module marketplace
+     * @param $id_crd int id place
+     * @param $id_product int id product
+     * @return bool
+     */
+    public function setProductToCustomer($id_crd, $id_product)
     {
-        $id_customer = $this->getTableLink($id_place);
+        $id_customer = $this->getTableLink($id_crd);
 
         if (!$id_customer) {
             return false;
@@ -80,7 +97,7 @@ class CustomerCrd
         $id_seller = Db::getInstance()->getValue('SELECT id_seller FROM ' . _DB_PREFIX_ . 'wk_mp_seller WHERE seller_customer_id = ' . $id_customer);
 
         if (!$id_seller) {
-            return false;
+            $id_seller = $this->addSeller($id_customer);
         }
 
         $datas = [
@@ -104,5 +121,44 @@ class CustomerCrd
 
         $datas['date_add'] = date("Y-m-d H:i:s");
         return Db::getInstance()->insert('wk_mp_seller_product', $datas);
+    }
+
+    private function addSeller($id_customer)
+    {
+        $customer = new \Customer($id_customer, Configuration::get('PS_LANG_DEFAULT'));
+
+        $uniqueName = $customer->firstname . " " . $customer->lastname;
+        $datas = [
+            "shop_name_unique" => pSQL($uniqueName),
+            "link_rewrite" => Tools::link_rewrite($uniqueName),
+            "seller_firstname" => pSQL($customer->firstname),
+            "seller_lastname" => pSQL($customer->lastname),
+            "business_email" => pSQL($customer->email),
+            "id_country" => 0,
+            "id_state" => 0,
+            "default_lang" => (int) Configuration::get('PS_LANG_DEFAULT'),
+            "active" => 1,
+            "shop_approved" => 1,
+            "seller_customer_id" => (int) $id_customer,
+            "id_shop" => 1,
+            "id_shop_group" => 1,
+            "seller_details_access" => json_encode(["1", "2", "3", "4", "5", "6", "7", "8", "9"]),
+            "date_add" => date("Y-m-d H:i:s"),
+            "date_upd" => date("Y-m-d H:i:s"),
+        ];
+
+        //insert
+        Db::getInstance()->insert('wk_mp_seller', $datas);
+        $id_seller =  Db::getInstance()->Insert_ID();
+
+        $datas_lang = [
+            "id_seller" => $id_seller,
+            "id_lang" => (int) Configuration::get('PS_LANG_DEFAULT'),
+            "shop_name" => pSQL($customer->lastname),
+        ];
+
+        Db::getInstance()->insert('wk_mp_seller_lang', $datas_lang);
+
+        return $id_seller;
     }
 }

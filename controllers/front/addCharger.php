@@ -41,8 +41,10 @@ class DioqaapiconnexionAddChargerModuleFrontController extends ModuleFrontContro
             return;
         }
 
-        $sql = "INSERT INTO ps_customization (id_cart, id_product, id_product_attribute, quantity, in_cart) 
-                VALUES (" . $id_cart . ", " . $id_product . ", " . 0 . ", " . 1 . ", 1)";
+        $id_address_delivery = $this->context->cart->id_address_delivery;
+
+        $sql = "INSERT INTO ps_customization (id_cart, id_product, id_product_attribute, quantity, in_cart, id_address_delivery) 
+                VALUES (" . $id_cart . ", " . $id_product . ", " . 0 . ", " . 1 . ", 1, $id_address_delivery)";
         Db::getInstance()->execute($sql);
         $id_custom = (int) Db::getInstance()->Insert_ID();
 

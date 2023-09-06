@@ -389,11 +389,12 @@ class Dioqaapiconnexion extends Module implements WidgetInterface
         try {
             $this->deleteBookingAfterOrder($params);
             $this->sendOrder($params);
+            $this->disableOrderProducts($params);
         } catch (\Exception $th) {
             $this->setLogTest(
                 'hookActionValidateOrder : ' . $th->__toString(),
                 null,
-                __DIR__ . '/logs_test/log_' . date('y-m-d-H') . 'h.log'
+                __DIR__ . '/logs_error/log_' . date('y-m-d-H') . 'h.log'
             );
         }
     }
@@ -567,9 +568,10 @@ class Dioqaapiconnexion extends Module implements WidgetInterface
         echo 'DEV';
         echo '<pre>';
         try {
-            /* $this->setTasksFromAPI();
-            $this->executeTasksFromBDD(); */
-            (new CustomerCrd)->setProductToCustomer(18, 24);
+            /* $this->setTasksFromAPI(); */
+            $this->executeTasksFromBDD();
+            /* (new CustomerCrd)->setProductToCustomer(18, 24); */
+            /* $this->deleteBooking(24, 14); */
         } catch (\Throwable $e) {
             var_dump($e);
         }
@@ -634,11 +636,11 @@ class Dioqaapiconnexion extends Module implements WidgetInterface
                 $this->route = null;
                 $this->API_route = "/api/crd/essentials/";
                 break;
-            case 'stock':
+                /* case 'stock':
                 $this->route = "stocks";
                 $this->queueType = "stock";
                 $this->API_route = "/api/crd/stocks/components/place/" . $this->id_place;
-                break;
+                break; */
             default:
                 break;
         }
@@ -922,8 +924,10 @@ class Dioqaapiconnexion extends Module implements WidgetInterface
         $productDatas = [];
 
         foreach ($products as $product) {
+            $id_crd = new ProductCrd($product['id_product']);
+            $id_crd = $id_crd->getCRDProductId();
             $data = [
-                "deviceId" => (int) $product['id_product'],
+                "deviceId" => (int) $id_crd,
                 "quantity" => (int) $product['quantity'],
                 "unitPrice" => (float) $product['price_wt'],
             ];
@@ -938,9 +942,20 @@ class Dioqaapiconnexion extends Module implements WidgetInterface
             "content" => $productDatas
         ];
 
-        throw new PrestaShopException(json_encode($data));
+        /* throw new PrestaShopException(json_encode($data)); */
 
         return ApiController::getInstance()->post("/api/crd/order", $data);
+    }
+
+    private function disableOrderProducts($params)
+    {
+        $order = $params['order'];
+        $products = $order->product_list;
+
+        foreach ($products as $product) {
+            $pr = new ProductCrd($product['id_product']);
+            $pr->disableProduct();
+        }
     }
 
     private function updateBooking($id_product, $id_cart, $quantity, $addTime = false)
