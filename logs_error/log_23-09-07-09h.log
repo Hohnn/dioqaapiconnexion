@@ -1,0 +1,47 @@
+==================================2023-09-07 09:48:27==================================
+ => hookActionProductUpdate : PrestaShopException: Product id : 2 does not exist in /home/www/client/www/CPT013/bee/modules/dioqaapiconnexion/src/Entity/ProductCrd.php:353
+Stack trace:
+#0 /home/www/client/www/CPT013/bee/modules/dioqaapiconnexion/dioqaapiconnexion.php(412): Dioqaapiconnexion\Entity\ProductCrd->getCRDProductId()
+#1 /home/www/client/www/CPT013/bee/classes/Hook.php(1007): Dioqaapiconnexion->hookActionProductUpdate(Array)
+#2 /home/www/client/www/CPT013/bee/classes/Hook.php(431): HookCore::coreCallHook(Object(Dioqaapiconnexion), 'hookActionProdu...', Array)
+#3 /home/www/client/www/CPT013/bee/classes/Hook.php(944): HookCore::callHookOn(Object(Dioqaapiconnexion), 'actionProductUp...', Array)
+#4 /home/www/client/www/CPT013/bee/classes/Product.php(831): HookCore::exec('actionProductUp...', Array)
+#5 /home/www/client/www/CPT013/bee/src/Adapter/Product/AdminProductDataUpdater.php(84): ProductCore->update()
+#6 /home/www/client/www/CPT013/bee/src/PrestaShopBundle/Controller/Admin/ProductController.php(1110): PrestaShop\PrestaShop\Adapter\Product\AdminProductDataUpdater->activateProductIdList(Array)
+#7 /home/www/client/www/CPT013/bee/vendor/symfony/symfony/src/Symfony/Component/HttpKernel/HttpKernel.php(151): PrestaShopBundle\Controller\Admin\ProductController->unitAction('activate', '2')
+#8 /home/www/client/www/CPT013/bee/vendor/symfony/symfony/src/Symfony/Component/HttpKernel/HttpKernel.php(68): Symfony\Component\HttpKernel\HttpKernel->handleRaw(Object(Symfony\Component\HttpFoundation\Request), 1)
+#9 /home/www/client/www/CPT013/bee/vendor/symfony/symfony/src/Symfony/Component/HttpKernel/Kernel.php(200): Symfony\Component\HttpKernel\HttpKernel->handle(Object(Symfony\Component\HttpFoundation\Request), 1, false)
+#10 /home/www/client/www/CPT013/bee/admin705jwzuuo/index.php(82): Symfony\Component\HttpKernel\Kernel->handle(Object(Symfony\Component\HttpFoundation\Request), 1, false)
+#11 {main} 
+==================================2023-09-07 09:48:47==================================
+ => hookActionProductUpdate : PrestaShopException: Product id : 2 does not exist in /home/www/client/www/CPT013/bee/modules/dioqaapiconnexion/src/Entity/ProductCrd.php:353
+Stack trace:
+#0 /home/www/client/www/CPT013/bee/modules/dioqaapiconnexion/dioqaapiconnexion.php(412): Dioqaapiconnexion\Entity\ProductCrd->getCRDProductId()
+#1 /home/www/client/www/CPT013/bee/classes/Hook.php(1007): Dioqaapiconnexion->hookActionProductUpdate(Array)
+#2 /home/www/client/www/CPT013/bee/classes/Hook.php(431): HookCore::coreCallHook(Object(Dioqaapiconnexion), 'hookActionProdu...', Array)
+#3 /home/www/client/www/CPT013/bee/classes/Hook.php(944): HookCore::callHookOn(Object(Dioqaapiconnexion), 'actionProductUp...', Array)
+#4 /home/www/client/www/CPT013/bee/classes/Product.php(831): HookCore::exec('actionProductUp...', Array)
+#5 /home/www/client/www/CPT013/bee/controllers/admin/AdminProductsController.php(1906): ProductCore->update()
+#6 /home/www/client/www/CPT013/bee/classes/controller/AdminController.php(1183): AdminProductsControllerCore->processUpdate()
+#7 /home/www/client/www/CPT013/bee/classes/controller/AdminController.php(1013): AdminControllerCore->processSave()
+#8 /home/www/client/www/CPT013/bee/controllers/admin/AdminProductsController.php(1285): AdminControllerCore->postProcess()
+#9 /home/www/client/www/CPT013/bee/src/PrestaShopBundle/Controller/Admin/ProductController.php(535): AdminProductsControllerCore->postCoreProcess()
+#10 /home/www/client/www/CPT013/bee/vendor/symfony/symfony/src/Symfony/Component/HttpKernel/HttpKernel.php(151): PrestaShopBundle\Controller\Admin\ProductController->formAction('2', Object(Symfony\Component\HttpFoundation\Request))
+#11 /home/www/client/www/CPT013/bee/vendor/symfony/symfony/src/Symfony/Component/HttpKernel/HttpKernel.php(68): Symfony\Component\HttpKernel\HttpKernel->handleRaw(Object(Symfony\Component\HttpFoundation\Request), 1)
+#12 /home/www/client/www/CPT013/bee/vendor/symfony/symfony/src/Symfony/Component/HttpKernel/Kernel.php(200): Symfony\Component\HttpKernel\HttpKernel->handle(Object(Symfony\Component\HttpFoundation\Request), 1, false)
+#13 /home/www/client/www/CPT013/bee/admin705jwzuuo/index.php(82): Symfony\Component\HttpKernel\Kernel->handle(Object(Symfony\Component\HttpFoundation\Request), 1, false)
+#14 {main} 
+==================================2023-09-07 09:48:47==================================
+ => hookActionProductUpdate : PrestaShopException: Product id : 2 does not exist in /home/www/client/www/CPT013/bee/modules/dioqaapiconnexion/src/Entity/ProductCrd.php:353
+Stack trace:
+#0 /home/www/client/www/CPT013/bee/modules/dioqaapiconnexion/dioqaapiconnexion.php(412): Dioqaapiconnexion\Entity\ProductCrd->getCRDProductId()
+#1 /home/www/client/www/CPT013/bee/classes/Hook.php(1007): Dioqaapiconnexion->hookActionProductUpdate(Array)
+#2 /home/www/client/www/CPT013/bee/classes/Hook.php(431): HookCore::coreCallHook(Object(Dioqaapiconnexion), 'hookActionProdu...', Array)
+#3 /home/www/client/www/CPT013/bee/classes/Hook.php(944): HookCore::callHookOn(Object(Dioqaapiconnexion), 'actionProductUp...', Array)
+#4 /home/www/client/www/CPT013/bee/src/Adapter/Product/AdminProductWrapper.php(235): HookCore::exec('actionProductUp...', Array)
+#5 /home/www/client/www/CPT013/bee/src/PrestaShopBundle/Controller/Admin/ProductController.php(564): PrestaShop\PrestaShop\Adapter\Product\AdminProductWrapper->processQuantityUpdate(Object(Product), 10)
+#6 /home/www/client/www/CPT013/bee/vendor/symfony/symfony/src/Symfony/Component/HttpKernel/HttpKernel.php(151): PrestaShopBundle\Controller\Admin\ProductController->formAction('2', Object(Symfony\Component\HttpFoundation\Request))
+#7 /home/www/client/www/CPT013/bee/vendor/symfony/symfony/src/Symfony/Component/HttpKernel/HttpKernel.php(68): Symfony\Component\HttpKernel\HttpKernel->handleRaw(Object(Symfony\Component\HttpFoundation\Request), 1)
+#8 /home/www/client/www/CPT013/bee/vendor/symfony/symfony/src/Symfony/Component/HttpKernel/Kernel.php(200): Symfony\Component\HttpKernel\HttpKernel->handle(Object(Symfony\Component\HttpFoundation\Request), 1, false)
+#9 /home/www/client/www/CPT013/bee/admin705jwzuuo/index.php(82): Symfony\Component\HttpKernel\Kernel->handle(Object(Symfony\Component\HttpFoundation\Request), 1, false)
+#10 {main} 

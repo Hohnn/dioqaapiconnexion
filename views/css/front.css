@@ -49,6 +49,7 @@
     border: 1px solid #FAB511;
     cursor: pointer;
 }
+
 #bookingModal .modal-body ul li .close-label {
     display: inline-block;
     background: white;
@@ -56,6 +57,7 @@
     border-radius: 5px;
     padding: 0;
 }
+
 #bookingModal .modal-header {
     background-color: black;
     color: white;
@@ -67,7 +69,7 @@
     width: 0;
 }
 
-#bookingModal input[type="radio"]:checked + label {
+#bookingModal input[type="radio"]:checked+label {
     background: #FAB511;
     border: 1px solid #FAB511;
 }
@@ -80,7 +82,7 @@
     padding: 5px 10px;
     text-transform: uppercase;
     color: red;
-    
+
 }
 
 .productTimer {

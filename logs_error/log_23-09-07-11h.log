@@ -1,0 +1,12 @@
+==================================2023-09-07 11:11:39==================================
+ => DioqaapiconnexionBookingExpiredCartModuleFrontController : ErrorException: {"stack":["error: la valeur d'une clé dupliquée rompt la contrainte unique « booking_un »"],"message":"la valeur d'une clé dupliquée rompt la contrainte unique « booking_un »","length":192,"name":"error","severity":"ERREUR","code":"23505","detail":"La clé « (stock_id, cart_id)=(30, 22) » existe déjà.","file":"nbtinsert.c","line":"408","routine":"_bt_check_unique"} in /home/www/client/www/CPT013/bee/modules/dioqaapiconnexion/src/Controller/ApiController.php:118
+Stack trace:
+#0 /home/www/client/www/CPT013/bee/modules/dioqaapiconnexion/dioqaapiconnexion.php(1031): Dioqaapiconnexion\Controller\ApiController->post('/api/crd/stock/...', Object(stdClass))
+#1 /home/www/client/www/CPT013/bee/modules/dioqaapiconnexion/dioqaapiconnexion.php(1011): Dioqaapiconnexion->handleBooking(Object(Dioqaapiconnexion\Entity\Booking), false)
+#2 /home/www/client/www/CPT013/bee/modules/dioqaapiconnexion/dioqaapiconnexion.php(907): Dioqaapiconnexion->updateBooking(18, 22, 0)
+#3 /home/www/client/www/CPT013/bee/modules/dioqaapiconnexion/controllers/front/bookingExpiredCart.php(46): Dioqaapiconnexion->deleteBooking(18, 22)
+#4 /home/www/client/www/CPT013/bee/modules/dioqaapiconnexion/controllers/front/bookingExpiredCart.php(13): DioqaapiconnexionBookingExpiredCartModuleFrontController->handleBooking()
+#5 /home/www/client/www/CPT013/bee/classes/controller/Controller.php(295): DioqaapiconnexionBookingExpiredCartModuleFrontController->postProcess()
+#6 /home/www/client/www/CPT013/bee/classes/Dispatcher.php(525): ControllerCore->run()
+#7 /home/www/client/www/CPT013/bee/index.php(28): DispatcherCore->dispatch()
+#8 {main} 

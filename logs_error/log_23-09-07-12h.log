@@ -1,0 +1,14 @@
+==================================2023-09-07 12:04:50==================================
+ => hookActionValidateOrder : ErrorException: {"stack":["error: INSERT a plus de colonnes cibles que d'expressions"],"message":"INSERT a plus de colonnes cibles que d'expressions","length":112,"name":"error","severity":"ERREUR","code":"42601","position":"93","file":"analyze.c","line":"844","routine":"transformInsertRow"} in /home/www/client/www/CPT013/bee/modules/dioqaapiconnexion/src/Controller/ApiController.php:118
+Stack trace:
+#0 /home/www/client/www/CPT013/bee/modules/dioqaapiconnexion/dioqaapiconnexion.php(958): Dioqaapiconnexion\Controller\ApiController->post('/api/crd/order', Array)
+#1 /home/www/client/www/CPT013/bee/modules/dioqaapiconnexion/dioqaapiconnexion.php(391): Dioqaapiconnexion->sendOrder(Array)
+#2 /home/www/client/www/CPT013/bee/classes/Hook.php(1007): Dioqaapiconnexion->hookActionValidateOrder(Array)
+#3 /home/www/client/www/CPT013/bee/classes/Hook.php(431): HookCore::coreCallHook(Object(Dioqaapiconnexion), 'hookActionValid...', Array)
+#4 /home/www/client/www/CPT013/bee/classes/Hook.php(944): HookCore::callHookOn(Object(Dioqaapiconnexion), 'actionValidateO...', Array)
+#5 /home/www/client/www/CPT013/bee/classes/PaymentModule.php(550): HookCore::exec('actionValidateO...', Array)
+#6 /home/www/client/www/CPT013/bee/modules/ps_checkpayment/controllers/front/validation.php(86): PaymentModuleCore->validateOrder(22, 1, 758, 'Ch\xC3\xA8que', NULL, Array, 1, false, '8339edcdb422120...')
+#7 /home/www/client/www/CPT013/bee/classes/controller/Controller.php(295): Ps_CheckpaymentValidationModuleFrontController->postProcess()
+#8 /home/www/client/www/CPT013/bee/classes/Dispatcher.php(525): ControllerCore->run()
+#9 /home/www/client/www/CPT013/bee/index.php(28): DispatcherCore->dispatch()
+#10 {main} 

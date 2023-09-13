@@ -71,15 +71,15 @@ function hideBooking() {
 let count = 0;
 
 function countdown(date) {
-  const currentDate = new Date(date);
-  currentDate.setMinutes(currentDate.getMinutes() - 1);
-
-  const expiredDate = currentDate.getTime();
-  let timeRemaining = expiredDate - new Date().getTime();
-
   const interval = 1000;
   // Mettre à jour le compte à rebours immédiatement
   const updateCountdown = () => {
+    const currentDate = new Date(date);
+    currentDate.setMinutes(currentDate.getMinutes() - 1);
+
+    const expiredDate = currentDate.getTime();
+    let timeRemaining = expiredDate - new Date().getTime();
+
     if (timeRemaining <= 0) {
       clearInterval(countdownInterval);
       console.log("Compte à rebours terminé !");

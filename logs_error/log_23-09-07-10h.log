@@ -1,0 +1,15 @@
+==================================2023-09-07 10:46:24==================================
+ => hookActionObjectProductInCartDeleteAfter : PrestaShopException: Booking for product id : 24 and cart id 15 does not exist in /home/www/client/www/CPT013/bee/modules/dioqaapiconnexion/dioqaapiconnexion.php:1004
+Stack trace:
+#0 /home/www/client/www/CPT013/bee/modules/dioqaapiconnexion/dioqaapiconnexion.php(907): Dioqaapiconnexion->updateBooking(24, 15, 0)
+#1 /home/www/client/www/CPT013/bee/modules/dioqaapiconnexion/dioqaapiconnexion.php(377): Dioqaapiconnexion->deleteBooking(24, 15)
+#2 /home/www/client/www/CPT013/bee/classes/Hook.php(1007): Dioqaapiconnexion->hookActionObjectProductInCartDeleteAfter(Array)
+#3 /home/www/client/www/CPT013/bee/classes/Hook.php(431): HookCore::coreCallHook(Object(Dioqaapiconnexion), 'hookActionObjec...', Array)
+#4 /home/www/client/www/CPT013/bee/classes/Hook.php(944): HookCore::callHookOn(Object(Dioqaapiconnexion), 'actionObjectPro...', Array)
+#5 /home/www/client/www/CPT013/bee/controllers/front/CartController.php(346): HookCore::exec('actionObjectPro...', Array)
+#6 /home/www/client/www/CPT013/bee/controllers/front/CartController.php(248): CartControllerCore->processDeleteProductInCart()
+#7 /home/www/client/www/CPT013/bee/controllers/front/CartController.php(235): CartControllerCore->updateCart()
+#8 /home/www/client/www/CPT013/bee/classes/controller/Controller.php(295): CartControllerCore->postProcess()
+#9 /home/www/client/www/CPT013/bee/classes/Dispatcher.php(525): ControllerCore->run()
+#10 /home/www/client/www/CPT013/bee/index.php(28): DispatcherCore->dispatch()
+#11 {main} 

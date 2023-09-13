@@ -1,0 +1,28 @@
+==================================2023-08-31 16:47:26==================================
+ => hookActionValidateOrder : ErrorException: {"stack":["error: une valeur NULL viole la contrainte NOT NULL de la colonne « order_id »"],"message":"une valeur NULL viole la contrainte NOT NULL de la colonne « order_id »","length":178,"name":"error","severity":"ERREUR","code":"23502","detail":"La ligne en échec contient (null, null, null)","file":"execMain.c","line":"1554","routine":"ExecConstraints"} in /home/www/client/www/CPT013/bee/modules/dioqaapiconnexion/src/Controller/ApiController.php:118
+Stack trace:
+#0 /home/www/client/www/CPT013/bee/modules/dioqaapiconnexion/dioqaapiconnexion.php(943): Dioqaapiconnexion\Controller\ApiController->post('/api/crd/order', Array)
+#1 /home/www/client/www/CPT013/bee/modules/dioqaapiconnexion/dioqaapiconnexion.php(390): Dioqaapiconnexion->sendOrder(Array)
+#2 /home/www/client/www/CPT013/bee/classes/Hook.php(1007): Dioqaapiconnexion->hookActionValidateOrder(Array)
+#3 /home/www/client/www/CPT013/bee/classes/Hook.php(431): HookCore::coreCallHook(Object(Dioqaapiconnexion), 'hookActionValid...', Array)
+#4 /home/www/client/www/CPT013/bee/classes/Hook.php(944): HookCore::callHookOn(Object(Dioqaapiconnexion), 'actionValidateO...', Array)
+#5 /home/www/client/www/CPT013/bee/classes/PaymentModule.php(550): HookCore::exec('actionValidateO...', Array)
+#6 /home/www/client/www/CPT013/bee/modules/ps_checkpayment/controllers/front/validation.php(86): PaymentModuleCore->validateOrder(9, 1, 379, 'Ch\xC3\xA8que', NULL, Array, 1, false, '8339edcdb422120...')
+#7 /home/www/client/www/CPT013/bee/classes/controller/Controller.php(295): Ps_CheckpaymentValidationModuleFrontController->postProcess()
+#8 /home/www/client/www/CPT013/bee/classes/Dispatcher.php(525): ControllerCore->run()
+#9 /home/www/client/www/CPT013/bee/index.php(28): DispatcherCore->dispatch()
+#10 {main} 
+==================================2023-08-31 16:55:06==================================
+ => hookActionValidateOrder : ErrorException: {"stack":["error: une valeur NULL viole la contrainte NOT NULL de la colonne « order_id »"],"message":"une valeur NULL viole la contrainte NOT NULL de la colonne « order_id »","length":178,"name":"error","severity":"ERREUR","code":"23502","detail":"La ligne en échec contient (null, null, null)","file":"execMain.c","line":"1554","routine":"ExecConstraints"} in /home/www/client/www/CPT013/bee/modules/dioqaapiconnexion/src/Controller/ApiController.php:118
+Stack trace:
+#0 /home/www/client/www/CPT013/bee/modules/dioqaapiconnexion/dioqaapiconnexion.php(943): Dioqaapiconnexion\Controller\ApiController->post('/api/crd/order', Array)
+#1 /home/www/client/www/CPT013/bee/modules/dioqaapiconnexion/dioqaapiconnexion.php(390): Dioqaapiconnexion->sendOrder(Array)
+#2 /home/www/client/www/CPT013/bee/classes/Hook.php(1007): Dioqaapiconnexion->hookActionValidateOrder(Array)
+#3 /home/www/client/www/CPT013/bee/classes/Hook.php(431): HookCore::coreCallHook(Object(Dioqaapiconnexion), 'hookActionValid...', Array)
+#4 /home/www/client/www/CPT013/bee/classes/Hook.php(944): HookCore::callHookOn(Object(Dioqaapiconnexion), 'actionValidateO...', Array)
+#5 /home/www/client/www/CPT013/bee/classes/PaymentModule.php(550): HookCore::exec('actionValidateO...', Array)
+#6 /home/www/client/www/CPT013/bee/modules/ps_checkpayment/controllers/front/validation.php(86): PaymentModuleCore->validateOrder(12, 1, 379, 'Ch\xC3\xA8que', NULL, Array, 1, false, '8339edcdb422120...')
+#7 /home/www/client/www/CPT013/bee/classes/controller/Controller.php(295): Ps_CheckpaymentValidationModuleFrontController->postProcess()
+#8 /home/www/client/www/CPT013/bee/classes/Dispatcher.php(525): ControllerCore->run()
+#9 /home/www/client/www/CPT013/bee/index.php(28): DispatcherCore->dispatch()
+#10 {main} 

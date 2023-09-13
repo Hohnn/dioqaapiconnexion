@@ -917,8 +917,6 @@ class Dioqaapiconnexion extends Module implements WidgetInterface
     private function sendOrder($params)
     {
         $order = $params['order'];
-        $cart = $params['cart'];
-
         $products = $order->product_list;
 
         $productDatas = [];
@@ -930,21 +928,61 @@ class Dioqaapiconnexion extends Module implements WidgetInterface
                 "deviceId" => (int) $id_crd,
                 "quantity" => (int) $product['quantity'],
                 "unitPrice" => (float) $product['price_wt'],
+                "withCharger" => (bool) $this->withCharger($product)
             ];
 
             array_push($productDatas, $data);
         }
 
+        $stock = ApiController::getInstance()->get("/api/crd/stocks/device/$id_crd");
+
         $data = [
             "orderId" => (int) $order->id,
-            "placeId" => (int) 999,
+            "placeId" => (int) $stock[0]->placeId,
             "orderDate" => $order->date_add,
             "content" => $productDatas
         ];
 
-        /* throw new PrestaShopException(json_encode($data)); */
+        $this->setLogTest(
+            'sendOrder row',
+            $params,
+            __DIR__ . '/logs_order/log_' . date('y-m-d-H') . 'h.log'
+        );
+
+        $this->setLogTest(
+            'sendOrder formatted',
+            $data,
+            __DIR__ . '/logs_order/log_' . date('y-m-d-H') . 'h.log'
+        );
 
         return ApiController::getInstance()->post("/api/crd/order", $data);
+    }
+
+    private function withCharger($product)
+    {
+        $id_customization = $product['id_customization'];
+
+        if ($id_customization == 0) {
+            return false;
+        }
+
+        //get customization data in bdd
+        $query = new DbQuery();
+        $query->select('value')
+            ->from('customized_data')
+            ->where("id_customization = $id_customization");
+
+        $customization_data = Db::getInstance()->getValue($query);
+
+        if (!$customization_data) {
+            return;
+        }
+
+        if ($customization_data == 'Avec chargeur') {
+            return true;
+        } else if ($customization_data == 'Sans chargeur') {
+            return false;
+        }
     }
 
     private function disableOrderProducts($params)

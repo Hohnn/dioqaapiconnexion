@@ -1,0 +1,13 @@
+==================================2023-08-31 17:02:15==================================
+ => hookActionValidateOrder : PrestaShopException: {"order":{"orderId":"3","placeId":999,"orderDate":"2023-08-31 17:02:14","content":[{"deviceId":"24","quantity":1,"unitPrice":379}]}} in /home/www/client/www/CPT013/bee/modules/dioqaapiconnexion/dioqaapiconnexion.php:943
+Stack trace:
+#0 /home/www/client/www/CPT013/bee/modules/dioqaapiconnexion/dioqaapiconnexion.php(391): Dioqaapiconnexion->sendOrder(Array)
+#1 /home/www/client/www/CPT013/bee/classes/Hook.php(1007): Dioqaapiconnexion->hookActionValidateOrder(Array)
+#2 /home/www/client/www/CPT013/bee/classes/Hook.php(431): HookCore::coreCallHook(Object(Dioqaapiconnexion), 'hookActionValid...', Array)
+#3 /home/www/client/www/CPT013/bee/classes/Hook.php(944): HookCore::callHookOn(Object(Dioqaapiconnexion), 'actionValidateO...', Array)
+#4 /home/www/client/www/CPT013/bee/classes/PaymentModule.php(550): HookCore::exec('actionValidateO...', Array)
+#5 /home/www/client/www/CPT013/bee/modules/ps_checkpayment/controllers/front/validation.php(86): PaymentModuleCore->validateOrder(13, 1, 379, 'Ch\xC3\xA8que', NULL, Array, 1, false, '8339edcdb422120...')
+#6 /home/www/client/www/CPT013/bee/classes/controller/Controller.php(295): Ps_CheckpaymentValidationModuleFrontController->postProcess()
+#7 /home/www/client/www/CPT013/bee/classes/Dispatcher.php(525): ControllerCore->run()
+#8 /home/www/client/www/CPT013/bee/index.php(28): DispatcherCore->dispatch()
+#9 {main} 
