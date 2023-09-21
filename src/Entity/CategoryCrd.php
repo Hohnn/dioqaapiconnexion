@@ -24,7 +24,13 @@ use Dioqaapiconnexion\Controller\SwitchAction;
 
 class CategoryCrd
 {
-    const ID_MAIN_CAT = 23;
+    const ID_RACINE_CAT = 2;
+    const ID_MAIN_CAT = 2284;
+    const ID_SMARTPHONE_CAT = 2285;
+    const ID_TABLETTE_CAT = 2394;
+    const ID_COMPUTER_CAT = 2306;
+    const ID_OBJECT_CAT = 2445;
+    const ID_CONSOLE_CAT = 2289;
     public $id_category_parent;
 
     public function add($object)
@@ -50,6 +56,10 @@ class CategoryCrd
         $cat->link_rewrite = Tools::link_rewrite($clean);
         $cat->name = $object->name;
         $cat->active = $object->status;
+
+        if ($object->meta != null) {
+            $cat->meta_description = $object->meta;
+        }
 
         SwitchAction::handleCrud($cat, $action);
 

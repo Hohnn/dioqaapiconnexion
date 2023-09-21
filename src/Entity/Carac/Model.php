@@ -16,6 +16,7 @@ use ImageManager;
 use ImageType;
 use Context;
 use Dioqaapiconnexion\Entity\CategoryCrd;
+use Dioqaapiconnexion\Controller\ApiController;
 use PrestaShopException;
 
 
@@ -43,11 +44,37 @@ class Model extends Main
 
     public function createCategoryThree($object)
     {
+        $this->createCatProductType($object);
+        $this->createCatSeoProductType($object);
+
         $this->createCatBrand($object);
 
-        $this->createCatProductType($object);
+        $haveGroup = $this->createCatGroup($object);
 
-        $this->createCatModel($object);
+        $this->createCatModel($object, $haveGroup);
+
+        if ($haveGroup) {
+            $group = $this->getGroupDetail($object->groupId);
+            if ($group->isSeo == true) {
+                $this->createCatSeoBrand($object);
+                $this->createCatSeoGroup($object);
+            }
+        }
+    }
+
+    public function createCatProductType($object)
+    {
+        $productTypeId = $object->productTypeId;
+        $productTypeName = $object->productTypeName;
+
+        $cat = new CategoryCrd();
+
+        $this->ID_CATEGORY_PARENT = $cat::ID_MAIN_CAT;
+
+        $type = 'productType-' . $productTypeId;
+
+        $obj = $this->formatDataCategory($productTypeId, $productTypeName, $type, $object->status);
+        $this->setCategory($obj);
     }
 
     public function createCatBrand($object)
@@ -55,48 +82,130 @@ class Model extends Main
         $brandId = $object->brandId;
         $brandName = $object->brandName;
 
-        $cat = new CategoryCrd();
-        $this->ID_CATEGORY_PARENT = $cat::ID_MAIN_CAT;
+        $productTypeId = $object->productTypeId;
+        $productTypeName = $object->productTypeName;
 
-        $type = 'brand-' . $brandId;
+        $brandName = $productTypeName . ' ' . $brandName;
+
+        $typePT = 'productType-' . $productTypeId;
+
+        $cat = new CategoryCrd();
+        $this->ID_CATEGORY_PARENT = $cat->getTableLink($productTypeId, $typePT);
+
+        $type = $typePT . '-' . 'brand-' . $brandId;
 
         $obj = $this->formatDataCategory($brandId, $brandName, $type, $object->status);
         $this->setCategory($obj);
     }
 
-    public function createCatProductType($object)
+    public function createCatGroup($object)
     {
-        $productTypeId = $object->productTypeId;
-        $productTypeName = $object->productTypeName . ' ' . $object->brandName;
+        $brandId = $object->brandId;
 
-        $typeBrand = 'brand-' . $object->brandId;
+        $productTypeId = $object->productTypeId;
+
+        $groupId = $object->groupId;
+        $groupName = $object->groupName;
+
+        if ($groupId == null || $groupName == null) {
+            return false;
+        }
+
+        $typePT = 'productType-' . $productTypeId;
+        $typeBrand = $typePT . '-' . 'brand-' . $brandId;
+
+        $cat = new CategoryCrd();
+        $this->ID_CATEGORY_PARENT = $cat->getTableLink($brandId, $typeBrand);
+
+        $type = $typeBrand . '-' . 'group-' . $groupId;
+
+        $obj = $this->formatDataCategory($groupId, $groupName, $type, $object->status);
+        $this->setCategory($obj);
+        return true;
+    }
+
+    public function createCatModel($object, $haveGroup)
+    {
+        $modelId = $object->modelId;
+        $modelName = $object->name;
+
+        $brandId = $object->brandId;
+        $groupId = $object->groupId;
+
+        $productTypeId = $object->productTypeId;
+
+        $typePT = 'productType-' . $productTypeId;
+        $typeBrand = $typePT . '-' . 'brand-' . $brandId;
 
         $cat = new CategoryCrd();
 
-        $this->ID_CATEGORY_PARENT = $cat->getTableLink($object->brandId, $typeBrand);
+        if ($haveGroup) {
+            $typeGroup = $typeBrand . '-' . 'group-' . $groupId;
+            $this->ID_CATEGORY_PARENT = $cat->getTableLink($object->groupId, $typeGroup);
+            $type = $typeGroup . '-' . 'model-' . $modelId;
+        } else {
+            $this->ID_CATEGORY_PARENT = $cat->getTableLink($object->brandId, $typeBrand);
+            $type = $typeBrand . '-' . 'model-' . $modelId;
+        }
 
-        $type = $typeBrand . '-' . 'productType-' . $productTypeId;
+        $obj = $this->formatDataCategory($modelId, $modelName, $type, $object->status, $object->metaDescription);
+        $this->setCategory($obj);
+    }
+
+    private function createCatSeoProductType($object)
+    {
+        $productTypeId = $object->productTypeId;
+        $productTypeName = $object->productTypeName;
+        $productTypeName = $productTypeName . ' reconditionné';
+
+        $cat = new CategoryCrd();
+
+        $this->ID_CATEGORY_PARENT = $cat::ID_RACINE_CAT;
+
+        $type = 'productTypeSeo-' . $productTypeId;
 
         $obj = $this->formatDataCategory($productTypeId, $productTypeName, $type, $object->status);
         $this->setCategory($obj);
     }
 
-    public function createCatModel($object)
+    private function createCatSeoBrand($object)
     {
-        $modelId = $object->modelId;
-        $modelName = $object->name;
-
-        $typeBrand = 'brand-' . $object->brandId;
-        $typeproductType = $typeBrand . '-' . 'productType-' . $object->productTypeId;
+        $brandId = $object->brandId;
+        $brandName = $object->brandName;
+        $brandName = $brandName . ' reconditionné';
 
         $cat = new CategoryCrd();
+        $this->ID_CATEGORY_PARENT = $cat::ID_RACINE_CAT;
 
-        $this->ID_CATEGORY_PARENT = $cat->getTableLink($object->productTypeId, $typeproductType);
+        $type = 'brandSeo-' . $brandId;
 
-        $type = $typeproductType . '-' . 'model-' . $modelId;
-
-        $obj = $this->formatDataCategory($modelId, $modelName, $type, $object->status);
+        $obj = $this->formatDataCategory($brandId, $brandName, $type, $object->status);
         $this->setCategory($obj);
+    }
+
+    private function createCatSeoGroup($object)
+    {
+        $brandId = $object->brandId;
+
+        $groupId = $object->groupId;
+        $groupName = $object->groupName;
+        $groupName = $groupName . ' reconditionné';
+
+        $typeBrand = 'brandSeo-' . $brandId;
+
+        $cat = new CategoryCrd();
+        $this->ID_CATEGORY_PARENT = $cat->getTableLink($brandId, $typeBrand);
+
+        $type = $typeBrand . '-' . 'groupSeo-' . $groupId;
+
+        $obj = $this->formatDataCategory($groupId, $groupName, $type, $object->status);
+        $this->setCategory($obj);
+    }
+
+
+    private function getGroupDetail($groupId)
+    {
+        return ApiController::getInstance()->get("/api/crd/group/$groupId/detail");
     }
 
     private function setCategory($obj)
@@ -110,13 +219,14 @@ class Model extends Main
         }
     }
 
-    private function formatDataCategory($id, $name, $type, $status)
+    private function formatDataCategory($id, $name, $type, $status, $meta = null)
     {
         return (object)[
             "id" => $id,
             "name" => $name,
             "type" => $type,
-            "status" => $status
+            "status" => $status,
+            "meta" => $meta
         ];
     }
 }

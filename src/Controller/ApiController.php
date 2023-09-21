@@ -31,6 +31,7 @@ class ApiController
 {
 
     const BASE_URI = "https://cerebro.ready2dev.fr";
+    /* const BASE_URI = "https://cerebro.margueritegroup.fr"; */
     private static $instance;
     private $username = "dioqa";
     private $password = "87tP^JkVA2n3iKbU";

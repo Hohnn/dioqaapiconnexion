@@ -569,14 +569,12 @@ class Dioqaapiconnexion extends Module implements WidgetInterface
         echo '<pre>';
         try {
             /* $this->setTasksFromAPI(); */
-            $this->executeTasksFromBDD();
-            /* (new CustomerCrd)->setProductToCustomer(18, 24); */
-            /* $this->deleteBooking(24, 14); */
+            /* $this->executeTasksFromBDD(); */
+            /* $this->cleanGhostDevices(); */
         } catch (\Throwable $e) {
             var_dump($e);
         }
     }
-
 
     public function setTasksFromAPI()
     {
@@ -702,13 +700,16 @@ class Dioqaapiconnexion extends Module implements WidgetInterface
     private function processData($datas, $featureName = null)
     {
         foreach ($datas as $key => $data) {
+            /* if ($this->action === 'category' && $data->groupId == null) {
+                continue;
+            } */
             if ($featureName !== null) {
                 $data->featureName = $featureName;
             }
             try {
                 $this->setTask($data);
                 $this->handleSuccess($key, $data);
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 $this->handleFail($key, $data, $e->__toString());
             }
         }
@@ -1097,6 +1098,30 @@ class Dioqaapiconnexion extends Module implements WidgetInterface
                 continue;
             }
             $this->updateBooking($product['id_product'], $id_cart, 1, true);
+        }
+    }
+
+    private function cleanGhostDevices()
+    {
+        $apiDevices = ApiController::getInstance()->get("/api/crd/devices");
+
+        $devices = Db::getInstance()->executeS("SELECT * FROM `" . _DB_PREFIX_ . "dioqaapiconnexion_product`");
+
+        foreach ($devices as $device) {
+            $id_crd = $device['id_crd'];
+            $deviceFound = array_filter($apiDevices, function ($e) use ($id_crd) {
+                return $e->deviceId == $id_crd;
+            });
+
+            if (empty($deviceFound)) {
+                $this->setLogTest(
+                    'cleanGhostDevices',
+                    [$device],
+                    __DIR__ . '/logs_error/log_' . date('y-m-d-H') . 'h.log'
+                );
+                $product = new \Product($device['id_product']);
+                $product->delete();
+            }
         }
     }
 }

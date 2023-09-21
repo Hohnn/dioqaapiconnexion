@@ -64,6 +64,8 @@ class ProductCrd
     {
         $cat = $this->getCatModel($object->modelId);
 
+        var_dump($cat);
+
         $pr = new \Product($id, Configuration::get('PS_LANG_DEFAULT'));
         $pr->reference = $object->serialNumber;
         /* $pr->supplier_reference = $object->manufacturerRef; */
@@ -73,7 +75,7 @@ class ProductCrd
         /* $pr->link_rewrite = self::createMultiLangField(Tools::str2url($object->shortName)); */
         $pr->modifierWsLinkRewrite();
         $pr->minimal_quantity = 1;
-        $pr->id_category_default = $cat;
+        $pr->id_category_default = $cat[0] ?? 2;
         $pr->redirect_type = '301';
         $pr->show_price = 1;
         $pr->on_sale = 0;
@@ -82,7 +84,6 @@ class ProductCrd
         $idManufacturer = new ManufacturerCrd();
         $idManufacturer = $idManufacturer->getTableLink($object->brandId);
         $pr->id_manufacturer = $idManufacturer;
-        /* $pr->quantity = 1; */
 
         if ($action == 'create') {
             $pr->active = false;
@@ -94,7 +95,8 @@ class ProductCrd
         $this->handleAllImages($pr, $object);
 
         $pr->deleteCategories();
-        $pr->addToCategories([$cat]);
+        $catsSeo = $this->getCatSeo($object->modelId);
+        $pr->addToCategories(array_merge($cat, $catsSeo));
 
         $this->setAllFeatures($pr, $object);
 
@@ -176,16 +178,6 @@ class ProductCrd
         return $productName;
     }
 
-    private function getCatList($object)
-    {
-        $list = [];
-        foreach ($object->models as $key => $value) {
-            $cat = $this->getCatModel($value->id);
-            $cat && $list[] = $cat;
-        }
-        return $list;
-    }
-
     private function getCatModel($id_crd)
     {
         $type = "model-" . $id_crd;
@@ -196,7 +188,52 @@ class ProductCrd
         $query->where("id_crd = $id_crd");
         $query->where("type like '%$type'");
 
-        return Db::getInstance()->getValue($query);
+        return array_map(fn ($cat) => $cat['id_category'], Db::getInstance()->executeS($query));
+    }
+
+    private function getCatSeo($id_crd)
+    {
+        $type = "model-" . $id_crd;
+
+        $query = new DbQuery();
+        $query->select('type');
+        $query->from('dioqaapiconnexion_category');
+        $query->where("id_crd = $id_crd");
+        $query->where("type like '%$type'");
+
+        $datas = array_map(fn ($cat) => $cat['type'], Db::getInstance()->executeS($query));
+
+        $group = array_filter($datas, fn ($cat) => preg_match('/group/', $cat));
+
+        $catIdsGroup = [];
+        $catIdsPt = [];
+
+        foreach ($group as $key => $type) {
+
+            $groupId = $this->getIdByType($type, 'group');
+
+            $brandId = $this->getIdByType($type, 'brand');
+
+            $typeGroup = "brandSeo-" . $brandId . '-groupSeo-' . $groupId;
+            $cat = new CategoryCrd();
+            $catIdGroup = $cat->getTableLink($groupId, $typeGroup);
+            $catIdsGroup[] = $catIdGroup;
+
+            $productTypeId = $this->getIdByType($type, 'productType');
+
+            $typePt = 'productTypeSeo-' . $productTypeId;
+            $catIdPt = $cat->getTableLink($productTypeId, $typePt);
+            $catIdsPt[] = $catIdPt;
+        }
+
+        return array_merge($catIdsGroup, $catIdsPt);
+    }
+
+    private function getIdByType($type, $typeName)
+    {
+        $pattern = "/$typeName-\d+/";
+        preg_match($pattern, $type, $matches);
+        return str_replace("$typeName-", '', $matches[0]);
     }
 
     private function setTableLink($id_product, $id_crd)
