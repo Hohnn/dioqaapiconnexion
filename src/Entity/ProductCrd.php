@@ -64,8 +64,6 @@ class ProductCrd
     {
         $cat = $this->getCatModel($object->modelId);
 
-        var_dump($cat);
-
         $pr = new \Product($id, Configuration::get('PS_LANG_DEFAULT'));
         $pr->reference = $object->serialNumber;
         /* $pr->supplier_reference = $object->manufacturerRef; */

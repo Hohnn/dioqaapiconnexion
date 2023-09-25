@@ -74,6 +74,21 @@
     border: 1px solid #FAB511;
 }
 
+#bookingModal .product {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+#bookingModal .product img {
+    width: 60px;
+}
+
+#bookingModal .actions {
+    display: flex;
+    align-items: center;
+}
+
 .isBooked {
     border: 1px solid red;
     display: flex;

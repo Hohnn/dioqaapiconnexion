@@ -37,7 +37,7 @@ class DioqaapiconnexionBookingExpiredCartModuleFrontController extends ModuleFro
 
                 $isPossible = $this->module->isBookingPossible($id_product);
                 if ($isPossible && !$isPossible['isBooked']) {
-                    $this->module->addBooking($id_product, $id_cart, $id_customer);
+                    $this->module->addBooking($id_product, $id_cart);
                 } else {
                     $this->context->cart->deleteProduct($id_product, 0, $id_customization);
                 }

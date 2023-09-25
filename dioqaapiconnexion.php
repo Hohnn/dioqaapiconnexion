@@ -43,7 +43,7 @@ use Dioqaapiconnexion\Entity\FeatureValueCrd;
 use Dioqaapiconnexion\Entity\ProductCrd;
 use Dioqaapiconnexion\Entity\Booking;
 use Dioqaapiconnexion\Entity\CustomerCrd;
-
+use PrestaShop\PrestaShop\Core\Domain\Category\ValueObject\CategoryId;
 use PrestaShop\PrestaShop\Core\Module\WidgetInterface;
 use PrestaShopBundle\Form\Admin\Type\TranslateType;
 use \Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -451,33 +451,50 @@ class Dioqaapiconnexion extends Module implements WidgetInterface
     {
         if ($this->context->cart->id) {
             $bookings = Booking::getBookingsByCartId($this->context->cart->id);
+
+            $productCats = [];
+
             if ($bookings) {
                 $olderBook = $bookings[0];
                 $date = $olderBook['date_expire'];
                 $countDown = Booking::timeDifferenceToNowFormatted($date);
 
+
                 if (!$countDown) {
-                    $this->deleteProductNotAvailable();
+                    $productCats = $this->deleteProductNotAvailable();
                 }
             }
 
             $cart = new Cart($this->context->cart->id);
 
             $this->smarty->assign([
-                'products' => $cart->getProducts(true, false, null, false)
+                'products' => $cart->getProducts(true, false, null, false),
+                'productCats' => $this->getCatInfoByCatIds($productCats)
             ]);
 
             return $this->display(__FILE__, 'views/templates/hook/modals.tpl');
         }
     }
 
+    private function getCatInfoByCatIds($ids)
+    {
+        $productCats = [];
+        foreach (array_unique($ids) as $id) {
+            $cat = new Category($id);
+            $productCats[] = ['link' => $cat->getLink(), 'name' => $cat->name[$this->context->language->id]];
+        }
+        return $productCats;
+    }
 
     private function deleteProductNotAvailable()
     {
         $cart = new Cart($this->context->cart->id);
         $productsInCart = $cart->getProducts(false, false, null, false);
 
+        $productCats = [];
         foreach ($productsInCart as $key => $product) {
+            $productCats[] = $product['id_category_default'];
+
             $productCrd = new ProductCrd($product['id_product']);
             $id_crd = $productCrd->getCRDProductId();
             $stock = $this->getCRDStockByProductId($id_crd);
@@ -493,6 +510,8 @@ class Dioqaapiconnexion extends Module implements WidgetInterface
             $cart->deleteProduct($product['id_product'], $product['id_product_attribute'], $product['id_customization']);
             $this->deleteBooking($product['id_product'], $this->context->cart->id);
         }
+
+        return $productCats;
     }
 
     /**
@@ -522,19 +541,19 @@ class Dioqaapiconnexion extends Module implements WidgetInterface
     {
         if ($this->context->cart->id) {
             $bookings = Booking::getBookingsByCartId($this->context->cart->id);
-            if (empty($bookings)) {
-                return;
+            if (!empty($bookings)) {
+
+                $olderBook = $bookings[0];
+
+                $date = $olderBook['date_expire'];
+
+                $countDown = Booking::timeDifferenceToNowFormatted($date);
+
+                $this->smarty->assign([
+                    'date' => $date,
+                    'timed' => $countDown
+                ]);
             }
-            $olderBook = $bookings[0];
-
-            $date = $olderBook['date_expire'];
-
-            $countDown = Booking::timeDifferenceToNowFormatted($date);
-
-            $this->smarty->assign([
-                'date' => $date,
-                'time' => $countDown
-            ]);
 
             return $this->display(__FILE__, 'views/templates/widget/timer.tpl');
         }
@@ -568,9 +587,8 @@ class Dioqaapiconnexion extends Module implements WidgetInterface
         echo 'DEV';
         echo '<pre>';
         try {
-            /* $this->setTasksFromAPI(); */
-            /* $this->executeTasksFromBDD(); */
-            /* $this->cleanGhostDevices(); */
+            /* $this->setTasksFromAPI();
+            $this->executeTasksFromBDD(); */
         } catch (\Throwable $e) {
             var_dump($e);
         }
@@ -1021,7 +1039,7 @@ class Dioqaapiconnexion extends Module implements WidgetInterface
             return false;
         }
 
-        $route = str_replace(":id", $stock->stockId, Booking::ROUTE_UPDATE . "?id=" . $book->id_crd);
+        $route = str_replace(":id", $stock->stockId, Booking::ROUTE_UPDATE);
 
         $data = (object)[
             "cartId" => $book->id_cart,
@@ -1029,10 +1047,17 @@ class Dioqaapiconnexion extends Module implements WidgetInterface
             "time" => $addTime
         ];
 
-        $bookingCrd = ApiController::getInstance()->post($route, $data);
-
-        $book->date_expire = $bookingCrd->dateValidity;
-        $book->add_time = $addTime;
+        try {
+            $bookingCrd = ApiController::getInstance()->post($route, $data);
+            $book->date_expire = $bookingCrd->dateValidity;
+            $book->add_time = $addTime;
+        } catch (\Throwable $th) {
+            $this->setLogTest(
+                'handleBooking : ' . $th->__toString(),
+                [$book, $route, $data],
+                __DIR__ . '/logs_error/log_' . date('y-m-d-H') . 'h.log'
+            );
+        }
 
         return $book->handleBookingInBDD();
     }
@@ -1046,7 +1071,7 @@ class Dioqaapiconnexion extends Module implements WidgetInterface
             return false;
         }
 
-        $placeId = 999;
+        /* $placeId = 999;
 
         $stock = array_filter($stocks, function ($e) use ($placeId) {
             return $e->placeId == $placeId;
@@ -1054,9 +1079,9 @@ class Dioqaapiconnexion extends Module implements WidgetInterface
 
         if (empty($stock)) {
             return false;
-        }
+        } */
 
-        return array_shift($stock);
+        return array_shift($stocks);
     }
 
     public function isBookingPossible($id_product)

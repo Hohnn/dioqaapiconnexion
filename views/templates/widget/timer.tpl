@@ -1,4 +1,5 @@
-<div class="bookingTimeContainer" title="Temps de réservation des produits">
+<div class="bookingTimeContainer {if !isset($timed) || !$timed}d-none{/if}" title="Temps de réservation des produits">
     <i class="material-icons">timer</i>
-    <span data-date="{$date}" data-time-out="{if $time}0{else}1{/if}" class="bookingTime">{$time}</span>
+    <span data-date="{if isset($date)}{$date}{/if}" data-time="{if isset($timed)}{$timed}{else}null{/if}"
+        class="bookingTime">{if isset($timed)}{$timed}{/if}</span>
 </div>

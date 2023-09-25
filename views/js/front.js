@@ -28,44 +28,18 @@ function ajaxCheckBooking() {
 ajaxCheckBooking();
 
 let timerSpan = document.querySelector(".bookingTimeContainer .bookingTime");
-if (!timerSpan) {
-  timerSpan = document.createElement("span");
-}
+
 const cartBlock = document.querySelector(".blockcart.cart-preview");
 
 function showBooking(date) {
-  if (timerSpan.className === "") {
-    const menuBlock = document.querySelector(
-      ".ets_mm_megamenu_content .ets_mm_megamenu_content_content"
-    );
-
-    let icon2 = document.createElement("i");
-    icon2.className = "material-icons";
-    icon2.innerText = "timer";
-
-    timerSpan.className = "bookingTime";
-    let div = document.createElement("div");
-    div.className = "bookingTimeContainer";
-    div.append(icon2);
-    div.append(timerSpan);
-    menuBlock.append(div);
-  } else {
-    date = document.querySelector(".bookingTimeContainer [data-date]")?.dataset
-      ?.date;
-  }
-
-  cartBlock.classList.add("booked");
-  let icon = document.createElement("i");
-  icon.className = "material-icons";
-  icon.innerText = "timer";
-  cartBlock.append(icon);
-
+  timerSpan?.parentNode?.classList.remove("d-none");
+  timerSpan.dataset.date = date;
   countdown(date);
 }
 
 function hideBooking() {
-  timerSpan?.parentNode?.remove();
-  cartBlock.classList.remove("booked");
+  timerSpan?.parentNode?.classList.add("d-none");
+  /* cartBlock.classList.remove("booked"); */
 }
 
 let count = 0;
@@ -75,7 +49,7 @@ function countdown(date) {
   // Mettre à jour le compte à rebours immédiatement
   const updateCountdown = () => {
     const currentDate = new Date(date);
-    currentDate.setMinutes(currentDate.getMinutes() - 1);
+    /* currentDate.setMinutes(currentDate.getMinutes() - 1); */
 
     const expiredDate = currentDate.getTime();
     let timeRemaining = expiredDate - new Date().getTime();
@@ -84,8 +58,9 @@ function countdown(date) {
       clearInterval(countdownInterval);
       console.log("Compte à rebours terminé !");
       showModalBookingExpire();
+      hideBooking();
     } else {
-      if (timeRemaining <= 2000) {
+      if (timeRemaining <= 10000) {
         console.log("bientot fini");
         showModalBookingOrderNow();
       }
@@ -100,7 +75,6 @@ function countdown(date) {
 
       displayTime(days, hours, minutes, seconds);
 
-      timeRemaining -= interval;
       count++;
     }
   };
@@ -115,9 +89,9 @@ function displayTime(days, hours, minutes, seconds) {
     ".bookingTimeContainer .bookingTime"
   );
   allTimer.forEach((el) => {
-    el.innerText = `${hours.toString().padStart(2, "0")}:${minutes
+    el.innerText = `${minutes.toString().padStart(2, "0")}:${seconds
       .toString()
-      .padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
+      .padStart(2, "0")}`;
   });
 }
 
@@ -132,7 +106,7 @@ function showModalBookingExpire() {
 let countModalBookingOrderNow = 0;
 
 function showModalBookingOrderNow() {
-  if (countModalBookingOrderNow == 0) {
+  if (countModalBookingOrderNow == 0 && !$("body").hasClass("cart")) {
     $("#bookingModalTimeOut").modal("show");
   }
   countModalBookingOrderNow++;

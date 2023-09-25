@@ -1,11 +1,9 @@
 function listenForModal() {
   const timeOut = document.querySelector(".bookingTimeContainer .bookingTime")
-    ?.dataset?.timeOut;
+    ?.dataset?.time;
 
-  if (timeOut == "1") {
+  if (timeOut == false) {
     $("#bookingModal").modal("show");
-  } else {
-    $("#bookingModal").modal("hide");
   }
 }
 listenForModal();

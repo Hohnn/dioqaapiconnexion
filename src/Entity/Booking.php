@@ -46,6 +46,14 @@ class Booking
 
     public function add()
     {
+        $allBookings = self::getBookingsByCartId($this->id_cart);
+
+        foreach ($allBookings as $key => $booking) {
+            $booking = new Booking($booking['id_booking']);
+            $booking->date_expire = $this->date_expire;
+            $booking->update();
+        }
+
         $data = [
             'id_product' => $this->id_product,
             'id_crd' => $this->id_crd,
@@ -163,7 +171,7 @@ class Booking
     public static function timeDifferenceToNowFormatted($date)
     {
         $dateTime = new DateTime($date);
-        $dateTime->modify('-1 minutes');
+        /* $dateTime->modify('-1 minutes'); */
         $now = new DateTime();
 
         if ($dateTime < $now) {
@@ -172,7 +180,7 @@ class Booking
 
         $interval = $now->diff($dateTime);
 
-        $formattedTime = sprintf('%02d:%02d:%02d', $interval->h, $interval->i, $interval->s);
+        $formattedTime = sprintf('%02d:%02d', $interval->i, $interval->s);
         return $formattedTime;
     }
 }
