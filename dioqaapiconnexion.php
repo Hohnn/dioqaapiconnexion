@@ -589,6 +589,7 @@ class Dioqaapiconnexion extends Module implements WidgetInterface
         try {
             /* $this->setTasksFromAPI();
             $this->executeTasksFromBDD(); */
+            $this->orderCatsPosition();
         } catch (\Throwable $e) {
             var_dump($e);
         }
@@ -652,11 +653,14 @@ class Dioqaapiconnexion extends Module implements WidgetInterface
                 $this->route = null;
                 $this->API_route = "/api/crd/essentials/";
                 break;
-                /* case 'stock':
-                $this->route = "stocks";
-                $this->queueType = "stock";
-                $this->API_route = "/api/crd/stocks/components/place/" . $this->id_place;
-                break; */
+            case 'stock':
+                $this->route = "stock";
+                $this->API_route = "/api/crd/devices";
+                break;
+            case 'orderCategory':
+                $this->route = "orderCategory";
+                $this->API_route = "/api/crd/average";
+                break;
             default:
                 break;
         }
@@ -679,6 +683,9 @@ class Dioqaapiconnexion extends Module implements WidgetInterface
                 break;
             case 'stock':
                 $this->setStock($data);
+                break;
+            case 'orderCategory':
+                $this->orderCategory($data);
                 break;
             default:
                 break;
@@ -1149,5 +1156,94 @@ class Dioqaapiconnexion extends Module implements WidgetInterface
                 $product->delete();
             }
         }
+    }
+
+    private function orderCategory($data)
+    {
+        $datas = $this->setTimeCrd($data->id_crd_product, $data->id_grade, $data->time);
+        $this->handleCatOrder($datas);
+    }
+
+    private function setTimeCrd($productId, $gradeId, $time)
+    {
+        $productCrd = ApiController::getInstance()->get("/api/crd/product/$productId/detail");
+
+        $data = [
+            "id_crd_product" => $productId,
+            "id_grade" => $gradeId,
+            "time" => $time,
+            "id_productType" => $productCrd->productTypeId,
+            "id_brand" => $productCrd->brandId,
+            "id_model" => $productCrd->modelId,
+        ];
+
+        $exist = Db::getInstance()->getValue("SELECT `id_time` FROM `ps_dioqaapiconnexion_time` WHERE `id_crd_product` = $productId AND `id_grade` = $gradeId");
+
+        if ($exist) {
+            Db::getInstance()->update('dioqaapiconnexion_time', $data, "id_time = $exist");
+        } else {
+            Db::getInstance()->insert('dioqaapiconnexion_time', $data);
+        }
+
+        return $data;
+    }
+
+    private function handleCatOrder($data)
+    {
+        $brand = $data['id_brand'];
+        $model = $data['id_model'];
+        $productType = $data['id_productType'];
+
+        $this->handlecatPositionByType($productType, 'productType');
+        $this->handlecatPositionByType($brand, 'brand');
+        $this->handlecatPositionByType($model, 'model');
+    }
+
+    function handlecatPositionByType($id_crd, $type)
+    {
+        $catIds = $this->getCatIdByCrdId($id_crd, $type);
+        $catSeoIds = $this->getCatIdByCrdId($id_crd, $type . 'Seo');
+        $catIds = array_merge($catIds, $catSeoIds);
+
+        $time = $this->getTimeBytype($type);
+
+        if (empty($catIds) || empty($time)) {
+            return;
+        }
+
+        $position = null;
+
+        foreach ($time as $key => $value) {
+            if ($value['id'] == $id_crd) {
+                $position = $key;
+                break;
+            }
+        }
+
+        if ($position === null) {
+            return;
+        }
+
+        foreach ($catIds as $key => $catId) {
+            $cat = new Category($catId['id_category']);
+            $cat->updatePosition(false, $position);
+        }
+    }
+
+    private function getCatIdByCrdId($id_crd, $type)
+    {
+        $typeString = "'%" . $type . '-' . $id_crd . "'";
+
+        return Db::getInstance()->executeS("SELECT `id_category` FROM `ps_dioqaapiconnexion_category` WHERE `type` like $typeString");
+    }
+
+    private function getTimeBytype($type)
+    {
+        return Db::getInstance()->executeS(
+            "SELECT AVG(time) as avg, id_$type as id
+            FROM ps_dioqaapiconnexion_time
+            GROUP BY id
+            ORDER BY avg;"
+        );
     }
 }

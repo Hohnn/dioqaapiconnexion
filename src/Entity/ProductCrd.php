@@ -400,9 +400,18 @@ class ProductCrd
     {
         $id_product = $this->getTableLink($object->deviceId);
 
-        $stock = $object->quantity - ($object->bookingQuantity ?: 0); /*  - bookingValidity ???*/
+        $stock = ApiController::getInstance()->get("/api/crd/stocks/device/$object->deviceId");
 
-        StockAvailable::setQuantity($id_product, null, $stock);
+        $pr = new \Product($id_product);
+        if ($object->publishedDateStart && $object->publishedDateEnd) {
+            $pr->active = false;
+        } else {
+            if (isset($stock[0])) {
+                StockAvailable::setQuantity($id_product, null, $stock[0]->quantity);
+            }
+        }
+
+        $pr->update();
     }
 
     public function isPublished()
