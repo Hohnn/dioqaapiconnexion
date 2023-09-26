@@ -594,10 +594,10 @@ class Dioqaapiconnexion extends Module implements WidgetInterface
         }
     }
 
-    public function setTasksFromAPI()
+    public function setTasksFromAPI($types = [])
     {
-        $types = ['category', 'brand', 'feature', 'product', 'stock'];
-        $types = ['product'];
+        /* $types = ['category', 'brand', 'feature', 'product', 'stock'];
+        $types = ['product']; */
 
         foreach ($types as $action) {
             $this->dispatchTasks($action);
@@ -959,6 +959,7 @@ class Dioqaapiconnexion extends Module implements WidgetInterface
             "orderId" => (int) $order->id,
             "placeId" => (int) $stock[0]->placeId,
             "orderDate" => $order->date_add,
+            "orderState" => $order->orderStatus->name,
             "content" => $productDatas
         ];
 

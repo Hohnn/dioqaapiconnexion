@@ -94,7 +94,10 @@ class ProductCrd
 
         $pr->deleteCategories();
         $catsSeo = $this->getCatSeo($object->modelId);
-        $pr->addToCategories(array_merge($cat, $catsSeo));
+        $allCats = array_merge($cat, $catsSeo);
+        $pr->addToCategories($allCats);
+
+        $this->addCategoriesImages($allCats, $object);
 
         $this->setAllFeatures($pr, $object);
 
@@ -273,10 +276,10 @@ class ProductCrd
         $objImg->id_product = $pr->id;
         $objImg->position = \Image::getHighestPosition($pr->id) + 1;
 
-        if ($objImg->position == 1) {
-            $objImg->cover = true;
-        } else {
+        if (self::getCover($pr->id)) {
             $objImg->cover = false;
+        } else {
+            $objImg->cover = true;
         }
 
         $alt = substr($this->createProductName($object), 0, 100);
@@ -294,6 +297,17 @@ class ProductCrd
                 $objImg->delete();
             }
         }
+    }
+
+    private static function getCover($id_product)
+    {
+        $query = new DbQuery();
+        $query->select('id_image');
+        $query->from('image');
+        $query->where("id_product = $id_product");
+        $query->where("cover = 1");
+
+        return Db::getInstance()->getValue($query);
     }
 
     public function isSameHash($url, $productId)
@@ -339,6 +353,37 @@ class ProductCrd
         fclose($temp); // this removes the file
         $sql = "INSERT INTO ps_dioqaapiconnexion_image VALUE ($idImage, $idProduct, '$hash')";
         return Db::getInstance()->execute($sql);
+    }
+
+    private function addCategoriesImages($allCats, $object)
+    {
+        $images = [];
+        if (isset($object->productImages)) {
+            foreach ($object->productImages as $key => $image_link) {
+                $images[] = $image_link;
+            }
+        }
+        /* foreach ($object as $key => $value) {
+            if (preg_match('/image\d/', $key) && $value != null) {
+                $images[] = $value;
+            }
+        } */
+
+        var_dump($object);
+
+        if (empty($images)) {
+            return;
+        }
+
+        foreach ($allCats as $key => $catId) {
+            var_dump($catId);
+            $this->handleCategoryImage($catId, $images[0]);
+        }
+    }
+
+    private function handleCategoryImage($catId, $image_link)
+    {
+        return ImageCrd::copyImg($catId, null, $image_link, 'categories');
     }
 
     protected static function createMultiLangField($field)
