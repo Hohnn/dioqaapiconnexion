@@ -50,12 +50,14 @@ class ProductCrd
     {
         $id_product = $this->parseProduct($object, "create");
 
-        $this->setTableLink($id_product, $object->deviceId);
+        $this->setTableLink($id_product, $object);
     }
 
     public function update($object)
     {
         $id_product = $this->getTableLink($object->deviceId);
+
+        $this->updateTableLink($id_product, $object);
 
         $this->parseProduct($object, "update", $id_product);
     }
@@ -97,7 +99,11 @@ class ProductCrd
         $allCats = array_merge($cat, $catsSeo);
         $pr->addToCategories($allCats);
 
-        $this->addCategoriesImages($allCats, $object);
+        $groupCats = $this->getCatGroupByModelId($object->modelId);
+
+        $catsForImages = array_merge($allCats, $groupCats);
+
+        $this->addCategoriesImages($catsForImages, $object);
 
         $this->setAllFeatures($pr, $object);
 
@@ -113,7 +119,9 @@ class ProductCrd
             $this->addAndsetFeatures($pr, $object, $object->gradeId, 'grade');
         }
 
-        StockAvailable::setQuantity($pr->id, null, 1);
+        if ($action == 'create') {
+            StockAvailable::setQuantity($pr->id, null, 1);
+        }
 
         $this->handleCustomerCrd($object->placeId);
         $client = new CustomerCrd();
@@ -192,6 +200,26 @@ class ProductCrd
         return array_map(fn ($cat) => $cat['id_category'], Db::getInstance()->executeS($query));
     }
 
+    private function getCatGroupByModelId($id_crd)
+    {
+        $type = "%group-%-model-" . $id_crd;
+
+
+        $result = CategoryCrd::getTableLinkLikeStatic($id_crd, $type);
+
+        $groupIds = [];
+        foreach ($result as $key => $value) {
+            //find group id
+            $groupId = $this->getIdByType($value['type'], 'group');
+            $type = "%group-$groupId";
+            $groups = CategoryCrd::getTableLinkLikeStatic($groupId, $type);
+            foreach ($groups as $key => $group) {
+                $groupIds[] = $group['id_category'];
+            }
+        }
+        return $groupIds;
+    }
+
     private function getCatSeo($id_crd)
     {
         $type = "model-" . $id_crd;
@@ -237,10 +265,32 @@ class ProductCrd
         return str_replace("$typeName-", '', $matches[0]);
     }
 
-    private function setTableLink($id_product, $id_crd)
+    private function setTableLink($id_product, $objectCrd)
     {
-        $datas = ["id_product" => $id_product, "id_crd" => $id_crd];
+        $datas = [
+            "id_product" => $id_product,
+            "id_crd" => $objectCrd->deviceId,
+            "productId" => $objectCrd->productId,
+            "gradeId" => $objectCrd->gradeId,
+            "productTypeId" => $objectCrd->productTypeId,
+            "brandId" => $objectCrd->brandId,
+            "modelId" => $objectCrd->modelId,
+        ];
         return Db::getInstance()->insert('dioqaapiconnexion_product', $datas);
+    }
+
+    private function updateTableLink($id_product, $objectCrd)
+    {
+        $datas = [
+            "id_product" => $id_product,
+            "id_crd" => $objectCrd->deviceId,
+            "productId" => $objectCrd->productId,
+            "gradeId" => $objectCrd->gradeId,
+            "productTypeId" => $objectCrd->productTypeId,
+            "brandId" => $objectCrd->brandId,
+            "modelId" => $objectCrd->modelId,
+        ];
+        return Db::getInstance()->update('dioqaapiconnexion_product', $datas, "id_crd = $objectCrd->deviceId");
     }
 
     private function getTableLink($id_crd)
@@ -357,19 +407,16 @@ class ProductCrd
 
     private function addCategoriesImages($allCats, $object)
     {
+        if ($object->colorId != 1 && $object->colorId != 2) {
+            return;
+        }
+
         $images = [];
         if (isset($object->productImages)) {
             foreach ($object->productImages as $key => $image_link) {
                 $images[] = $image_link;
             }
         }
-        /* foreach ($object as $key => $value) {
-            if (preg_match('/image\d/', $key) && $value != null) {
-                $images[] = $value;
-            }
-        } */
-
-        var_dump($object);
 
         if (empty($images)) {
             return;

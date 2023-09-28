@@ -18,6 +18,10 @@ try {
         $module->setTasksFromAPI(['product']);
     } elseif (isset($_GET["action"]) && $_GET["action"] == 'setStockTask') {
         $module->setTasksFromAPI(['stock']);
+    } elseif (isset($_GET["action"]) && $_GET["action"] == 'orderCategoryTask') {
+        $module->setTasksFromAPI(['orderCategory']);
+    } elseif (isset($_GET["action"]) && $_GET["action"] == 'setCategoryTask') {
+        $module->setTasksFromAPI(['category']);
     }
 } catch (Throwable $e) {
     $module->setLogTest(

@@ -48,6 +48,7 @@ use PrestaShop\PrestaShop\Core\Module\WidgetInterface;
 use PrestaShopBundle\Form\Admin\Type\TranslateType;
 use \Symfony\Component\Form\Extension\Core\Type\TextType;
 
+
 class Dioqaapiconnexion extends Module implements WidgetInterface
 {
     protected $config_form = false;
@@ -582,6 +583,9 @@ class Dioqaapiconnexion extends Module implements WidgetInterface
         return ApiController::getInstance()->post($route, []);
     }
 
+
+
+
     public function dev()
     {
         echo 'DEV';
@@ -589,7 +593,7 @@ class Dioqaapiconnexion extends Module implements WidgetInterface
         try {
             /* $this->setTasksFromAPI();
             $this->executeTasksFromBDD(); */
-            $this->orderCatsPosition();
+            /* Category::cleanPositions(2285); */
         } catch (\Throwable $e) {
             var_dump($e);
         }
@@ -1160,13 +1164,19 @@ class Dioqaapiconnexion extends Module implements WidgetInterface
 
     private function orderCategory($data)
     {
-        $datas = $this->setTimeCrd($data->id_crd_product, $data->id_grade, $data->time);
+        $datas = $this->setTimeCrd($data->productId, $data->gradeId, $data->time);
         $this->handleCatOrder($datas);
     }
 
     private function setTimeCrd($productId, $gradeId, $time)
     {
         $productCrd = ApiController::getInstance()->get("/api/crd/product/$productId/detail");
+
+        if (!$productCrd) {
+            return;
+        }
+
+        $model = ApiController::getInstance()->get("/api/crd/model/$productCrd->modelId/detail");
 
         $data = [
             "id_crd_product" => $productId,
@@ -1175,6 +1185,7 @@ class Dioqaapiconnexion extends Module implements WidgetInterface
             "id_productType" => $productCrd->productTypeId,
             "id_brand" => $productCrd->brandId,
             "id_model" => $productCrd->modelId,
+            "id_group" => $model->groupId
         ];
 
         $exist = Db::getInstance()->getValue("SELECT `id_time` FROM `ps_dioqaapiconnexion_time` WHERE `id_crd_product` = $productId AND `id_grade` = $gradeId");
@@ -1190,16 +1201,13 @@ class Dioqaapiconnexion extends Module implements WidgetInterface
 
     private function handleCatOrder($data)
     {
-        $brand = $data['id_brand'];
-        $model = $data['id_model'];
-        $productType = $data['id_productType'];
-
-        $this->handlecatPositionByType($productType, 'productType');
-        $this->handlecatPositionByType($brand, 'brand');
-        $this->handlecatPositionByType($model, 'model');
+        $this->updateCatPositionByType($data['id_productType'], 'productType');
+        $this->updateCatPositionByType($data['id_brand'], 'brand');
+        $this->updateCatPositionByType($data['id_group'], 'group');
+        $this->updateCatPositionByType($data['id_model'], 'model');
     }
 
-    function handlecatPositionByType($id_crd, $type)
+    function updateCatPositionByType($id_crd, $type)
     {
         $catIds = $this->getCatIdByCrdId($id_crd, $type);
         $catSeoIds = $this->getCatIdByCrdId($id_crd, $type . 'Seo');
@@ -1212,10 +1220,12 @@ class Dioqaapiconnexion extends Module implements WidgetInterface
         }
 
         $position = null;
+        $products = [];
 
         foreach ($time as $key => $value) {
-            if ($value['id'] == $id_crd) {
+            if ($value['id_crd2'] == $id_crd) {
                 $position = $key;
+                $products = $this->getDevicesByModelId($value['id_model']);
                 break;
             }
         }
@@ -1227,6 +1237,12 @@ class Dioqaapiconnexion extends Module implements WidgetInterface
         foreach ($catIds as $key => $catId) {
             $cat = new Category($catId['id_category']);
             $cat->updatePosition(false, $position);
+
+            /* foreach ($products as $keyP => $product) {
+                $id = $product['id_product'];
+
+                $this->updateProductPosition($id, $catId['id_category'], $position + $keyP + 1);
+            } */
         }
     }
 
@@ -1239,11 +1255,25 @@ class Dioqaapiconnexion extends Module implements WidgetInterface
 
     private function getTimeBytype($type)
     {
-        return Db::getInstance()->executeS(
-            "SELECT AVG(time) as avg, id_$type as id
-            FROM ps_dioqaapiconnexion_time
-            GROUP BY id
-            ORDER BY avg;"
-        );
+        $sql = "SELECT AVG(time) as avg, id_$type as id_crd2, t.*
+        FROM ps_dioqaapiconnexion_time t
+        GROUP BY id_crd2
+        ORDER BY avg;";
+        return Db::getInstance()->executeS($sql);
+    }
+
+    private function getDevicesByModelId($id_model)
+    {
+        $sql = "SELECT * FROM `ps_dioqaapiconnexion_product` WHERE `modelId` = $id_model";
+        return Db::getInstance()->executeS($sql);
+    }
+
+    private function updateProductPosition($id_product, $id_category, $position)
+    {
+        //move all product in category above position
+        Db::getInstance()->execute("UPDATE `ps_category_product` SET `position` = `position` + 1 WHERE `id_category` = $id_category AND `position` >= $position");
+
+        //move product to position
+        Db::getInstance()->update('category_product', ['position' => $position], "id_category = $id_category AND id_product = $id_product");
     }
 }

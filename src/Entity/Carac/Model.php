@@ -160,7 +160,7 @@ class Model extends Main
 
         $cat = new CategoryCrd();
 
-        $this->ID_CATEGORY_PARENT = $cat::ID_RACINE_CAT;
+        $this->ID_CATEGORY_PARENT = $cat::ID_SEO_CAT;
 
         $type = 'productTypeSeo-' . $productTypeId;
 
@@ -175,7 +175,7 @@ class Model extends Main
         $brandName = $brandName . ' reconditionné';
 
         $cat = new CategoryCrd();
-        $this->ID_CATEGORY_PARENT = $cat::ID_RACINE_CAT;
+        $this->ID_CATEGORY_PARENT = $cat::ID_SEO_CAT;
 
         $type = 'brandSeo-' . $brandId;
 

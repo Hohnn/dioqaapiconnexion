@@ -10,7 +10,7 @@
         "fail": 0
     },
     "stock": {
-        "date": "2023-08-09T17:35:57",
+        "date": "2023-09-28T12:15:03",
         "success": 0,
         "fail": 0
     },
@@ -20,18 +20,23 @@
         "fail": 0
     },
     "category": {
-        "date": "2023-09-14T11:51:44",
-        "success": 4,
+        "date": "2023-09-18T10:04:13",
+        "success": 1930,
         "fail": 0
     },
     "product": {
-        "date": "2023-09-05T11:11:33",
-        "success": 19,
+        "date": "2023-09-28T12:12:02",
+        "success": 0,
         "fail": 0
     },
     "brand": {
         "date": "2023-08-10T17:13:51",
         "success": 0,
+        "fail": 0
+    },
+    "orderCategory": {
+        "date": "2023-09-28T09:36:12",
+        "success": 16,
         "fail": 0
     }
 }
