@@ -14,6 +14,8 @@ try {
         $module->dev();
     } elseif (isset($_GET["action"]) && $_GET["action"] == 'executeTask') {
         $module->executeTasksFromBDD();
+    } elseif (isset($_GET["action"]) && $_GET["action"] == 'executeTaskTest') {
+        $module->executeTasksFromBDD(true);
     } elseif (isset($_GET["action"]) && $_GET["action"] == 'setProductTask') {
         $module->setTasksFromAPI(['product']);
     } elseif (isset($_GET["action"]) && $_GET["action"] == 'setStockTask') {

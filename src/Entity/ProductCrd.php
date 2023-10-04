@@ -288,7 +288,7 @@ class ProductCrd
             "gradeId" => $objectCrd->gradeId,
             "productTypeId" => $objectCrd->productTypeId,
             "brandId" => $objectCrd->brandId,
-            "modelId" => $objectCrd->modelId,
+            "modelId" => $objectCrd->modelId
         ];
         return Db::getInstance()->update('dioqaapiconnexion_product', $datas, "id_crd = $objectCrd->deviceId");
     }

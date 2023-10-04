@@ -391,7 +391,7 @@ class Dioqaapiconnexion extends Module implements WidgetInterface
             $this->deleteBookingAfterOrder($params);
             $this->sendOrder($params);
             $this->disableOrderProducts($params);
-        } catch (\Exception $th) {
+        } catch (\Throwable $th) {
             $this->setLogTest(
                 'hookActionValidateOrder : ' . $th->__toString(),
                 null,
@@ -454,22 +454,20 @@ class Dioqaapiconnexion extends Module implements WidgetInterface
             $bookings = Booking::getBookingsByCartId($this->context->cart->id);
 
             $productCats = [];
+            $products = [];
 
             if ($bookings) {
                 $olderBook = $bookings[0];
                 $date = $olderBook['date_expire'];
                 $countDown = Booking::timeDifferenceToNowFormatted($date);
 
-
                 if (!$countDown) {
-                    $productCats = $this->deleteProductNotAvailable();
+                    [$productCats, $products] = $this->deleteProductNotAvailable();
                 }
             }
 
-            $cart = new Cart($this->context->cart->id);
-
             $this->smarty->assign([
-                'products' => $cart->getProducts(true, false, null, false),
+                'products' => $products,
                 'productCats' => $this->getCatInfoByCatIds($productCats)
             ]);
 
@@ -482,7 +480,12 @@ class Dioqaapiconnexion extends Module implements WidgetInterface
         $productCats = [];
         foreach (array_unique($ids) as $id) {
             $cat = new Category($id);
-            $productCats[] = ['link' => $cat->getLink(), 'name' => $cat->name[$this->context->language->id]];
+            $productCats[] = [
+                'link' => $cat->getLink(),
+                'name' => $cat->name[$this->context->language->id],
+                'id_image' => $cat->id_image,
+                'link_rewrite' => $cat->link_rewrite[$this->context->language->id]
+            ];
         }
         return $productCats;
     }
@@ -493,6 +496,7 @@ class Dioqaapiconnexion extends Module implements WidgetInterface
         $productsInCart = $cart->getProducts(false, false, null, false);
 
         $productCats = [];
+        $products = [];
         foreach ($productsInCart as $key => $product) {
             $productCats[] = $product['id_category_default'];
 
@@ -501,18 +505,18 @@ class Dioqaapiconnexion extends Module implements WidgetInterface
             $stock = $this->getCRDStockByProductId($id_crd);
 
             if ($stock->bookingQuantity < $stock->quantity) {
-                continue;
+                $products[] = $product;
             }
 
-            if (count($stock->bookings) && $stock->bookings[0]->cartId == $this->context->cart->id) {
+            /* if (count($stock->bookings) && $stock->bookings[0]->cartId == $this->context->cart->id) {
                 continue;
-            }
+            } */
 
             $cart->deleteProduct($product['id_product'], $product['id_product_attribute'], $product['id_customization']);
             $this->deleteBooking($product['id_product'], $this->context->cart->id);
         }
 
-        return $productCats;
+        return [$productCats, $products];
     }
 
     /**
@@ -593,7 +597,12 @@ class Dioqaapiconnexion extends Module implements WidgetInterface
         try {
             /* $this->setTasksFromAPI();
             $this->executeTasksFromBDD(); */
-            /* Category::cleanPositions(2285); */
+            /* Category::cleanPositions(4420); */
+            /* $cat = new Category(2307);
+             $cat->addPosition(2); */
+            /* $obj = '{"productId":"9325","gradeId":"1","times":"-6040844","updatedDate":"2023-10-02T12:28:40.706Z","modelId":"95","name":"XIAOMI 12"}';
+            $obj = json_decode($obj);
+            $this->orderCategory($obj); */
         } catch (\Throwable $e) {
             var_dump($e);
         }
@@ -610,11 +619,11 @@ class Dioqaapiconnexion extends Module implements WidgetInterface
         }
     }
 
-    public function executeTasksFromBDD()
+    public function executeTasksFromBDD($test = false)
     {
-        $startTime = time();
+        $startTime = times();
 
-        while (time() - $startTime < 150) { /* 60 seconds */
+        while (times() - $startTime < 150) { /* 60 seconds */
             $task = $this->getTask();
 
             if (!$task) {
@@ -631,6 +640,10 @@ class Dioqaapiconnexion extends Module implements WidgetInterface
             } catch (Throwable $e) {
                 $this->setTaskError($e->__toString(), $task['id_task']);
                 var_dump($e);
+            }
+
+            if ($test) {
+                break;
             }
         }
     }
@@ -849,8 +862,8 @@ class Dioqaapiconnexion extends Module implements WidgetInterface
 
     public function createJson($msg)
     {
-        $time = uniqid();
-        $name = $this->route . '_' . $time;
+        $times = uniqid();
+        $name = $this->route . '_' . $times;
         return file_put_contents(__DIR__ . "/bugs_json/$name.json", json_encode($msg, JSON_PRETTY_PRINT));
     }
 
@@ -947,30 +960,22 @@ class Dioqaapiconnexion extends Module implements WidgetInterface
     private function sendOrder($params)
     {
         $order = $params['order'];
+        $customer = $params['customer'];
+        $orderStatus = $params['orderStatus'];
         $products = $order->product_list;
 
-        $productDatas = [];
-
-        foreach ($products as $product) {
-            $id_crd = new ProductCrd($product['id_product']);
-            $id_crd = $id_crd->getCRDProductId();
-            $data = [
-                "deviceId" => (int) $id_crd,
-                "quantity" => (int) $product['quantity'],
-                "unitPrice" => (float) $product['price_wt'],
-                "withCharger" => (bool) $this->withCharger($product)
-            ];
-
-            array_push($productDatas, $data);
-        }
-
-        $stock = ApiController::getInstance()->get("/api/crd/stocks/device/$id_crd");
+        $productDatas = $this->getProductsDatasForOrder($products);
+        $customerDatas = $this->getCustomersDatasForOrder($customer, $order->id_address_delivery);
 
         $data = [
             "orderId" => (int) $order->id,
-            "placeId" => (int) $stock[0]->placeId,
             "orderDate" => $order->date_add,
-            "orderState" => $order->orderStatus->name,
+            "shippingPrice" => (float) $order->total_shipping_tax_incl,
+            "totalPrice" => (float) $order->total_paid_tax_incl,
+            "paymentMethod" => $order->payment,
+            "paymentPrice" => (float) $order->total_paid_real,
+            "orderState" => $orderStatus->name,
+            "customer" => $customerDatas,
             "content" => $productDatas
         ];
 
@@ -987,6 +992,46 @@ class Dioqaapiconnexion extends Module implements WidgetInterface
         );
 
         return ApiController::getInstance()->post("/api/crd/order", $data);
+    }
+
+    private function getProductsDatasForOrder($products)
+    {
+        $productDatas = [];
+
+        foreach ($products as $product) {
+            $pr = new ProductCrd($product['id_product']);
+            $id_crd = $pr->getCRDProductId();
+            $data = [
+                "deviceId" => (int) $id_crd,
+                "quantity" => (int) $product['quantity'],
+                "unitPrice" => (float) $product['price_wt'],
+                "withCharger" => (bool) $this->withCharger($product),
+            ];
+
+            array_push($productDatas, $data);
+        }
+
+        return $productDatas;
+    }
+
+    private function getCustomersDatasForOrder($customer, $id_address_delivery)
+    {
+        $address = new Address($id_address_delivery);
+
+        $gender = new Gender($customer->id_gender);
+
+        return [
+            "id_customer" => (int) $customer->id,
+            "firstname" => $customer->firstname,
+            "lastname" => $customer->lastname,
+            "address1" => $address->address1,
+            "address2" => $address->address2,
+            "postcode" => $address->postcode,
+            "city" => $address->city,
+            "phone" => $address->phone,
+            "email" => $customer->email,
+            "gender" => $gender->name[$this->context->language->id],
+        ];
     }
 
     private function withCharger($product)
@@ -1056,7 +1101,7 @@ class Dioqaapiconnexion extends Module implements WidgetInterface
         $data = (object)[
             "cartId" => $book->id_cart,
             "quantity" => $book->quantity,
-            "time" => $addTime
+            "times" => $addTime
         ];
 
         try {
@@ -1164,11 +1209,19 @@ class Dioqaapiconnexion extends Module implements WidgetInterface
 
     private function orderCategory($data)
     {
-        $datas = $this->setTimeCrd($data->productId, $data->gradeId, $data->time);
+        $datas = $this->setTimeCrd($data->productId, $data->gradeId, $data->times);
         $this->handleCatOrder($datas);
     }
 
-    private function setTimeCrd($productId, $gradeId, $time)
+    private function orderAllCategories()
+    {
+        $datas = Db::getInstance()->executeS("SELECT * FROM `ps_dioqaapiconnexion_time`");
+        foreach ($datas as $data) {
+            $this->handleCatOrder($data);
+        }
+    }
+
+    private function setTimeCrd($productId, $gradeId, $times)
     {
         $productCrd = ApiController::getInstance()->get("/api/crd/product/$productId/detail");
 
@@ -1181,7 +1234,7 @@ class Dioqaapiconnexion extends Module implements WidgetInterface
         $data = [
             "id_crd_product" => $productId,
             "id_grade" => $gradeId,
-            "time" => $time,
+            "times" => $times,
             "id_productType" => $productCrd->productTypeId,
             "id_brand" => $productCrd->brandId,
             "id_model" => $productCrd->modelId,
@@ -1201,7 +1254,7 @@ class Dioqaapiconnexion extends Module implements WidgetInterface
 
     private function handleCatOrder($data)
     {
-        $this->updateCatPositionByType($data['id_productType'], 'productType');
+        /* $this->updateCatPositionByType($data['id_productType'], 'productType'); */
         $this->updateCatPositionByType($data['id_brand'], 'brand');
         $this->updateCatPositionByType($data['id_group'], 'group');
         $this->updateCatPositionByType($data['id_model'], 'model');
@@ -1211,23 +1264,26 @@ class Dioqaapiconnexion extends Module implements WidgetInterface
     {
         $catIds = $this->getCatIdByCrdId($id_crd, $type);
         $catSeoIds = $this->getCatIdByCrdId($id_crd, $type . 'Seo');
+
         $catIds = array_merge($catIds, $catSeoIds);
 
-        $time = $this->getTimeBytype($type);
+        $times = $this->getTimeBytype($type);
 
-        if (empty($catIds) || empty($time)) {
+        if (empty($catIds) || empty($times)) {
             return;
         }
 
         $position = null;
-        $products = [];
 
-        foreach ($time as $key => $value) {
+        foreach ($times as $key => $value) {
             if ($value['id_crd2'] == $id_crd) {
                 $position = $key;
-                $products = $this->getDevicesByModelId($value['id_model']);
                 break;
             }
+        }
+
+        if ($type == 'model') {
+            $this->orderProductPositionByModelId($id_crd, $catIds);
         }
 
         if ($position === null) {
@@ -1235,15 +1291,40 @@ class Dioqaapiconnexion extends Module implements WidgetInterface
         }
 
         foreach ($catIds as $key => $catId) {
+            var_dump([$catId['id_category'], $position]);
             $cat = new Category($catId['id_category']);
-            $cat->updatePosition(false, $position);
-
-            /* foreach ($products as $keyP => $product) {
-                $id = $product['id_product'];
-
-                $this->updateProductPosition($id, $catId['id_category'], $position + $keyP + 1);
-            } */
+            $cat->addPosition($position);
+            Category::cleanPositions($cat->id_parent);
         }
+    }
+
+    private function orderProductPositionByModelId($id_crd, $catIds)
+    {
+        $times = $this->getTimeByModelId($id_crd);
+        $ordered = [];
+        $products = $this->getDevicesByModelId($id_crd);
+
+        foreach ($times as $time) {
+            foreach ($products as $product) {
+                if ($product['gradeId'] == $time['id_grade']) {
+                    $ordered[] = $product['id_product'];
+                }
+            }
+        }
+
+        foreach ($catIds as $catId) {
+            foreach ($ordered as $key => $prId) {
+                $this->updateProductPosition($prId, $catId['id_category'], $key + 1);
+            }
+            \Product::cleanPositions($catId['id_category']);
+            var_dump($catId['id_category']);
+        }
+    }
+
+    private function getTimeByModelId($id_crd)
+    {
+        $sql = "SELECT * FROM ps_dioqaapiconnexion_time where id_model = $id_crd order by time";
+        return Db::getInstance()->executeS($sql);
     }
 
     private function getCatIdByCrdId($id_crd, $type)
@@ -1255,7 +1336,7 @@ class Dioqaapiconnexion extends Module implements WidgetInterface
 
     private function getTimeBytype($type)
     {
-        $sql = "SELECT AVG(time) as avg, id_$type as id_crd2, t.*
+        $sql = "SELECT AVG(times) as avg, id_$type as id_crd2, t.*
         FROM ps_dioqaapiconnexion_time t
         GROUP BY id_crd2
         ORDER BY avg;";

@@ -32,7 +32,7 @@ class DioqaapiconnexionBookingExpiredCartModuleFrontController extends ModuleFro
         foreach ($products as $key => $data) {
             $id_product = $data['id_product'];
             $id_customization = $data['id_customization'];
-            if ($data['addBooking']) {
+            /* if ($data['addBooking']) {
                 $this->module->deleteBooking($id_product, $id_cart);
 
                 $isPossible = $this->module->isBookingPossible($id_product);
@@ -44,6 +44,10 @@ class DioqaapiconnexionBookingExpiredCartModuleFrontController extends ModuleFro
             } else {
                 $this->context->cart->deleteProduct($id_product, 0, $id_customization);
                 $this->module->deleteBooking($id_product, $id_cart);
+            } */
+
+            if ($data['addBooking']) {
+                $this->context->cart->updateQty(1, $id_product);
             }
         }
     }

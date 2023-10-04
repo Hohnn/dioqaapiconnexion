@@ -113,3 +113,40 @@ function showModalBookingOrderNow() {
 }
 
 prestashop.on("updateCart", ajaxCheckBooking);
+
+function handleModalExpire() {
+  const modal = document.getElementById("bookingModal");
+  console.log(modal);
+  if (!modal) {
+    return;
+  }
+
+  const inputsRadio = modal.querySelectorAll(".actions .btn-book");
+  console.log(inputsRadio);
+  if (!inputsRadio) {
+    return;
+  }
+
+  let count = 0;
+
+  inputsRadio.forEach((input) => {
+    input.addEventListener("change", function () {
+      hideBookingProduct(this);
+      count++;
+      console.log(count);
+      if (count >= inputsRadio.length) {
+        modal.classList.add("loading");
+        modal.querySelector("form").submit();
+      }
+    });
+  });
+}
+handleModalExpire();
+
+function hideBookingProduct(el) {
+  let target = el.closest("li");
+  console.log(target);
+  if (target) {
+    target.classList.add("d-none");
+  }
+}
