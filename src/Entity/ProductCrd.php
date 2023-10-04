@@ -99,11 +99,9 @@ class ProductCrd
         $allCats = array_merge($cat, $catsSeo);
         $pr->addToCategories($allCats);
 
-        $groupCats = $this->getCatGroupByModelId($object->modelId);
-
+        /* $groupCats = $this->getCatGroupByModelId($object->modelId);
         $catsForImages = array_merge($allCats, $groupCats);
-
-        $this->addCategoriesImages($catsForImages, $object);
+        $this->addCategoriesImages($catsForImages, $object->colorId, $object->productImage[0]); */
 
         $this->setAllFeatures($pr, $object);
 
@@ -185,6 +183,15 @@ class ProductCrd
         $productName = str_replace($brandName, '', $object->name);
         $productName = trim($productName);
         return $productName;
+    }
+
+    public function getCatsForImages($modelId)
+    {
+        $cat = $this->getCatModel($modelId);
+        $catsSeo = $this->getCatSeo($modelId);
+        $allCats = array_merge($cat, $catsSeo);
+        $groupCats = $this->getCatGroupByModelId($modelId);
+        return array_merge($allCats, $groupCats);
     }
 
     private function getCatModel($id_crd)
@@ -405,26 +412,18 @@ class ProductCrd
         return Db::getInstance()->execute($sql);
     }
 
-    private function addCategoriesImages($allCats, $object)
+    public function addCategoriesImages($allCats, $colorId, $image_link)
     {
-        if ($object->colorId != 1 && $object->colorId != 2) {
+        if ($colorId != 1 && $colorId != 2) {
             return;
         }
 
-        $images = [];
-        if (isset($object->productImages)) {
-            foreach ($object->productImages as $key => $image_link) {
-                $images[] = $image_link;
-            }
-        }
-
-        if (empty($images)) {
+        if (!$image_link) {
             return;
         }
 
-        foreach ($allCats as $key => $catId) {
-            var_dump($catId);
-            $this->handleCategoryImage($catId, $images[0]);
+        foreach ($allCats as $catId) {
+            $this->handleCategoryImage($catId, $image_link);
         }
     }
 

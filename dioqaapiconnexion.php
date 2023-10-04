@@ -595,18 +595,52 @@ class Dioqaapiconnexion extends Module implements WidgetInterface
         echo 'DEV';
         echo '<pre>';
         try {
-            /* $this->setTasksFromAPI();
-            $this->executeTasksFromBDD(); */
-            /* Category::cleanPositions(4420); */
-            /* $cat = new Category(2307);
-             $cat->addPosition(2); */
-            /* $obj = '{"productId":"9325","gradeId":"1","times":"-6040844","updatedDate":"2023-10-02T12:28:40.706Z","modelId":"95","name":"XIAOMI 12"}';
-            $obj = json_decode($obj);
-            $this->orderCategory($obj); */
+            $products = ApiController::getInstance()->get('/api/crd/products');
+            $productGroup = [];
+            $modelIds = [];
+            foreach ($products as $key => $product) {
+                if ($product->image) {
+                    $productGroup[$product->modelId] = $product;
+                }
+            }
+            foreach ($productGroup as $key => $value) {
+                $modelIds[] = $key;
+            }
+
+            $models = ApiController::getInstance()->get('/api/crd/essentials/model');
+
+            $emptyModels = [];
+            foreach ($models as $key => $model) {
+                if (!in_array($model->modelId, $modelIds)) {
+                    $emptyModels[] = $model->modelId;
+                }
+            }
+
+            var_dump(json_encode($emptyModels, JSON_PRETTY_PRINT));
+
+            /* $productGroup2 = []; */
+
+            /* foreach ($products as $key => $product) {
+                if (!in_array($product->modelId, $modelIds)) {
+                    if ($product->image) {
+                        $productGroup2[$product->modelId] = $product;
+                    }
+                }
+            }
+
+            foreach ($productGroup2 as $modelId => $product) {
+                $pr = new ProductCrd();
+                $catsForImages = $pr->getCatsForImages($modelId);
+                $pr->addCategoriesImages($catsForImages, 1, $product->image);
+            } */
         } catch (\Throwable $e) {
             var_dump($e);
         }
     }
+
+
+
+
 
     public function setTasksFromAPI($types = [])
     {
@@ -615,7 +649,6 @@ class Dioqaapiconnexion extends Module implements WidgetInterface
 
         foreach ($types as $action) {
             $this->dispatchTasks($action);
-            $this->getDatas();
         }
     }
 
@@ -657,26 +690,37 @@ class Dioqaapiconnexion extends Module implements WidgetInterface
             case 'product':
                 $this->route = "device";
                 $this->API_route = "/api/crd/devices";
+                $this->getDatas();
                 break;
             case 'category':
                 $this->route = "model";
                 $this->API_route = "/api/crd/essentials/model";
+                $this->getDatas();
                 break;
             case 'brand':
                 $this->route = "brand";
                 $this->API_route = "/api/crd/essentials/brand";
+                $this->getDatas();
                 break;
             case 'feature':
                 $this->route = null;
                 $this->API_route = "/api/crd/essentials/";
+                $this->getDatas();
                 break;
             case 'stock':
                 $this->route = "stock";
                 $this->API_route = "/api/crd/devices";
+                $this->getDatas();
                 break;
             case 'orderCategory':
                 $this->route = "orderCategory";
                 $this->API_route = "/api/crd/average";
+                $this->getDatas();
+                break;
+            case 'product_crd':
+                $this->route = "product_crd";
+                $this->API_route = "/api/crd/products";
+                $this->getDatas();
                 break;
             default:
                 break;
@@ -703,6 +747,9 @@ class Dioqaapiconnexion extends Module implements WidgetInterface
                 break;
             case 'orderCategory':
                 $this->orderCategory($data);
+                break;
+            case 'product_crd':
+                $this->setCategoriesImage($data);
                 break;
             default:
                 break;
@@ -1356,5 +1403,12 @@ class Dioqaapiconnexion extends Module implements WidgetInterface
 
         //move product to position
         Db::getInstance()->update('category_product', ['position' => $position], "id_category = $id_category AND id_product = $id_product");
+    }
+
+    private function setCategoriesImage($data)
+    {
+        $pr = new ProductCrd();
+        $catsForImages = $pr->getCatsForImages($data->modelId);
+        $pr->addCategoriesImages($catsForImages, $data->colorId, $data->image);
     }
 }
