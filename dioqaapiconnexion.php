@@ -389,8 +389,8 @@ class Dioqaapiconnexion extends Module implements WidgetInterface
     {
         try {
             $this->deleteBookingAfterOrder($params);
-            $this->sendOrder($params);
             $this->disableOrderProducts($params);
+            $this->sendOrder($params);
         } catch (\Throwable $th) {
             $this->setLogTest(
                 'hookActionValidateOrder : ' . $th->__toString(),
@@ -654,9 +654,9 @@ class Dioqaapiconnexion extends Module implements WidgetInterface
 
     public function executeTasksFromBDD($test = false)
     {
-        $startTime = times();
+        $startTime = time();
 
-        while (times() - $startTime < 150) { /* 60 seconds */
+        while (time() - $startTime < 150) { /* 60 seconds */
             $task = $this->getTask();
 
             if (!$task) {
@@ -675,9 +675,9 @@ class Dioqaapiconnexion extends Module implements WidgetInterface
                 var_dump($e);
             }
 
-            if ($test) {
+            /* if ($test) {
                 break;
-            }
+            } */
         }
     }
 
@@ -1148,20 +1148,24 @@ class Dioqaapiconnexion extends Module implements WidgetInterface
         $data = (object)[
             "cartId" => $book->id_cart,
             "quantity" => $book->quantity,
-            "times" => $addTime
+            "time" => $addTime
         ];
 
         try {
             $bookingCrd = ApiController::getInstance()->post($route, $data);
-            $book->date_expire = $bookingCrd->dateValidity;
-            $book->add_time = $addTime;
+            if (isset($bookingCrd->dateValidity)) {
+                $book->date_expire = $bookingCrd->dateValidity;
+                $book->add_time = $addTime;
+            }
         } catch (\Throwable $th) {
             $this->setLogTest(
                 'handleBooking : ' . $th->__toString(),
-                [$book, $route, $data],
+                [$book, $route, $data, $bookingCrd],
                 __DIR__ . '/logs_error/log_' . date('y-m-d-H') . 'h.log'
             );
         }
+
+
 
         return $book->handleBookingInBDD();
     }

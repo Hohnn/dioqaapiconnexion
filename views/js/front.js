@@ -106,7 +106,11 @@ function showModalBookingExpire() {
 let countModalBookingOrderNow = 0;
 
 function showModalBookingOrderNow() {
-  if (countModalBookingOrderNow == 0 && !$("body").hasClass("cart")) {
+  if (
+    countModalBookingOrderNow == 0 &&
+    !$("body").is("#cart") &&
+    !$("body").is("#order")
+  ) {
     $("#bookingModalTimeOut").modal("show");
   }
   countModalBookingOrderNow++;

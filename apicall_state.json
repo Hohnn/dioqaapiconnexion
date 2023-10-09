@@ -10,8 +10,8 @@
         "fail": 0
     },
     "stock": {
-        "date": "2023-09-28T12:15:03",
-        "success": 0,
+        "date": "2023-10-06T13:09:12",
+        "success": 1,
         "fail": 0
     },
     "feature": {
@@ -20,12 +20,12 @@
         "fail": 0
     },
     "category": {
-        "date": "2023-09-18T10:04:13",
-        "success": 1930,
+        "date": "2023-09-29T13:07:20",
+        "success": 2,
         "fail": 0
     },
     "product": {
-        "date": "2023-09-28T12:12:02",
+        "date": "2023-10-06T17:58:25",
         "success": 0,
         "fail": 0
     },
@@ -35,8 +35,8 @@
         "fail": 0
     },
     "orderCategory": {
-        "date": "2023-09-28T09:36:12",
-        "success": 16,
+        "date": "2023-10-06T13:09:12",
+        "success": 1,
         "fail": 0
     }
 }

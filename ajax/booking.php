@@ -21,8 +21,6 @@ if (isset($_POST['action']) && $_POST['action'] == 'checkBooking') {
 
     $book = Booking::getBookingsByCartId($id_cart);
     $data['bookings'] = $book;
-    /* $data['customer'] = $context->customer; */
-    /* $data['cart'] = $context->cart; */
     returnDatas($data);
 }
 

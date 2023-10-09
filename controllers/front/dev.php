@@ -9,6 +9,6 @@ class DioqaapiconnexionDevModuleFrontController extends ModuleFrontController
     {
         parent::initContent();
 
-        $this->setTemplate('module:dioqaapiconnexion/views/templates/hook/modalTimeOut.tpl');
+        $this->setTemplate('module:dioqaapiconnexion/views/templates/front/dev.tpl');
     }
 }
