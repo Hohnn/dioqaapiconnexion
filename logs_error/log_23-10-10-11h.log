@@ -1,0 +1,101 @@
+==================================2023-10-10 11:00:16==================================
+ => handleBooking : ErrorException: {"stack":["error: droit refusé pour la séquence booking_id_seq"],"message":"droit refusé pour la séquence booking_id_seq","length":103,"name":"error","severity":"ERREUR","code":"42501","file":"sequence.c","line":"561","routine":"nextval_internal"} in /home/www/client/www/CPT013/bee/modules/dioqaapiconnexion/src/Controller/ApiController.php:119
+Stack trace:
+#0 /home/www/client/www/CPT013/bee/modules/dioqaapiconnexion/dioqaapiconnexion.php(1169): Dioqaapiconnexion\Controller\ApiController->post('/api/crd/stock/...', Object(stdClass))
+#1 /home/www/client/www/CPT013/bee/modules/dioqaapiconnexion/dioqaapiconnexion.php(1004): Dioqaapiconnexion->handleBooking(Object(Dioqaapiconnexion\Entity\Booking))
+#2 /home/www/client/www/CPT013/bee/modules/dioqaapiconnexion/dioqaapiconnexion.php(378): Dioqaapiconnexion->addBooking(89, 80)
+#3 /home/www/client/www/CPT013/bee/classes/Hook.php(1007): Dioqaapiconnexion->hookActionCartUpdateQuantityAfter(Array)
+#4 /home/www/client/www/CPT013/bee/modules/ets_superspeed/classes/ext/ets_hook(531): HookCore::coreCallHook(Object(Dioqaapiconnexion), 'hookactionCartU...', Array)
+#5 /home/www/client/www/CPT013/bee/modules/ets_superspeed/classes/ext/ets_hook(381): Ets_Hook::callHookOn(Object(Dioqaapiconnexion), 'actionCartUpdat...', Array)
+#6 /home/www/client/www/CPT013/bee/override/classes/Hook.php(36): Ets_Hook::exec17('actionCartUpdat...', Array, NULL, false, true, false, NULL, false, Array)
+#7 /home/www/client/www/CPT013/bee/override/classes/Cart.php(180): Hook::exec('actionCartUpdat...', Array)
+#8 /home/www/client/www/CPT013/bee/controllers/front/CartController.php(502): Cart->updateQty(1, 89, 0, 0, 'up', '2', Object(Shop), true, true)
+#9 /home/www/client/www/CPT013/bee/controllers/front/CartController.php(246): CartControllerCore->processChangeProductInCart()
+#10 /home/www/client/www/CPT013/bee/controllers/front/CartController.php(235): CartControllerCore->updateCart()
+#11 /home/www/client/www/CPT013/bee/classes/controller/Controller.php(295): CartControllerCore->postProcess()
+#12 /home/www/client/www/CPT013/bee/classes/Dispatcher.php(525): ControllerCore->run()
+#13 /home/www/client/www/CPT013/bee/override/classes/Dispatcher.php(23): DispatcherCore->dispatch()
+#14 /home/www/client/www/CPT013/bee/index.php(28): Dispatcher->dispatch()
+#15 {main} : [
+    {
+        "id_product": 89,
+        "id_customer": null,
+        "id_cart": 80,
+        "id_crd": "20",
+        "quantity": "1",
+        "id": null,
+        "date_add": null,
+        "date_expire": null,
+        "add_time": null
+    },
+    "\/api\/crd\/stock\/18\/booking",
+    {
+        "cartId": 80,
+        "quantity": "1",
+        "time": false
+    },
+    null
+] 
+==================================2023-10-10 11:02:25==================================
+ => handleBooking : ErrorException: {"stack":["error: droit refusé pour la séquence booking_id_seq"],"message":"droit refusé pour la séquence booking_id_seq","length":103,"name":"error","severity":"ERREUR","code":"42501","file":"sequence.c","line":"561","routine":"nextval_internal"} in /home/www/client/www/CPT013/bee/modules/dioqaapiconnexion/src/Controller/ApiController.php:119
+Stack trace:
+#0 /home/www/client/www/CPT013/bee/modules/dioqaapiconnexion/dioqaapiconnexion.php(1169): Dioqaapiconnexion\Controller\ApiController->post('/api/crd/stock/...', Object(stdClass))
+#1 /home/www/client/www/CPT013/bee/modules/dioqaapiconnexion/dioqaapiconnexion.php(1146): Dioqaapiconnexion->handleBooking(Object(Dioqaapiconnexion\Entity\Booking), false)
+#2 /home/www/client/www/CPT013/bee/modules/dioqaapiconnexion/dioqaapiconnexion.php(1009): Dioqaapiconnexion->updateBooking('89', 80, 0)
+#3 /home/www/client/www/CPT013/bee/modules/dioqaapiconnexion/dioqaapiconnexion.php(557): Dioqaapiconnexion->deleteBooking('89', 80)
+#4 /home/www/client/www/CPT013/bee/modules/dioqaapiconnexion/dioqaapiconnexion.php(506): Dioqaapiconnexion->deleteProductNotAvailable()
+#5 /home/www/client/www/CPT013/bee/classes/Hook.php(1007): Dioqaapiconnexion->hookDisplayBeforeBodyClosingTag(Array)
+#6 /home/www/client/www/CPT013/bee/modules/ets_superspeed/classes/ext/ets_hook(531): HookCore::coreCallHook(Object(Dioqaapiconnexion), 'hookdisplayBefo...', Array)
+#7 /home/www/client/www/CPT013/bee/modules/ets_superspeed/classes/ext/ets_hook(381): Ets_Hook::callHookOn(Object(Dioqaapiconnexion), 'displayBeforeBo...', Array)
+#8 /home/www/client/www/CPT013/bee/override/classes/Hook.php(36): Ets_Hook::exec17('displayBeforeBo...', Array, NULL, false, true, false, NULL, false, Array)
+#9 /home/www/client/www/CPT013/bee/config/smarty.config.inc.php(167): Hook::exec('displayBeforeBo...', Array, NULL)
+#10 /home/www/client/www/CPT013/bee/classes/Smarty/SmartyLazyRegister.php(83): smartyHook(Array, Object(SmartyDevTemplate))
+#11 /home/www/client/www/CPT013/bee/var/cache/dev/smarty/compile/classic_rocket_childlayouts_layout_full_width_tpl/46/5d/5f/465d5f46d3d5e2c9b01f4b6f0a26fc9664dc054f_2.file.layout-both-columns.tpl.php(586): SmartyLazyRegister->__call('smartyHook', Array)
+#12 /home/www/client/www/CPT013/bee/vendor/smarty/smarty/libs/sysplugins/smarty_internal_runtime_inheritance.php(248): Block_13475137386525085fd74bf4_69852532->callBlock(Object(SmartyDevTemplate))
+#13 /home/www/client/www/CPT013/bee/vendor/smarty/smarty/libs/sysplugins/smarty_internal_runtime_inheritance.php(184): Smarty_Internal_Runtime_Inheritance->callBlock(Object(Block_13475137386525085fd74bf4_69852532), Object(SmartyDevTemplate))
+#14 /home/www/client/www/CPT013/bee/vendor/smarty/smarty/libs/sysplugins/smarty_internal_runtime_inheritance.php(156): Smarty_Internal_Runtime_Inheritance->process(Object(SmartyDevTemplate), Object(Block_13475137386525085fd74bf4_69852532))
+#15 /home/www/client/www/CPT013/bee/var/cache/dev/smarty/compile/classic_rocket_childlayouts_layout_full_width_tpl/46/5d/5f/465d5f46d3d5e2c9b01f4b6f0a26fc9664dc054f_2.file.layout-both-columns.tpl.php(109): Smarty_Internal_Runtime_Inheritance->instanceBlock(Object(SmartyDevTemplate), 'Block_134751373...', 'hook_before_bod...')
+#16 /home/www/client/www/CPT013/bee/vendor/smarty/smarty/libs/sysplugins/smarty_template_resource_base.php(123): content_6525085fd75fe7_09266963(Object(SmartyDevTemplate))
+#17 /home/www/client/www/CPT013/bee/vendor/smarty/smarty/libs/sysplugins/smarty_template_compiled.php(114): Smarty_Template_Resource_Base->getRenderedTemplateCode(Object(SmartyDevTemplate))
+#18 /home/www/client/www/CPT013/bee/vendor/smarty/smarty/libs/sysplugins/smarty_internal_template.php(216): Smarty_Template_Compiled->render(Object(SmartyDevTemplate))
+#19 /home/www/client/www/CPT013/bee/vendor/smarty/smarty/libs/sysplugins/smarty_internal_template.php(385): Smarty_Internal_Template->render()
+#20 /home/www/client/www/CPT013/bee/vendor/smarty/smarty/libs/sysplugins/smarty_internal_runtime_inheritance.php(116): Smarty_Internal_Template->_subTemplateRender('layouts/layout-...', NULL, 'classic-rocket-...', 0, 3600, Array, 2, false, NULL, NULL)
+#21 /home/www/client/www/CPT013/bee/var/cache/dev/smarty/compile/classic_rocket_childlayouts_layout_full_width_tpl/06/0a/5f/060a5fe9fbae32f45d0ad1a45a2c61c549511d62_2.file.layout-full-width.tpl.php(42): Smarty_Internal_Runtime_Inheritance->endChild(Object(SmartyDevTemplate), 'layouts/layout-...')
+#22 /home/www/client/www/CPT013/bee/vendor/smarty/smarty/libs/sysplugins/smarty_template_resource_base.php(123): content_6525085fd33068_75421508(Object(SmartyDevTemplate))
+#23 /home/www/client/www/CPT013/bee/vendor/smarty/smarty/libs/sysplugins/smarty_template_compiled.php(114): Smarty_Template_Resource_Base->getRenderedTemplateCode(Object(SmartyDevTemplate))
+#24 /home/www/client/www/CPT013/bee/vendor/smarty/smarty/libs/sysplugins/smarty_internal_template.php(216): Smarty_Template_Compiled->render(Object(SmartyDevTemplate))
+#25 /home/www/client/www/CPT013/bee/vendor/smarty/smarty/libs/sysplugins/smarty_internal_template.php(385): Smarty_Internal_Template->render()
+#26 /home/www/client/www/CPT013/bee/vendor/smarty/smarty/libs/sysplugins/smarty_internal_runtime_inheritance.php(116): Smarty_Internal_Template->_subTemplateRender('layouts/layout-...', NULL, 'classic-rocket-...', 0, 3600, Array, 2, false, NULL, NULL)
+#27 /home/www/client/www/CPT013/bee/var/cache/dev/smarty/compile/classic_rocket_childlayouts_layout_full_width_tpl/c7/18/c8/c718c86280039bb37c59f696697089ea69d5aad9_2.file.product.tpl.php(40): Smarty_Internal_Runtime_Inheritance->endChild(Object(SmartyDevTemplate), 'layouts/layout-...')
+#28 /home/www/client/www/CPT013/bee/vendor/smarty/smarty/libs/sysplugins/smarty_template_resource_base.php(123): content_65250bff20aa18_26415055(Object(SmartyDevTemplate))
+#29 /home/www/client/www/CPT013/bee/vendor/smarty/smarty/libs/sysplugins/smarty_template_compiled.php(114): Smarty_Template_Resource_Base->getRenderedTemplateCode(Object(SmartyDevTemplate))
+#30 /home/www/client/www/CPT013/bee/vendor/smarty/smarty/libs/sysplugins/smarty_internal_template.php(216): Smarty_Template_Compiled->render(Object(SmartyDevTemplate))
+#31 /home/www/client/www/CPT013/bee/vendor/smarty/smarty/libs/sysplugins/smarty_internal_templatebase.php(232): Smarty_Internal_Template->render(false, 0)
+#32 /home/www/client/www/CPT013/bee/vendor/smarty/smarty/libs/sysplugins/smarty_internal_templatebase.php(116): Smarty_Internal_TemplateBase->_execute(Object(SmartyDevTemplate), NULL, 'classic-rocket-...', NULL, 0)
+#33 /home/www/client/www/CPT013/bee/classes/Smarty/SmartyDev.php(40): Smarty_Internal_TemplateBase->fetch('catalog/product...', NULL, 'classic-rocket-...', NULL, false, true, false)
+#34 /home/www/client/www/CPT013/bee/classes/controller/FrontController.php(727): SmartyDev->fetch('catalog/product...', NULL, 'classic-rocket-...')
+#35 /home/www/client/www/CPT013/bee/classes/controller/FrontController.php(709): FrontControllerCore->smartyOutputContent('catalog/product...')
+#36 /home/www/client/www/CPT013/bee/classes/controller/Controller.php(326): FrontControllerCore->display()
+#37 /home/www/client/www/CPT013/bee/classes/Dispatcher.php(525): ControllerCore->run()
+#38 /home/www/client/www/CPT013/bee/override/classes/Dispatcher.php(23): DispatcherCore->dispatch()
+#39 /home/www/client/www/CPT013/bee/index.php(28): Dispatcher->dispatch()
+#40 {main} : [
+    {
+        "id_product": "89",
+        "id_customer": null,
+        "id_cart": "80",
+        "id_crd": "20",
+        "quantity": 0,
+        "id": "180",
+        "date_add": null,
+        "date_expire": "0000-00-00 00:00:00",
+        "add_time": null
+    },
+    "\/api\/crd\/stock\/18\/booking",
+    {
+        "cartId": "80",
+        "quantity": 0,
+        "time": false
+    },
+    null
+] 

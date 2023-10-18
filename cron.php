@@ -8,6 +8,7 @@ require(__DIR__ . '/../../init.php');
  */
 $module = Module::getInstanceByName('dioqaapiconnexion');
 
+var_dump($_GET);
 
 try {
     if (isset($_GET["action"]) && $_GET["action"] == 'dev') {
@@ -15,7 +16,7 @@ try {
     } elseif (isset($_GET["action"]) && $_GET["action"] == 'executeTask') {
         $module->executeTasksFromBDD();
     } elseif (isset($_GET["action"]) && $_GET["action"] == 'executeTaskTest') {
-        $module->executeTasksFromBDD(true);
+        $module->executeTasksFromBDD();
     } elseif (isset($_GET["action"]) && $_GET["action"] == 'setProductTask') {
         $module->setTasksFromAPI(['product']);
     } elseif (isset($_GET["action"]) && $_GET["action"] == 'setStockTask') {
@@ -24,6 +25,8 @@ try {
         $module->setTasksFromAPI(['orderCategory']);
     } elseif (isset($_GET["action"]) && $_GET["action"] == 'setCategoryTask') {
         $module->setTasksFromAPI(['category']);
+    } elseif (isset($_GET["action"]) && $_GET["action"] == 'cleanLogs') {
+        $module->cleanLogsAllType();
     }
 } catch (Throwable $e) {
     $module->setLogTest(
@@ -33,4 +36,10 @@ try {
     );
     var_dump($e->__toString());
     http_response_code(500);
+} finally {
+    $module->setLogTest(
+        'call cron : ' . $_GET["action"],
+        null,
+        __DIR__ . '/logs_cron/log_' . date('y-m-d-H') . 'h.log'
+    );
 }

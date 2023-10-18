@@ -2,7 +2,7 @@
 <div class="modal fade" id="bookingModal" tabindex="-1" role="dialog" aria-labelledby="bookingDetailModal"
     aria-hidden="true" data-backdrop="static">
     <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
+        <div class="modal-content rounded-lg">
             <form action="{Context::getContext()->link->getModuleLink('dioqaapiconnexion', 'bookingExpiredCart')}"
                 method="post">
                 <div class="modal-header">

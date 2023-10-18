@@ -18,7 +18,7 @@ use Context;
 use PrestaShopException;
 use FeatureValue;
 use Category;
-
+use Dioqaapiconnexion\Controller\ApiController;
 use Dioqaapiconnexion\Entity\ImageCrd;
 use Dioqaapiconnexion\Controller\SwitchAction;
 
@@ -98,5 +98,77 @@ class CategoryCrd
         $query->where("type LIKE '$type'");
 
         return Db::getInstance()->executeS($query);
+    }
+
+    public static function removeDuplicateCategories()
+    {
+
+        $query = "SELECT *, count(id_crd) as ff FROM 03beeph0ne05.ps_dioqaapiconnexion_category 
+        where type like concat('%model-', id_crd)
+        group by id_crd
+        having count(id_crd) > 1";
+
+        $categories = Db::getInstance()->executeS($query);
+
+        foreach ($categories as $key => $category) {
+            $cat = new Category($category['id_category'], Configuration::get('PS_LANG_DEFAULT'));
+            try {
+                $del = $cat->delete();
+            } catch (\Throwable $th) {
+                //throw $th;
+            }
+        }
+    }
+
+    public static function disableEmptyGroupModel()
+    {
+        /* $models = ApiController::getInstance()->get('/api/crd/essentials/model');
+
+        $byGroup = [];
+
+        foreach ($models as $key => $model) {
+            $byGroup[$model->groupId][] = $model;
+        }
+
+        $byGroupFilter = [];
+
+        foreach ($byGroup as $groupId => $models) {
+            $byGroupFilter[$groupId] = array_filter($models, function ($item) {
+                return $item->status == true;
+            });
+        }
+
+        $emptyGroup = [];
+
+        foreach ($byGroupFilter as $groupId => $models) {
+            if (empty($models)) {
+                $emptyGroup[] = $groupId;
+            }
+        }
+
+        var_dump($emptyGroup);
+        return; */
+
+        $allGroups = Db::getInstance()->executeS("SELECT * FROM 03beeph0ne05.ps_dioqaapiconnexion_category where type like concat('%group-',id_crd);");
+
+        $countDisable = [];
+
+        foreach ($allGroups as $key => $group) {
+            $id_category = $group['id_category'];
+            $cat = new Category($id_category, Configuration::get('PS_LANG_DEFAULT'));
+            $childrens = $cat->getSubCategories(Configuration::get('PS_LANG_DEFAULT'));
+
+            if (empty($childrens)) {
+                $countDisable[] = $id_category;
+                $cat->active = false;
+                try {
+                    $cat->update();
+                } catch (\Throwable $th) {
+                    //throw $th;
+                }
+            }
+        }
+
+        var_dump($countDisable);
     }
 }

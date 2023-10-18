@@ -126,7 +126,7 @@ class ProductCrd
         $client->setProductToCustomer($object->placeId, $pr->id);
 
         /* ajout à l'index de recherche */
-        Search::indexation(false, $object->deviceId);
+        Search::indexation(false, $pr->id);
         Module::processDeferedFuncCall();
         Module::processDeferedClearCache();
         Tag::updateTagCount();
@@ -179,10 +179,7 @@ class ProductCrd
 
     public function createProductName($object)
     {
-        $brandName = $object->brandName;
-        $productName = str_replace($brandName, '', $object->name);
-        $productName = trim($productName);
-        return $productName;
+        return $object->name;
     }
 
     public function getCatsForImages($modelId)
@@ -265,7 +262,7 @@ class ProductCrd
         return array_merge($catIdsGroup, $catIdsPt);
     }
 
-    private function getIdByType($type, $typeName)
+    public function getIdByType($type, $typeName)
     {
         $pattern = "/$typeName-\d+/";
         preg_match($pattern, $type, $matches);
@@ -449,8 +446,12 @@ class ProductCrd
         $stock = ApiController::getInstance()->get("/api/crd/stocks/device/$object->deviceId");
 
         $pr = new \Product($id_product);
-        if ($object->publishedDateStart && $object->publishedDateEnd) {
-            $pr->active = false;
+        if ($object->publishedDateStart) {
+            if ($object->publishedDateEnd) {
+                $pr->active = false;
+            } else {
+                $pr->active = true;
+            }
         } else {
             if (isset($stock[0])) {
                 StockAvailable::setQuantity($id_product, null, $stock[0]->quantity);

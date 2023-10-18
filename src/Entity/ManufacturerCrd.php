@@ -76,15 +76,16 @@ class ManufacturerCrd
     public function handleImage($man, $object)
     {
 
+        if (!$object->image) {
+            return false;
+        }
+
         $url = trim($object->image);
         $url = str_replace(' ', '%20', $url);
 
-        try {
-            if (!ImageCrd::copyImg($man->id, null, $url, 'manufacturers', true)) {
-                throw new PrestaShopException('error image import');
-            }
-        } catch (Exception $e) {
-            throw new PrestaShopException($e);
+
+        if (!ImageCrd::copyImg($man->id, null, $url, 'manufacturers', true)) {
+            throw new PrestaShopException('error image import');
         }
     }
 }

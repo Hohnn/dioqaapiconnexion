@@ -1,0 +1,16 @@
+==================================2023-10-11 15:03:26==================================
+ => hookActionValidateOrder : ErrorException: {"stack":["error: droit refusé pour le schéma feedback"],"message":"droit refusé pour le schéma feedback","length":98,"name":"error","severity":"ERREUR","code":"42501","position":"1327","file":"aclchk.c","line":"3352","routine":"aclcheck_error"} in /home/www/client/www/CPT013/bee/modules/dioqaapiconnexion/src/Controller/ApiController.php:119
+Stack trace:
+#0 /home/www/client/www/CPT013/bee/modules/dioqaapiconnexion/dioqaapiconnexion.php(1045): Dioqaapiconnexion\Controller\ApiController->post('/api/crd/order', Array)
+#1 /home/www/client/www/CPT013/bee/modules/dioqaapiconnexion/dioqaapiconnexion.php(407): Dioqaapiconnexion->sendOrder(Array)
+#2 /home/www/client/www/CPT013/bee/classes/Hook.php(1007): Dioqaapiconnexion->hookActionValidateOrder(Array)
+#3 /home/www/client/www/CPT013/bee/modules/ets_superspeed/classes/ext/ets_hook(531): HookCore::coreCallHook(Object(Dioqaapiconnexion), 'hookactionValid...', Array)
+#4 /home/www/client/www/CPT013/bee/modules/ets_superspeed/classes/ext/ets_hook(381): Ets_Hook::callHookOn(Object(Dioqaapiconnexion), 'actionValidateO...', Array)
+#5 /home/www/client/www/CPT013/bee/override/classes/Hook.php(36): Ets_Hook::exec17('actionValidateO...', Array, NULL, false, true, false, NULL, false, Array)
+#6 /home/www/client/www/CPT013/bee/classes/PaymentModule.php(550): Hook::exec('actionValidateO...', Array)
+#7 /home/www/client/www/CPT013/bee/modules/ps_checkpayment/controllers/front/validation.php(86): PaymentModuleCore->validateOrder(80, 1, 495, 'Ch\xC3\xA8que', NULL, Array, 1, false, '8339edcdb422120...')
+#8 /home/www/client/www/CPT013/bee/classes/controller/Controller.php(295): Ps_CheckpaymentValidationModuleFrontController->postProcess()
+#9 /home/www/client/www/CPT013/bee/classes/Dispatcher.php(525): ControllerCore->run()
+#10 /home/www/client/www/CPT013/bee/override/classes/Dispatcher.php(25): DispatcherCore->dispatch()
+#11 /home/www/client/www/CPT013/bee/index.php(28): Dispatcher->dispatch()
+#12 {main} 

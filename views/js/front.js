@@ -1,5 +1,10 @@
 /* DIOQAAPICONNEXION */
 
+//jquery document readey
+$(document).ready(function () {
+  ajaxCheckBooking();
+});
+
 function ajaxCheckBooking() {
   console.log("ajaxCheckBooking");
   var form_data = new FormData();
@@ -25,27 +30,35 @@ function ajaxCheckBooking() {
     .catch((er) => console.log(er));
 }
 
-ajaxCheckBooking();
-
 let timerSpan = document.querySelector(".bookingTimeContainer .bookingTime");
 
 const cartBlock = document.querySelector(".blockcart.cart-preview");
 
+let timer = false;
+
 function showBooking(date) {
-  timerSpan?.parentNode?.classList.remove("d-none");
-  timerSpan.dataset.date = date;
-  countdown(date);
+  timerSpan = document.querySelector(".bookingTimeContainer .bookingTime");
+  if (timerSpan) {
+    timerSpan?.parentNode?.classList.remove("d-none");
+    timerSpan.dataset.date = date;
+    countdown(date);
+  }
 }
 
 function hideBooking() {
+  timerSpan = document.querySelector(".bookingTimeContainer .bookingTime");
   timerSpan?.parentNode?.classList.add("d-none");
   /* cartBlock.classList.remove("booked"); */
 }
 
 let count = 0;
+let countdownInterval;
 
 function countdown(date) {
   const interval = 1000;
+  if (timer) {
+    clearInterval(countdownInterval);
+  }
   // Mettre à jour le compte à rebours immédiatement
   const updateCountdown = () => {
     const currentDate = new Date(date);
@@ -60,7 +73,7 @@ function countdown(date) {
       showModalBookingExpire();
       hideBooking();
     } else {
-      if (timeRemaining <= 10000) {
+      if (timeRemaining <= 60000) {
         console.log("bientot fini");
         showModalBookingOrderNow();
       }
@@ -80,8 +93,8 @@ function countdown(date) {
   };
 
   // Appeler la mise à jour initiale puis démarrer l'intervalle
-  const countdownInterval = setInterval(updateCountdown, interval);
-  updateCountdown();
+  countdownInterval = setInterval(updateCountdown, interval);
+  timer = true;
 }
 
 function displayTime(days, hours, minutes, seconds) {
@@ -120,13 +133,11 @@ prestashop.on("updateCart", ajaxCheckBooking);
 
 function handleModalExpire() {
   const modal = document.getElementById("bookingModal");
-  console.log(modal);
   if (!modal) {
     return;
   }
 
   const inputsRadio = modal.querySelectorAll(".actions .btn-book");
-  console.log(inputsRadio);
   if (!inputsRadio) {
     return;
   }
@@ -137,19 +148,24 @@ function handleModalExpire() {
     input.addEventListener("change", function () {
       hideBookingProduct(this);
       count++;
-      console.log(count);
       if (count >= inputsRadio.length) {
         modal.classList.add("loading");
         modal.querySelector("form").submit();
       }
     });
   });
+
+  const btnClose = modal.querySelector(".modal-footer [type='submit']");
+  if (btnClose) {
+    btnClose.addEventListener("click", function () {
+      modal.classList.add("loading");
+    });
+  }
 }
 handleModalExpire();
 
 function hideBookingProduct(el) {
   let target = el.closest("li");
-  console.log(target);
   if (target) {
     target.classList.add("d-none");
   }

@@ -4,25 +4,24 @@ const addToCartBtn = document.querySelector(
   '[data-button-action-custom="add-to-cart"]'
 );
 
-const reelAddToCartBtn = document.querySelector(
-  '[data-button-action="add-to-cart"]'
-);
-
 const PRODUCT_ID = document.getElementById("product_page_product_id").value;
 
-addToCartBtn.addEventListener("click", handleAddToCart);
+/* addToCartBtn.addEventListener("click", handleAddToCart); */
 
 async function handleAddToCart() {
   console.log("handleAddToCart");
   let IsBookingPossible = await ajaxIsBookingPossible();
   if (IsBookingPossible) {
+    const reelAddToCartBtn = document.querySelector(
+      '[data-button-action="add-to-cart"]'
+    );
     reelAddToCartBtn.click();
+    setTimeout(() => {
+      addToCartBtn.classList.remove("is--loading");
+    }, 1000);
   } else {
     addToCartBtn.classList.remove("is--loading");
-    let error = document.createElement("span");
-    error.className = "text-danger";
-    error.innerText = "Produit déjà réservé";
-    addToCartBtn.parentNode.append(error);
+    addToCartBtn.innerText = "Produit déjà réservé";
   }
 }
 

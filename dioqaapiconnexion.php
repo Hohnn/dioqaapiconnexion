@@ -42,6 +42,7 @@ use Dioqaapiconnexion\Entity\FeatureCrd;
 use Dioqaapiconnexion\Entity\FeatureValueCrd;
 use Dioqaapiconnexion\Entity\ProductCrd;
 use Dioqaapiconnexion\Entity\Booking;
+use Dioqaapiconnexion\Entity\CategoryCrd;
 use Dioqaapiconnexion\Entity\CustomerCrd;
 use PrestaShop\PrestaShop\Core\Domain\Category\ValueObject\CategoryId;
 use PrestaShop\PrestaShop\Core\Module\WidgetInterface;
@@ -105,6 +106,7 @@ class Dioqaapiconnexion extends Module implements WidgetInterface
             $this->registerHook('displayBeforeBodyClosingTag') &&
             $this->registerHook('actionValidateOrder') &&
             $this->registerHook('actionPresentProduct') &&
+            $this->registerHook('displayProductActions') &&
             $this->registerHook('actionProductUpdate');
     }
 
@@ -296,6 +298,18 @@ class Dioqaapiconnexion extends Module implements WidgetInterface
         if (isset($this->context->controller->php_self)  && $this->context->controller->php_self == 'order') {
             $this->addBookingMoreTime();
         }
+
+        if (isset($this->context->controller->php_self)  && $this->context->controller->php_self == 'product') {
+            $this->context->controller->registerJavascript(
+                $this->name . '_product_js',
+                'modules/' . $this->name . '/views/js/product.js',
+                [
+                    'attributes' => 'defer',
+                    'priority' => 1000,
+                    'position' => 'bottom'
+                ]
+            );
+        }
     }
 
     public function hookActionCartUpdateQuantityBefore($params)
@@ -429,7 +443,7 @@ class Dioqaapiconnexion extends Module implements WidgetInterface
      */
     public function hookActionPresentProduct(array &$params)
     {
-        if (isset($this->context->controller->php_self)  && $this->context->controller->php_self == 'product') {
+        /* if (isset($this->context->controller->php_self)  && $this->context->controller->php_self == 'product') {
             $this->context->controller->registerJavascript(
                 $this->name . '_product_js',
                 'modules/' . $this->name . '/views/js/product.js',
@@ -445,7 +459,18 @@ class Dioqaapiconnexion extends Module implements WidgetInterface
             $this->context->smarty->assign([
                 'isBookingPossible' => $this->isBookingPossible($id_product)
             ]);
-        }
+        } */
+    }
+
+    public function hookDisplayProductActions($params)
+    {
+        /* $this->setLogTest(
+            'hookDisplayProductActions : ' . json_encode($params['product']->id),
+            null,
+            __DIR__ . '/logs_error/log_' . date('y-m-d-H') . 'h.log'
+        ); */
+
+        return $this->display(__FILE__, 'views/templates/hook/addToCartBtn.tpl');
     }
 
     public function hookDisplayBeforeBodyClosingTag(array &$params)
@@ -537,7 +562,12 @@ class Dioqaapiconnexion extends Module implements WidgetInterface
         }
 
         if (isset($configuration['action']) && $configuration['action'] == "displayBooked") {
-            $this->smarty->assign($configuration);
+            $id_product = $configuration['id_product'];
+
+            $this->smarty->smarty->assign([
+                'isBookingPossible' => $this->isBookingPossible($id_product)
+            ]);
+            /* $this->smarty->assign($configuration); */
             return $this->display(__FILE__, 'views/templates/widget/isBooked.tpl');
         }
     }
@@ -595,46 +625,8 @@ class Dioqaapiconnexion extends Module implements WidgetInterface
         echo 'DEV';
         echo '<pre>';
         try {
-            $products = ApiController::getInstance()->get('/api/crd/products');
-            $productGroup = [];
-            $modelIds = [];
-            foreach ($products as $key => $product) {
-                if ($product->image) {
-                    $productGroup[$product->modelId] = $product;
-                }
-            }
-            foreach ($productGroup as $key => $value) {
-                $modelIds[] = $key;
-            }
-
-            $models = ApiController::getInstance()->get('/api/crd/essentials/model');
-
-            $emptyModels = [];
-            foreach ($models as $key => $model) {
-                if (!in_array($model->modelId, $modelIds)) {
-                    $emptyModels[] = $model->modelId;
-                }
-            }
-
-            var_dump(json_encode($emptyModels, JSON_PRETTY_PRINT));
-
-            /* $productGroup2 = []; */
-
-            /* foreach ($products as $key => $product) {
-                if (!in_array($product->modelId, $modelIds)) {
-                    if ($product->image) {
-                        $productGroup2[$product->modelId] = $product;
-                    }
-                }
-            }
-
-            foreach ($productGroup2 as $modelId => $product) {
-                $pr = new ProductCrd();
-                $catsForImages = $pr->getCatsForImages($modelId);
-                $pr->addCategoriesImages($catsForImages, 1, $product->image);
-            } */
         } catch (\Throwable $e) {
-            var_dump($e);
+            var_dump($e->__toString());
         }
     }
 
@@ -654,9 +646,13 @@ class Dioqaapiconnexion extends Module implements WidgetInterface
 
     public function executeTasksFromBDD($test = false)
     {
+        /* if (!$test) {
+            return;
+        } */
+
         $startTime = time();
 
-        while (time() - $startTime < 150) { /* 60 seconds */
+        while (time() - $startTime < 60) { /* 60 seconds */
             $task = $this->getTask();
 
             if (!$task) {
@@ -675,9 +671,9 @@ class Dioqaapiconnexion extends Module implements WidgetInterface
                 var_dump($e);
             }
 
-            /* if ($test) {
+            if ($test) {
                 break;
-            } */
+            }
         }
     }
 
@@ -712,11 +708,11 @@ class Dioqaapiconnexion extends Module implements WidgetInterface
                 $this->API_route = "/api/crd/devices";
                 $this->getDatas();
                 break;
-            case 'orderCategory':
+                /* case 'orderCategory':
                 $this->route = "orderCategory";
                 $this->API_route = "/api/crd/average";
                 $this->getDatas();
-                break;
+                break; */
             case 'product_crd':
                 $this->route = "product_crd";
                 $this->API_route = "/api/crd/products";
@@ -732,6 +728,7 @@ class Dioqaapiconnexion extends Module implements WidgetInterface
         switch ($this->action) {
             case 'product':
                 $this->setProduct($data);
+                $this->setStock($data);
                 break;
             case 'category':
                 $this->setCategory($data);
@@ -745,9 +742,9 @@ class Dioqaapiconnexion extends Module implements WidgetInterface
             case 'stock':
                 $this->setStock($data);
                 break;
-            case 'orderCategory':
+                /* case 'orderCategory':
                 $this->orderCategory($data);
-                break;
+                break; */
             case 'product_crd':
                 $this->setCategoriesImage($data);
                 break;
@@ -761,14 +758,14 @@ class Dioqaapiconnexion extends Module implements WidgetInterface
         $lastDate = $this->getApiCallLastDate($this->action);
         $date = $lastDate ? "?date=$lastDate" : "";
 
+        $this->setApiCallState($this->action);
+
         if ($this->action === 'feature') {
             $features = FeatureCrd::$featureListToWatch;
             $this->processFeatureData($date, $features);
         } else {
             $this->processNormalData($date);
         }
-
-        $this->setApiCallState($this->action);
     }
 
     private function processFeatureData($date, $features)
@@ -1151,6 +1148,8 @@ class Dioqaapiconnexion extends Module implements WidgetInterface
             "time" => $addTime
         ];
 
+        $bookingCrd = null;
+
         try {
             $bookingCrd = ApiController::getInstance()->post($route, $data);
             if (isset($bookingCrd->dateValidity)) {
@@ -1260,7 +1259,7 @@ class Dioqaapiconnexion extends Module implements WidgetInterface
 
     private function orderCategory($data)
     {
-        $datas = $this->setTimeCrd($data->productId, $data->gradeId, $data->times);
+        $datas = $this->setTimeCrd($data->productId, $data->gradeId, $data->time);
         $this->handleCatOrder($datas);
     }
 
@@ -1272,7 +1271,7 @@ class Dioqaapiconnexion extends Module implements WidgetInterface
         }
     }
 
-    private function setTimeCrd($productId, $gradeId, $times)
+    private function setTimeCrd($productId, $gradeId, $time)
     {
         $productCrd = ApiController::getInstance()->get("/api/crd/product/$productId/detail");
 
@@ -1285,7 +1284,7 @@ class Dioqaapiconnexion extends Module implements WidgetInterface
         $data = [
             "id_crd_product" => $productId,
             "id_grade" => $gradeId,
-            "times" => $times,
+            "time" => $time,
             "id_productType" => $productCrd->productTypeId,
             "id_brand" => $productCrd->brandId,
             "id_model" => $productCrd->modelId,
@@ -1387,7 +1386,7 @@ class Dioqaapiconnexion extends Module implements WidgetInterface
 
     private function getTimeBytype($type)
     {
-        $sql = "SELECT AVG(times) as avg, id_$type as id_crd2, t.*
+        $sql = "SELECT AVG(time) as avg, id_$type as id_crd2, t.*
         FROM ps_dioqaapiconnexion_time t
         GROUP BY id_crd2
         ORDER BY avg;";
@@ -1414,5 +1413,107 @@ class Dioqaapiconnexion extends Module implements WidgetInterface
         $pr = new ProductCrd();
         $catsForImages = $pr->getCatsForImages($data->modelId);
         $pr->addCategoriesImages($catsForImages, $data->colorId, $data->image);
+
+        /* foreach ($catsForImages as $key => $category) {
+            $cat = new Category($category['id_category']);
+            $cat->active = 1;
+            $cat->update();
+        } */
+    }
+
+    private function emptyModel()
+    {
+        $products = ApiController::getInstance()->get('/api/crd/products');
+        $productGroup = [];
+        $modelIds = [];
+        $productNoImage = [];
+        foreach ($products as $key => $product) {
+            /* if ($product->image) {
+            $productGroup[$product->modelId] = $product;
+            } */
+
+            /* if (!$product->image) {
+                $productNoImage[] = [$product->productId, $product->modelName];
+            } */
+
+            if ($product->modelId == 870) {
+                var_dump($product);
+            }
+        }
+
+        return;
+        foreach ($productGroup as $key => $value) {
+            $modelIds[] = $key;
+        }
+
+        $models = ApiController::getInstance()->get('/api/crd/essentials/model');
+
+        $emptyModels = [];
+        foreach ($models as $key => $model) {
+            if (!in_array($model->modelId, $modelIds)) {
+                $emptyModels[] = $model->modelId;
+            }
+        }
+
+        /* var_dump(json_encode($emptyModels, JSON_PRETTY_PRINT)); */
+
+        foreach ($emptyModels as $key => $modelId) {
+            $catId = CategoryCrd::getTableLinkLikeStatic($modelId, "%model-$modelId");
+
+            if (empty($catId)) {
+                continue;
+            }
+
+            $cat = new Category($catId[0]['id_category']);
+            $cat->active = 0;
+            try {
+                $cat->update();
+            } catch (\Throwable $th) {
+                //throw $th;
+            }
+        }
+
+        /* $productGroup2 = []; */
+
+        /* foreach ($products as $key => $product) {
+                if (!in_array($product->modelId, $modelIds)) {
+                    if ($product->image) {
+                        $productGroup2[$product->modelId] = $product;
+                    }
+                }
+            }
+
+            foreach ($productGroup2 as $modelId => $product) {
+                $pr = new ProductCrd();
+                $catsForImages = $pr->getCatsForImages($modelId);
+                $pr->addCategoriesImages($catsForImages, 1, $product->image);
+            } */
+    }
+
+    public function cleanLogsAllType()
+    {
+        $types = ['base', 'cron', 'error', 'order', 'test', 'stock', 'webhook'];
+
+        foreach ($types as $key => $value) {
+            $folderPath = _PS_MODULE_DIR_ . $this->name . "/logs_$value";
+            $this->cleanLogs($folderPath);
+        }
+    }
+
+    private function cleanLogs($folderPath)
+    {
+        $listFiles = scandir($folderPath, SCANDIR_SORT_ASCENDING);
+        $maxDuration = 60 * 60 * 24 * 7;
+
+        foreach ($listFiles as $file) {
+            if (strpos($file, '.log') === false) continue;
+
+            $filemtime = time() - filemtime($folderPath . '/' . $file);
+            if ($filemtime < $maxDuration) {
+                break;
+            }
+
+            unlink($folderPath . '/' . $file);
+        }
     }
 }

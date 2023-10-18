@@ -43,9 +43,9 @@ if (isset($_GET["action"])) {
         }
     } catch (Throwable $e) {
         $module->setLogTest(
-            'Error cron : ' . $e->__toString(),
+            'Error webhook : ' . $e->__toString(),
             null,
-            __DIR__ . '/logs_cron/log_' . date('y-m-d-H') . 'h.log'
+            __DIR__ . '/logs_webhook/log_' . date('y-m-d-H') . 'h.log'
         );
         var_dump($e->__toString());
         http_response_code(500);

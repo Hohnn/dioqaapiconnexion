@@ -143,10 +143,19 @@ class Model extends Main
             $typeGroup = $typeBrand . '-' . 'group-' . $groupId;
             $this->ID_CATEGORY_PARENT = $cat->getTableLink($object->groupId, $typeGroup);
             $type = $typeGroup . '-' . 'model-' . $modelId;
+
+            $typeWithoutGroup = $typeBrand . '-' . 'model-' . $modelId;
+            $catToDelete = $cat->getTableLink($object->modelId, $typeWithoutGroup);
+            if ($catToDelete) {
+                $catPresta = new \Category($catToDelete, Configuration::get('PS_LANG_DEFAULT'));
+                $catPresta->delete();
+            }
         } else {
             $this->ID_CATEGORY_PARENT = $cat->getTableLink($object->brandId, $typeBrand);
             $type = $typeBrand . '-' . 'model-' . $modelId;
         }
+
+
 
         $obj = $this->formatDataCategory($modelId, $modelName, $type, $object->status, $object->metaDescription);
         $this->setCategory($obj);
